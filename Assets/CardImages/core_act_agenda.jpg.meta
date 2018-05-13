@@ -1,0 +1,473 @@
+fileFormatVersion: 2
+guid: 746b50161d1535041a7b2c619eaf2bc1
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: core_act_and_agenda_0
+    21300002: core_act_and_agenda_1
+    21300004: core_act_and_agenda_2
+    21300006: core_act_and_agenda_3
+    21300008: core_act_and_agenda_4
+    21300010: core_act_and_agenda_5
+    21300012: core_act_and_agenda_6
+    21300014: core_act_and_agenda_7
+    21300016: core_act_and_agenda_8
+    21300018: core_act_and_agenda_9
+    21300020: core_act_and_agenda_10
+    21300022: core_act_and_agenda_11
+    21300024: core_act_and_agenda_12
+    21300026: core_act_and_agenda_13
+    21300028: core_act_and_agenda_14
+    21300030: core_act_and_agenda_15
+    21300032: core_act_and_agenda_16
+    21300034: core_act_and_agenda_17
+  externalObjects: {}
+  serializedVersion: 5
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 0
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: core_act_and_agenda_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2916.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9692d803ac5225c4ba86f3e6d7577dea
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_1
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 2916.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ebdada201f17c14b99f4ccc4c01ed98
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_2
+      rect:
+        serializedVersion: 2
+        x: 1666
+        y: 2916.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba507f6a5efed2f49882b2eab0641ce2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2333.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49b57716532c6b84c978325273f079ae
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_4
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 2333.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9001308e64d79384a8d95289eff8f17e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_5
+      rect:
+        serializedVersion: 2
+        x: 1666
+        y: 2333.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4209a83c3657bff4895c4e9b9fe6a090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1750.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 160568168f3013c469336b4dfbc62956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_7
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 1750.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 701b803b618c1564cbf520e4b2a4d3f5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_8
+      rect:
+        serializedVersion: 2
+        x: 1666
+        y: 1750.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 545629d8552927c4f8170dde9fef16e8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1167.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79f6db6d7ac23ae4b9e80b85103be1b6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_10
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 1167.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c879aa1cafa31ab4d97946516c25985e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_11
+      rect:
+        serializedVersion: 2
+        x: 1666
+        y: 1167.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2376be4c21aea794592dc51629b1b7e2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 584.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9a703dfe0a5969478da238215902581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_13
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 584.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 727cb7a8cb6e77a4881bb036bd9e0886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_14
+      rect:
+        serializedVersion: 2
+        x: 1666
+        y: 584.6667
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea8c13dc5daee9a47887746f51b6afc9
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1.666687
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f5f89c508126e047b16687559f6d83b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_16
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 1.666687
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a130bfdfce6feb14190d3baf7a89c5f6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_act_and_agenda_17
+      rect:
+        serializedVersion: 2
+        x: 1666
+        y: 1.666687
+        width: 833.6667
+        height: 583.3333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8407bbbdb39d6194a8b34bae22c4db44
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 6c5404c8b6557c04f8aabf1a0a17a687
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
