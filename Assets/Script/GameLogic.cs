@@ -2,13 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: lua脚本化
-public class Role
-{
-    public string   m_name;
-    public int      m_currentScenario = -1;
-	public string	m_scenarioName;
-}
+
 
 public enum GameDifficulty
 {
@@ -27,16 +21,13 @@ public enum Faction
 	Seeker
 }
 
+
+
 public class GameLogic
 {
     public static GameLogic s_gameLogic = null;
 
-    private Role _role = new Role();
-    public Role PlayerRole
-    {
-        get { return _role; }
-        set { _role = value; }
-    }
+    public Player	m_player = new Player();
  
 
     static public GameLogic Get()
@@ -49,13 +40,39 @@ public class GameLogic
         return s_gameLogic;
     }
 
-	// Use this for initialization
-	void Start () {
-		
+	public static void Swap<T>(ref T a, ref T b)
+	{
+		T t = a;
+		a = b;
+		b = t;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	void Start()
+	{
+		UnityEngine.Random.InitState((int)System.DateTime.Now.ToUniversalTime().ToBinary());
+	}
+
+	public static void Shuffle(List<GameObject> cards)
+	{
+		for(int i=0; i<cards.Count; ++i)
+		{
+			int newPos = Random.Range(0, cards.Count-1);
+			var t = cards[i];
+			cards[i] = cards[newPos];
+			cards[newPos] = t;
+		}
+	}
+
+	public static GameObject DrawCard(List<GameObject> cards)
+	{
+		if(cards.Count == 0)
+		{
+			return null;
+		}
+
+		var card = cards[0];
+		cards.RemoveAt(0);
+
+		return card;
 	}
 }

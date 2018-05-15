@@ -109,7 +109,6 @@ public class SelectMenu : MonoBehaviour {
 
     public void OnSelectRoleChanged(Dropdown d)
     {
-        GameLogic.Get().PlayerRole.m_name = d.options[d.value].text;
         _SetCurrentRoleInfo(d.value);
     }
 
@@ -133,8 +132,8 @@ public class SelectMenu : MonoBehaviour {
 
     public void OnButtonStartGame()
     {
-        GameLogic.Get().PlayerRole.m_currentScenario = m_selectScenarioDropdown.value;
-		GameLogic.Get().PlayerRole.m_scenarioName = m_selectScenarioDropdown.options[m_selectScenarioDropdown.value].text;
+		GameLogic.Get().m_player.m_faction = (Faction)m_selectRoleDropdown.value;
+		GameLogic.Get().m_player.m_currentScenario = m_selectScenarioDropdown.value;
 
 		UnityEngine.SceneManagement.SceneManager.LoadScene("MainGame");
     }

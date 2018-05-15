@@ -42,6 +42,7 @@ MonoBehaviour:
   m_backImage: {fileID: 21300000, guid: 23bec283faaa48e4886c8df63b8767b1, type: 3}
   m_image: {fileID: 0}
   m_cardName: "\u6DF7\u6DF7\u5965\u56FE\u5C14"
+  m_canFocus: 1
 --- !u!224 &224769279974275580
 RectTransform:
   m_ObjectHideFlags: 1
