@@ -63,6 +63,9 @@
     <Compile Include="Assets\Script\GameLogic.cs" />
     <Compile Include="Assets\Script\MainGame.cs" />
     <Compile Include="Assets\Script\MainMenu.cs" />
+    <Compile Include="Assets\Script\Player.cs" />
+    <Compile Include="Assets\Script\Scenario\core_gathering.cs" />
+    <Compile Include="Assets\Script\Scenario\scenario_base.cs" />
     <Compile Include="Assets\Script\SelectMenu.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>D:/UnityProjects/ArkhamHorrorCardGame/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>

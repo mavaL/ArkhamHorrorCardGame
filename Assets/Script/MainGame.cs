@@ -5,10 +5,11 @@ using System.Text;
 
 public class MainGame : MonoBehaviour
 {
-	public GameObject	m_actArea;
-	public GameObject	m_agendaArea;
+	public GameObject			m_actArea;
+	public GameObject			m_agendaArea;
+	public List<GameObject>		m_playerCardArea;
 
-	private GameObject m_currentAct;
+	private GameObject	m_currentAct;
 	private GameObject	m_currentAgenda;
 
 	string[]	m_strScenarioPrefix = 
@@ -43,16 +44,16 @@ public class MainGame : MonoBehaviour
 		"Seeker/core_seeker_barricade",
 		"Seeker/core_seeker_deduction",
 		// TODO: 重复加载资源？
-		"core_knife",
-		"core_knife",
-		"core_flashlight",
-		"core_flashlight",
-		"core_emergency_cache",
-		"core_emergency_cache",
-		"core_guts",
-		"core_guts",
-		"core_manual_dexterity",
-		"core_manual_dexterity",
+		"Neutral/core_knife",
+		"Neutral/core_knife",
+		"Neutral/core_flashlight",
+		"Neutral/core_flashlight",
+		"Neutral/core_emergency_cache",
+		"Neutral/core_emergency_cache",
+		"Neutral/core_guts",
+		"Neutral/core_guts",
+		"Neutral/core_manual_dexterity",
+		"Neutral/core_manual_dexterity",
 		"core_paranoia",
 	};
 
@@ -63,7 +64,7 @@ public class MainGame : MonoBehaviour
 	void Start ()
 	{
 		// Load and instantiate prefabs
-		string str = m_strScenarioPrefix[GameLogic.Get().m_player.m_currentScenario];
+		string str = m_strScenarioPrefix[Player.Get().m_currentScenario];
 		string strAct1 = str + "act_1";
 		string strAgenda1 = str + "agenda_1";
 
@@ -73,23 +74,21 @@ public class MainGame : MonoBehaviour
 		m_currentAct = Instantiate(act1);
 		m_currentAgenda = Instantiate(agenda1);
 
-		m_currentAct.transform.SetParent(m_actArea.transform);
-		m_currentAgenda.transform.SetParent(m_agendaArea.transform);
+		GameLogic.DockCard(Player.Get().m_investigatorCard, GameObject.Find("InvestigatorCard"));
+		GameLogic.DockCard(m_currentAct, m_actArea);
+		GameLogic.DockCard(m_currentAgenda, m_agendaArea);
 
-		m_currentAct.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-		m_currentAct.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
-		m_currentAgenda.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-		m_currentAgenda.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
-
-		_LoadPlayerCards(GameLogic.Get().m_player.m_faction);
+		_LoadPlayerCards(Player.Get().m_faction);
 		_DrawFiveOpenHands();
+
+		GameLogic.Get().StartScenario();
 	}
 
 	private void _DrawFiveOpenHands()
 	{
 		for(int i=0; i<5; ++i)
 		{
-			GameLogic.Get().m_player.AddHandCard(GameLogic.DrawCard(m_lstPlayerCards));
+			Player.Get().AddHandCard(GameLogic.DrawCard(m_lstPlayerCards));
 		}
 	}
 
@@ -117,16 +116,29 @@ public class MainGame : MonoBehaviour
 
 	public void	OnButtonDrawPlayerCard()
 	{
-
+		Player.Get().AddHandCard(GameLogic.DrawCard(m_lstPlayerCards));
 	}
 
-	public void OnButtonDrawEncounterCard()
+	public void OnButtonInvestigateCurrentLocation()
 	{
 
 	}
 
+	public void OnButtonGainOneResource()
+	{
+		Player.Get().m_resources += 1;
+	}
+
 	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+	{
+		var cards = Player.Get().GetHandCards();
+
+		for(int i=0; i<cards.Count; ++i)
+		{
+			GameLogic.DockCard(cards[i], m_playerCardArea[i]);
+		}
+
+		GameLogic.Get().Update();
 	}
 }

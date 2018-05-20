@@ -43,6 +43,7 @@ MonoBehaviour:
   m_backImage: {fileID: 21300006, guid: 0539b34f494283345b49dbefdb9058e0, type: 3}
   m_image: {fileID: 0}
   m_cardName: "\u96C6\u7ED3"
+  m_canFocus: 1
 --- !u!222 &222129302007310924
 CanvasRenderer:
   m_ObjectHideFlags: 1

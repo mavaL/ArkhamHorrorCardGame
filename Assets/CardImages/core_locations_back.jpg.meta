@@ -1,0 +1,599 @@
+fileFormatVersion: 2
+guid: ef1214a00c1281d43a2caa62587b38ec
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: core_locations_back_0
+    21300002: core_locations_back_1
+    21300004: core_locations_back_2
+    21300006: core_locations_back_3
+    21300008: core_locations_back_4
+    21300010: core_locations_back_5
+    21300012: core_locations_back_6
+    21300014: core_locations_back_7
+    21300016: core_locations_back_8
+    21300018: core_locations_back_9
+    21300020: core_locations_back_10
+    21300022: core_locations_back_11
+    21300024: core_locations_back_12
+    21300026: core_locations_back_13
+    21300028: core_locations_back_14
+    21300030: core_locations_back_15
+    21300032: core_locations_back_16
+    21300034: core_locations_back_17
+    21300036: core_locations_back_18
+    21300038: core_locations_back_19
+    21300040: core_locations_back_20
+    21300042: core_locations_back_21
+    21300044: core_locations_back_22
+    21300046: core_locations_back_23
+  externalObjects: {}
+  serializedVersion: 5
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 0
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: core_locations_back_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2499.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c54c55ac052f4ec449cdba9d64ae053a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_1
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 2499.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bbb8eca115b00d49be31522218e507a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_2
+      rect:
+        serializedVersion: 2
+        x: 1166
+        y: 2499.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6399336384abc24aadf117535f9017a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_3
+      rect:
+        serializedVersion: 2
+        x: 1749
+        y: 2499.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be7495ceb4d9eef4bab282fbe0e487f1
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_4
+      rect:
+        serializedVersion: 2
+        x: 2332
+        y: 2499.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4384dbfbaf1097546bee1a407db4428c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_5
+      rect:
+        serializedVersion: 2
+        x: 2915
+        y: 2499.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5ef33eb77b5ddc43a6bd7e81dfb9ced
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1666.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ec5791b88aee1542b4515980a09ddf5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_7
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 1666.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a83e948d5a33d8b41ab9ec1107c73132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_8
+      rect:
+        serializedVersion: 2
+        x: 1166
+        y: 1666.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe85d7b6aa510f145978ac60b8a1120a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_9
+      rect:
+        serializedVersion: 2
+        x: 1749
+        y: 1666.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f54a3a531ee3904cbbf67ac18521a65
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_10
+      rect:
+        serializedVersion: 2
+        x: 2332
+        y: 1666.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 205eda75c482a9f468cc226ba2cdcffb
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_11
+      rect:
+        serializedVersion: 2
+        x: 2915
+        y: 1666.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7752fd7131f543940b3185e45529e557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 833.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76d89ef65b8d81d4785d74a6dedf26cf
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_13
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 833.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63567d1263c7b94439c06bd2c8f8867c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_14
+      rect:
+        serializedVersion: 2
+        x: 1166
+        y: 833.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad5025c3a0febe14c82cab402200b3be
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_15
+      rect:
+        serializedVersion: 2
+        x: 1749
+        y: 833.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e951b1af97dd48f4a9cd1e6ce61b029f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_16
+      rect:
+        serializedVersion: 2
+        x: 2332
+        y: 833.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c160f559f90b29548ac071c1daaab14e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_17
+      rect:
+        serializedVersion: 2
+        x: 2915
+        y: 833.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6375dad7f9d6b0f44b88ab8a5462b44f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 110235f6841928f429a3464f977982f8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_19
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 0.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e6b82dd61fcf7847af28aa5855add7b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_20
+      rect:
+        serializedVersion: 2
+        x: 1166
+        y: 0.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a7caf0838deb3f489c7de7ecef2213e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_21
+      rect:
+        serializedVersion: 2
+        x: 1749
+        y: 0.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8398d6d86bfbe3341a52b0118da7faa1
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_22
+      rect:
+        serializedVersion: 2
+        x: 2332
+        y: 0.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61ff948105d7a2a40b85c4b58c36dd09
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: core_locations_back_23
+      rect:
+        serializedVersion: 2
+        x: 2915
+        y: 0.75
+        width: 583.3333
+        height: 833.25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5cd63b9f18990c40a6ad62e06816f6c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 9a4aae386c0aaaf4e9196546f66f2b8d
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

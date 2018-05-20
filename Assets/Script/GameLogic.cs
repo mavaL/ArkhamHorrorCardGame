@@ -27,8 +27,12 @@ public class GameLogic
 {
     public static GameLogic s_gameLogic = null;
 
-    public Player	m_player = new Player();
- 
+	public GameLogic()
+	{
+		UnityEngine.Random.InitState((int)System.DateTime.Now.ToUniversalTime().ToBinary());
+
+		m_core_scenarios[0] = new core_gathering();
+	}
 
     static public GameLogic Get()
     {
@@ -40,6 +44,8 @@ public class GameLogic
         return s_gameLogic;
     }
 
+	public scenario_base[]	m_core_scenarios = new scenario_base[3];
+
 	public static void Swap<T>(ref T a, ref T b)
 	{
 		T t = a;
@@ -47,10 +53,22 @@ public class GameLogic
 		b = t;
 	}
 
-	void Start()
+	public static void DockCard(GameObject go, GameObject parent)
 	{
-		UnityEngine.Random.InitState((int)System.DateTime.Now.ToUniversalTime().ToBinary());
+		go.transform.SetParent(parent.transform);
+		go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+		go.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 	}
+
+	public static void DockPlayerToken(GameObject go, GameObject parent)
+	{
+		go.transform.SetParent(parent.transform);
+
+		var rt = go.GetComponent<RectTransform>();
+		rt.anchoredPosition = new Vector2(rt.sizeDelta.x/2, rt.sizeDelta.y/2);
+		rt.localScale = new Vector3(1, 1, 1);
+	}
+
 
 	public static void Shuffle(List<GameObject> cards)
 	{
@@ -72,7 +90,18 @@ public class GameLogic
 
 		var card = cards[0];
 		cards.RemoveAt(0);
+		card.SetActive(true);
 
 		return card;
+	}
+
+	public void StartScenario()
+	{
+		m_core_scenarios[0].StartScenario();
+	}
+
+	public void Update()
+	{
+		m_core_scenarios[0].ShowPlayInfo();
 	}
 }

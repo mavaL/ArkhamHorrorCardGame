@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class SelectMenu : MonoBehaviour {
 
-    public List<GameObject>   m_lstRoleInfo = new List<GameObject>();
-    public List<GameObject>   m_lstScenarioInfo = new List<GameObject>();
+    public List<GameObject>		m_lstRoleInfo = new List<GameObject>();
+    public List<GameObject>		m_lstScenarioInfo = new List<GameObject>();
+	public List<GameObject>		m_lstPlayerToken = new List<GameObject>();
 
     public GameObject   m_selectRoleUI;
     public GameObject   m_selectScenarioUI;
@@ -62,8 +63,7 @@ public class SelectMenu : MonoBehaviour {
 
         m_lstRoleInfo.Add(Instantiate(investigator));
 
-        m_lstRoleInfo[index].transform.SetParent(GameObject.Find("RoleInfo").transform);
-        m_lstRoleInfo[index].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+		GameLogic.DockCard(m_lstRoleInfo[index], GameObject.Find("RoleInfo"));
     }
 
     private void _InitScenario(string path, int index)
@@ -72,9 +72,7 @@ public class SelectMenu : MonoBehaviour {
 
         m_lstScenarioInfo.Add(Instantiate(scenario));
 
-        m_lstScenarioInfo[index].transform.SetParent(GameObject.Find("ScenarioInfo").transform);
-        m_lstScenarioInfo[index].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-        m_lstScenarioInfo[index].GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+		GameLogic.DockCard(m_lstScenarioInfo[index], GameObject.Find("ScenarioInfo"));
     }
 
     private void _SetCurrentRoleInfo(int index)
@@ -127,13 +125,22 @@ public class SelectMenu : MonoBehaviour {
         m_selectRoleUI.SetActive(false);
         m_selectScenarioUI.SetActive(true);
 
-        _SetCurrentScenarioInfo(0);
+		Player.Get().m_investigatorCard = m_lstRoleInfo[m_selectRoleDropdown.value];
+		// 如果有父对象被摧毁，其子对象也会被摧毁
+		Player.Get().m_investigatorCard.transform.SetParent(null);
+		DontDestroyOnLoad(Player.Get().m_investigatorCard);
+
+		Player.Get().m_playerToken = Instantiate(m_lstPlayerToken[m_selectRoleDropdown.value]);
+		Player.Get().m_playerToken.transform.SetParent(null);
+		DontDestroyOnLoad(Player.Get().m_playerToken);
+
+		_SetCurrentScenarioInfo(0);
     }
 
     public void OnButtonStartGame()
     {
-		GameLogic.Get().m_player.m_faction = (Faction)m_selectRoleDropdown.value;
-		GameLogic.Get().m_player.m_currentScenario = m_selectScenarioDropdown.value;
+		Player.Get().m_faction = (Faction)m_selectRoleDropdown.value;
+		Player.Get().m_currentScenario = m_selectScenarioDropdown.value;
 
 		UnityEngine.SceneManagement.SceneManager.LoadScene("MainGame");
     }
