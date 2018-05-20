@@ -13,9 +13,6 @@ public class Card : MonoBehaviour, IPointerClickHandler {
     public string   m_cardName;
     public bool     m_canFocus = false;
 
-	public int		m_cluesInLocation = 0;
-	public int		m_shroud = 0;
-
     private bool    m_bIsFront = true;
     private bool    m_bIsFocus = false;
     private GameObject  m_focusImage;

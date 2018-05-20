@@ -8,6 +8,7 @@ public class MainGame : MonoBehaviour
 	public GameObject			m_actArea;
 	public GameObject			m_agendaArea;
 	public List<GameObject>		m_playerCardArea;
+	public ChaosBag				m_chaosBag;
 
 	private GameObject	m_currentAct;
 	private GameObject	m_currentAgenda;
@@ -121,7 +122,7 @@ public class MainGame : MonoBehaviour
 
 	public void OnButtonInvestigateCurrentLocation()
 	{
-
+		bool bSucceed = GameLogic.Get().InvestigateCurrentLocation(m_chaosBag);
 	}
 
 	public void OnButtonGainOneResource()

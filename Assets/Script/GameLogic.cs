@@ -44,6 +44,7 @@ public class GameLogic
         return s_gameLogic;
     }
 
+	public GameDifficulty	m_difficulty = GameDifficulty.Normal;
 	public scenario_base[]	m_core_scenarios = new scenario_base[3];
 
 	public static void Swap<T>(ref T a, ref T b)
@@ -103,5 +104,33 @@ public class GameLogic
 	public void Update()
 	{
 		m_core_scenarios[0].ShowPlayInfo();
+	}
+
+	public bool InvestigateCurrentLocation(ChaosBag bag)
+	{
+		int chaosResult = 0;
+		var chaosToken = bag.GetResult();
+
+		switch(chaosToken)
+		{
+			case ChaosBag.ChaosTokenType.Tentacle:
+				return false;    // Auto failed...
+			case ChaosBag.ChaosTokenType.Zero:
+			case ChaosBag.ChaosTokenType.Add_1:
+			case ChaosBag.ChaosTokenType.Substract_1:
+			case ChaosBag.ChaosTokenType.Substract_2:
+			case ChaosBag.ChaosTokenType.Substract_3:
+			case ChaosBag.ChaosTokenType.Substract_4:
+			case ChaosBag.ChaosTokenType.Substract_5:
+			case ChaosBag.ChaosTokenType.Substract_6:
+			case ChaosBag.ChaosTokenType.Substract_7:
+			case ChaosBag.ChaosTokenType.Substract_8:
+				chaosResult = (int)chaosToken;
+				break;
+			default:
+				chaosResult = m_core_scenarios[0].GetChaosTokenEffect(chaosToken);
+				break;
+		}
+		return false;
 	}
 }

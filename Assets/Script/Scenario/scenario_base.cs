@@ -17,4 +17,5 @@ public abstract class scenario_base
 	}
 
 	public abstract void ShowPlayInfo();
+	public abstract int GetChaosTokenEffect(ChaosBag.ChaosTokenType t);
 }

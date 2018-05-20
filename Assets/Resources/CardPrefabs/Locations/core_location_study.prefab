@@ -19,8 +19,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224698172392794050}
-  - component: {fileID: 114789858574939622}
   - component: {fileID: 222058868462546184}
+  - component: {fileID: 114700345351285458}
   m_Layer: 0
   m_Name: core_location_study
   m_TagString: Untagged
@@ -28,7 +28,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114789858574939622
+--- !u!114 &114700345351285458
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -36,7 +36,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1446705582362468}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a14094d4a19987546b86e0b7b99c52eb, type: 3}
+  m_Script: {fileID: 11500000, guid: cd63b616aa9410c4eaf6af6140c197b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_frontImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
@@ -44,8 +44,9 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_cardName: "\u4E66\u623F"
   m_canFocus: 1
-  m_cluesInLocation: 2
+  m_clues: 2
   m_shroud: 2
+  m_lstEnemies: []
 --- !u!222 &222058868462546184
 CanvasRenderer:
   m_ObjectHideFlags: 1
