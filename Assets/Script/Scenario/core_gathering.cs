@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 
 public class core_gathering : scenario_base
 {
@@ -22,12 +23,29 @@ public class core_gathering : scenario_base
 
 	public override int GetChaosTokenEffect(ChaosBag.ChaosTokenType t)
 	{
-		switch(t)
+		if(GameLogic.Get().m_difficulty == GameDifficulty.Easy ||
+		GameLogic.Get().m_difficulty == GameDifficulty.Normal )
 		{
-			case ChaosBag.ChaosTokenType.Skully:
-
-				break;
+			switch (t)
+			{
+				case ChaosBag.ChaosTokenType.Skully:
+					return 0 - Player.Get().m_currentLocation.HowManyEnemyContainTheKeyword(EnemyCard.Keyword.Ghoul);
+				case ChaosBag.ChaosTokenType.Cultist:
+					return -1;
+				case ChaosBag.ChaosTokenType.Tablet:
+					if (Player.Get().m_currentLocation.HowManyEnemyContainTheKeyword(EnemyCard.Keyword.Ghoul) > 0)
+					{
+						Player.Get().m_health -= 1;
+					}
+					return -2;
+			}
 		}
+		else
+		{
+			Debug.Log("Hard/Expert difficulty not impl in GetChaosTokenEffect()!!");
+		}
+		
+		Assert.IsTrue(false, "Assert failed in GetChaosTokenEffect()!!");
 		return -1;
 	}
 }

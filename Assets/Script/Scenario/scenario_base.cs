@@ -11,7 +11,7 @@ public abstract class scenario_base
 	public void StartScenario()
 	{
 		GameLogic.DockCard(m_startLocation, GameObject.Find("StartLocation"));
-		GameLogic.DockPlayerToken(Player.Get().m_playerToken, m_startLocation);
+		GameLogic.PlayerEnterLocation(m_startLocation);
 
 		m_revealedLocations.Add(m_startLocation);
 	}

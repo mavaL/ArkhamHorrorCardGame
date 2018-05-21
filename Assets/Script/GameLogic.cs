@@ -46,6 +46,7 @@ public class GameLogic
 
 	public GameDifficulty	m_difficulty = GameDifficulty.Normal;
 	public scenario_base[]	m_core_scenarios = new scenario_base[3];
+	public Card.CardClickMode	m_cardClickMode = Card.CardClickMode.Flip;
 
 	public static void Swap<T>(ref T a, ref T b)
 	{
@@ -61,11 +62,18 @@ public class GameLogic
 		go.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 	}
 
-	public static void DockPlayerToken(GameObject go, GameObject parent)
+	public static void PlayerEnterLocation(GameObject locationGO)
 	{
-		go.transform.SetParent(parent.transform);
+		Player.Get().m_currentLocation = locationGO.GetComponent<LocationCard>();
 
-		var rt = go.GetComponent<RectTransform>();
+		if(Player.Get().m_currentLocation == null)
+		{
+			Debug.LogError("locationGO.GetComponent<LocationCard>() is null in PlayerEnterLocation()!!");
+		}
+
+		Player.Get().m_playerToken.transform.SetParent(locationGO.transform);
+
+		var rt = Player.Get().m_playerToken.GetComponent<RectTransform>();
 		rt.anchoredPosition = new Vector2(rt.sizeDelta.x/2, rt.sizeDelta.y/2);
 		rt.localScale = new Vector3(1, 1, 1);
 	}

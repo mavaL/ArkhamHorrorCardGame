@@ -5,7 +5,13 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Card : MonoBehaviour, IPointerClickHandler {
+public class Card : MonoBehaviour, IPointerClickHandler
+{
+	public enum CardClickMode
+	{
+		Flip,
+		MultiSelect
+	}
 
     public Sprite   m_frontImage;
     public Sprite   m_backImage;
@@ -15,10 +21,13 @@ public class Card : MonoBehaviour, IPointerClickHandler {
 
     private bool    m_bIsFront = true;
     private bool    m_bIsFocus = false;
-    private GameObject  m_focusImage;
+	private bool	m_bSelected = false;
+    private GameObject			m_focusImage;
+	public static List<Card>	m_lstSelectCards = new List<Card>();
 
-    // Use this for initialization
-    void Start ()
+
+	// Use this for initialization
+	void Start ()
     {
         if(m_image == null)
         {
@@ -58,16 +67,38 @@ public class Card : MonoBehaviour, IPointerClickHandler {
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(m_bIsFront)
-        {
-            m_image.sprite = m_backImage;
-            m_bIsFront = false;
-        }
-        else
-        {
-            m_image.sprite = m_frontImage;
-            m_bIsFront = true;
-        }
+		if(GameLogic.Get().m_cardClickMode == CardClickMode.Flip)
+		{
+			if (m_bIsFront)
+			{
+				m_image.sprite = m_backImage;
+				m_bIsFront = false;
+			}
+			else
+			{
+				m_image.sprite = m_frontImage;
+				m_bIsFront = true;
+			}
+		}
+        else if(GameLogic.Get().m_cardClickMode == CardClickMode.MultiSelect)
+		{
+			if(m_bSelected)
+			{ 
+				RectTransform rt = (RectTransform)gameObject.GetComponent<RectTransform>().parent;
+				rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y-30);
+
+				m_lstSelectCards.Remove(this);
+				m_bSelected = false;
+			}
+			else
+			{
+				RectTransform rt = (RectTransform)gameObject.GetComponent<RectTransform>().parent;
+				rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y+30);
+
+				m_lstSelectCards.Add(this);
+				m_bSelected = true;
+			}
+		}
     }
 
     public void OnPointerEnter(BaseEventData arg0)

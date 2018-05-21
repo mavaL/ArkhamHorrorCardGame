@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Assets\Script\Card.cs" />
     <Compile Include="Assets\Script\ChaosBag.cs" />
+    <Compile Include="Assets\Script\EnemyCard.cs" />
     <Compile Include="Assets\Script\GameLogic.cs" />
     <Compile Include="Assets\Script\LocationCard.cs" />
     <Compile Include="Assets\Script\MainGame.cs" />

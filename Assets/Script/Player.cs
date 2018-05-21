@@ -6,11 +6,15 @@ public class Player
 {
 	public static Player s_player = null;
 
-	public int					m_resources = -1;
-	public Faction				m_faction;
 	public int					m_currentScenario = -1;
 	public GameObject			m_investigatorCard;
 	public GameObject			m_playerToken;
+	public LocationCard			m_currentLocation;
+
+	public int					m_health = -1;
+	public int					m_sanity = -1;
+	public int					m_resources = -1;
+	public Faction				m_faction;
 
 	private List<GameObject>	m_lstPlayerCards = new List<GameObject>();
 

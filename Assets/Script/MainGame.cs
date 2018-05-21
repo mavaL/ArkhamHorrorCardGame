@@ -7,11 +7,13 @@ public class MainGame : MonoBehaviour
 {
 	public GameObject			m_actArea;
 	public GameObject			m_agendaArea;
+	public GameObject			m_selectCardInfo;
+	public GameObject			m_gameArea;
 	public List<GameObject>		m_playerCardArea;
 	public ChaosBag				m_chaosBag;
 
-	private GameObject	m_currentAct;
-	private GameObject	m_currentAgenda;
+	private GameObject			m_currentAct;
+	private GameObject			m_currentAgenda;
 
 	string[]	m_strScenarioPrefix = 
 	{
@@ -122,7 +124,19 @@ public class MainGame : MonoBehaviour
 
 	public void OnButtonInvestigateCurrentLocation()
 	{
+		m_gameArea.SetActive(false);
+		m_selectCardInfo.SetActive(true);
+
+		GameLogic.Get().m_cardClickMode = Card.CardClickMode.MultiSelect;
+	}
+
+	public void OnButtonConfirmSelectCard()
+	{
 		bool bSucceed = GameLogic.Get().InvestigateCurrentLocation(m_chaosBag);
+
+		m_gameArea.SetActive(true);
+		m_selectCardInfo.SetActive(false);
+		GameLogic.Get().m_cardClickMode = Card.CardClickMode.Flip;
 	}
 
 	public void OnButtonGainOneResource()
