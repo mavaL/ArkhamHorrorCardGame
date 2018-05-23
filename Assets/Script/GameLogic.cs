@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Assertions;
 
 
 public enum GameDifficulty
@@ -114,15 +114,17 @@ public class GameLogic
 		m_core_scenarios[0].ShowPlayInfo();
 	}
 
-	public bool InvestigateCurrentLocation(ChaosBag bag)
+	public void InvestigateCurrentLocation(ChaosBag bag)
 	{
+		bool bAutoFailed = false;
 		int chaosResult = 0;
 		var chaosToken = bag.GetResult();
 
 		switch(chaosToken)
 		{
 			case ChaosBag.ChaosTokenType.Tentacle:
-				return false;    // Auto failed...
+				bAutoFailed = true;    // Auto failed...
+				break;
 			case ChaosBag.ChaosTokenType.Zero:
 			case ChaosBag.ChaosTokenType.Add_1:
 			case ChaosBag.ChaosTokenType.Substract_1:
@@ -139,6 +141,34 @@ public class GameLogic
 				chaosResult = m_core_scenarios[0].GetChaosTokenEffect(chaosToken);
 				break;
 		}
-		return false;
+
+		int shroudValue = Player.Get().m_currentLocation.m_shroud;
+		int skillIconValue = GetSkillIconNumInSelectCards(PlayerCard.SkillIcon.Intellect);
+
+		if(!bAutoFailed && skillIconValue + chaosResult >= shroudValue)
+		{
+			// Succeed!
+
+		}
+		else
+		{
+			// Failed..
+			m_core_scenarios[0].AfterSkillTestFailed(chaosToken);
+		}
+	}
+
+	public int GetSkillIconNumInSelectCards(PlayerCard.SkillIcon type)
+	{
+		for(int i=0; i<Card.m_lstSelectCards.Count; ++i)
+		{
+			PlayerCard pc = (PlayerCard)Card.m_lstSelectCards[i];
+			Assert.IsTrue(pc != null, "PlayerCard is null in GetSkillIconNumInSelectCards()!!");
+
+			if(pc.m_skillIcons.ContainsKey(type))
+			{
+				return pc.m_skillIcons[type];
+			}
+		}
+		return 0;
 	}
 }

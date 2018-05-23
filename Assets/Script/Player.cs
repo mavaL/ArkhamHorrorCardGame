@@ -11,8 +11,8 @@ public class Player
 	public GameObject			m_playerToken;
 	public LocationCard			m_currentLocation;
 
-	public int					m_health = -1;
-	public int					m_sanity = -1;
+	private int					m_health = -1;
+	private int					m_sanity = -1;
 	public int					m_resources = -1;
 	public Faction				m_faction;
 
@@ -41,5 +41,15 @@ public class Player
 	public List<GameObject> GetHandCards()
 	{
 		return m_lstPlayerCards;
+	}
+
+	public void DecreaseHealth()
+	{
+		m_health -= 1;
+	}
+
+	public void DecreaseSanity()
+	{
+		m_sanity -= 1;
 	}
 }

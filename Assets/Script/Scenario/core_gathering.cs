@@ -35,9 +35,11 @@ public class core_gathering : scenario_base
 				case ChaosBag.ChaosTokenType.Tablet:
 					if (Player.Get().m_currentLocation.HowManyEnemyContainTheKeyword(EnemyCard.Keyword.Ghoul) > 0)
 					{
-						Player.Get().m_health -= 1;
+						Player.Get().DecreaseHealth();
 					}
 					return -2;
+				default:
+					break;
 			}
 		}
 		else
@@ -47,5 +49,26 @@ public class core_gathering : scenario_base
 		
 		Assert.IsTrue(false, "Assert failed in GetChaosTokenEffect()!!");
 		return -1;
+	}
+
+	public override void AfterSkillTestFailed(ChaosBag.ChaosTokenType t)
+	{
+		if (GameLogic.Get().m_difficulty == GameDifficulty.Easy ||
+		GameLogic.Get().m_difficulty == GameDifficulty.Normal)
+		{
+			switch (t)
+			{
+				case ChaosBag.ChaosTokenType.Cultist:
+					Player.Get().DecreaseSanity();
+					break;
+				default:
+					break;
+
+			}
+		}
+		else
+		{
+			Debug.Log("Hard/Expert difficulty not impl in AfterSkillTest()!!");
+		}
 	}
 }

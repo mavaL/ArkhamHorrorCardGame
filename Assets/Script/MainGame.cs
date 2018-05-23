@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Text;
+using UnityEngine.UI;
 
 public class MainGame : MonoBehaviour
 {
@@ -10,6 +10,8 @@ public class MainGame : MonoBehaviour
 	public GameObject			m_selectCardInfo;
 	public GameObject			m_gameArea;
 	public List<GameObject>		m_playerCardArea;
+	public Text					m_gameLog;
+
 	public ChaosBag				m_chaosBag;
 
 	private GameObject			m_currentAct;
@@ -85,6 +87,55 @@ public class MainGame : MonoBehaviour
 		_DrawFiveOpenHands();
 
 		GameLogic.Get().StartScenario();
+
+		string log = Player.Get().m_investigatorCard.GetComponent<Card>().m_cardName + "进入了场景。\n";
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
+		OutputGameLog(log);
 	}
 
 	private void _DrawFiveOpenHands()
@@ -132,10 +183,11 @@ public class MainGame : MonoBehaviour
 
 	public void OnButtonConfirmSelectCard()
 	{
-		bool bSucceed = GameLogic.Get().InvestigateCurrentLocation(m_chaosBag);
+		GameLogic.Get().InvestigateCurrentLocation(m_chaosBag);
 
 		m_gameArea.SetActive(true);
 		m_selectCardInfo.SetActive(false);
+		Card.m_lstSelectCards.Clear();
 		GameLogic.Get().m_cardClickMode = Card.CardClickMode.Flip;
 	}
 
@@ -155,5 +207,10 @@ public class MainGame : MonoBehaviour
 		}
 
 		GameLogic.Get().Update();
+	}
+
+	public void OutputGameLog(string log)
+	{
+		m_gameLog.text += log;
 	}
 }

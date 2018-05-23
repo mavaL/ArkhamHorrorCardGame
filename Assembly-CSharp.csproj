@@ -59,11 +59,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\Card.cs" />
+    <Compile Include="Assets\Script\Card\Card.cs" />
+    <Compile Include="Assets\Script\Card\EnemyCard.cs" />
+    <Compile Include="Assets\Script\Card\LocationCard.cs" />
+    <Compile Include="Assets\Script\Card\PlayerCard.cs" />
     <Compile Include="Assets\Script\ChaosBag.cs" />
-    <Compile Include="Assets\Script\EnemyCard.cs" />
+    <Compile Include="Assets\Script\Code\Dictionary.cs" />
     <Compile Include="Assets\Script\GameLogic.cs" />
-    <Compile Include="Assets\Script\LocationCard.cs" />
     <Compile Include="Assets\Script\MainGame.cs" />
     <Compile Include="Assets\Script\MainMenu.cs" />
     <Compile Include="Assets\Script\Player.cs" />
