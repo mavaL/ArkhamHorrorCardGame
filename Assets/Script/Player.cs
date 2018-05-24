@@ -7,7 +7,7 @@ public class Player
 	public static Player s_player = null;
 
 	public int					m_currentScenario = -1;
-	public GameObject			m_investigatorCard;
+	public InvestigatorCard		m_investigatorCard;
 	public GameObject			m_playerToken;
 	public LocationCard			m_currentLocation;
 

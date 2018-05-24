@@ -26,8 +26,8 @@ public class MainGame : MonoBehaviour
 
 	string[]	m_roland_def_cards =
 	{
-		"core_roland_dot38_special",
-		"core_cover_up",
+		"Neutral/core_roland_dot38_special",
+		"Neutral/core_cover_up",
 		"Guardian/core_guardian_dot45_automatic",
 		"Guardian/core_guardian_physical_training",
 		"Guardian/core_guardian_beat_cop",
@@ -59,7 +59,7 @@ public class MainGame : MonoBehaviour
 		"Neutral/core_guts",
 		"Neutral/core_manual_dexterity",
 		"Neutral/core_manual_dexterity",
-		"core_paranoia",
+		"Neutral/core_paranoia",
 	};
 
 	private List<GameObject>		m_lstPlayerCards = new List<GameObject>();
@@ -68,6 +68,8 @@ public class MainGame : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		GameLogic.Get().m_logText = m_gameLog;
+
 		// Load and instantiate prefabs
 		string str = m_strScenarioPrefix[Player.Get().m_currentScenario];
 		string strAct1 = str + "act_1";
@@ -79,7 +81,7 @@ public class MainGame : MonoBehaviour
 		m_currentAct = Instantiate(act1);
 		m_currentAgenda = Instantiate(agenda1);
 
-		GameLogic.DockCard(Player.Get().m_investigatorCard, GameObject.Find("InvestigatorCard"));
+		GameLogic.DockCard(Player.Get().m_investigatorCard.gameObject, GameObject.Find("InvestigatorCard"));
 		GameLogic.DockCard(m_currentAct, m_actArea);
 		GameLogic.DockCard(m_currentAgenda, m_agendaArea);
 
@@ -88,54 +90,8 @@ public class MainGame : MonoBehaviour
 
 		GameLogic.Get().StartScenario();
 
-		string log = Player.Get().m_investigatorCard.GetComponent<Card>().m_cardName + "进入了场景。\n";
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
-		OutputGameLog(log);
+		string log = Player.Get().m_investigatorCard.m_cardName + "进入了场景。\n";
+		GameLogic.Get().OutputGameLog(log);
 	}
 
 	private void _DrawFiveOpenHands()
@@ -179,6 +135,8 @@ public class MainGame : MonoBehaviour
 		m_selectCardInfo.SetActive(true);
 
 		GameLogic.Get().m_cardClickMode = Card.CardClickMode.MultiSelect;
+
+		GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "调查了" + Player.Get().m_currentLocation.m_cardName + "\n");
 	}
 
 	public void OnButtonConfirmSelectCard()
@@ -207,10 +165,5 @@ public class MainGame : MonoBehaviour
 		}
 
 		GameLogic.Get().Update();
-	}
-
-	public void OutputGameLog(string log)
-	{
-		m_gameLog.text += log;
 	}
 }

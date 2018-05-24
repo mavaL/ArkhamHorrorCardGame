@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Assertions;
 
 
@@ -47,6 +48,7 @@ public class GameLogic
 	public GameDifficulty	m_difficulty = GameDifficulty.Normal;
 	public scenario_base[]	m_core_scenarios = new scenario_base[3];
 	public Card.CardClickMode	m_cardClickMode = Card.CardClickMode.Flip;
+	public Text				m_logText;
 
 	public static void Swap<T>(ref T a, ref T b)
 	{
@@ -144,21 +146,34 @@ public class GameLogic
 
 		int shroudValue = Player.Get().m_currentLocation.m_shroud;
 		int skillIconValue = GetSkillIconNumInSelectCards(PlayerCard.SkillIcon.Intellect);
+		int playerSkillValue = Player.Get().m_investigatorCard.m_intellect;
+		int finalValue = skillIconValue + chaosResult + playerSkillValue - shroudValue;
 
-		if(!bAutoFailed && skillIconValue + chaosResult >= shroudValue)
+		OutputGameLog(string.Format("知识：{0}\n打出技能图标：{1}\n混沌标记（{2}）：{3}\n笼罩：{4}\n最终结果：{5}\n",
+			playerSkillValue,
+			skillIconValue,
+			ChaosBag.GetChaosTokenName(chaosToken),
+			chaosResult,
+			shroudValue,
+			finalValue));
+
+		if (!bAutoFailed && finalValue >= 0)
 		{
 			// Succeed!
-
+			OutputGameLog("调查成功！\n");
 		}
 		else
 		{
 			// Failed..
+			OutputGameLog("调查失败！\n");
 			m_core_scenarios[0].AfterSkillTestFailed(chaosToken);
 		}
 	}
 
 	public int GetSkillIconNumInSelectCards(PlayerCard.SkillIcon type)
 	{
+		int result = 0;
+
 		for(int i=0; i<Card.m_lstSelectCards.Count; ++i)
 		{
 			PlayerCard pc = (PlayerCard)Card.m_lstSelectCards[i];
@@ -166,9 +181,19 @@ public class GameLogic
 
 			if(pc.m_skillIcons.ContainsKey(type))
 			{
-				return pc.m_skillIcons[type];
+				result += pc.m_skillIcons[type];
+			}
+
+			if (pc.m_skillIcons.ContainsKey(PlayerCard.SkillIcon.Wild))
+			{
+				result += pc.m_skillIcons[PlayerCard.SkillIcon.Wild];
 			}
 		}
-		return 0;
+		return result;
+	}
+
+	public void OutputGameLog(string log)
+	{
+		m_logText.text += log;
 	}
 }

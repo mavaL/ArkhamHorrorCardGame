@@ -16,7 +16,8 @@ public class PlayerCard : Card
 		Willpower,
 		Intellect,
 		Combat,
-		Agility
+		Agility,
+		Wild	// Can be treat as anyone
 	}
 
 	public SkillIconDictionary m_skillIcons;

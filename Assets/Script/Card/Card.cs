@@ -82,21 +82,26 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		}
         else if(GameLogic.Get().m_cardClickMode == CardClickMode.MultiSelect)
 		{
-			if(m_bSelected)
-			{ 
-				RectTransform rt = (RectTransform)gameObject.GetComponent<RectTransform>().parent;
-				rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y-30);
+			PlayerCard pc = this as PlayerCard;
 
-				m_lstSelectCards.Remove(this);
-				m_bSelected = false;
-			}
-			else
+			if(pc != null && pc.m_skillIcons.Count > 0)
 			{
-				RectTransform rt = (RectTransform)gameObject.GetComponent<RectTransform>().parent;
-				rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y+30);
+				if (m_bSelected)
+				{
+					RectTransform rt = (RectTransform)gameObject.GetComponent<RectTransform>().parent;
+					rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y - 30);
 
-				m_lstSelectCards.Add(this);
-				m_bSelected = true;
+					m_lstSelectCards.Remove(this);
+					m_bSelected = false;
+				}
+				else
+				{
+					RectTransform rt = (RectTransform)gameObject.GetComponent<RectTransform>().parent;
+					rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y + 30);
+
+					m_lstSelectCards.Add(this);
+					m_bSelected = true;
+				}
 			}
 		}
     }
@@ -109,7 +114,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 			m_focusImage.GetComponent<Image>().raycastTarget = false;
 
             RectTransform rt = (RectTransform)m_image.GetComponent<RectTransform>().parent;
-            m_focusImage.GetComponent<RectTransform>().SetParent(GameObject.Find("Canvas").transform);
+            m_focusImage.GetComponent<RectTransform>().SetParent(GameObject.Find("Canvas").transform, false);
             m_focusImage.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
             m_focusImage.GetComponent<RectTransform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
 

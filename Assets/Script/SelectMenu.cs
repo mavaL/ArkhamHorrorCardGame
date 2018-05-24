@@ -19,11 +19,11 @@ public class SelectMenu : MonoBehaviour {
     void Start ()
     {
         // Load and instantiate prefabs
-        _InitInvestigator("CardPrefabs/core_invesigator_roland_banks", 0);
-        _InitInvestigator("CardPrefabs/core_invesigator_wendy_adams", 1);
-        _InitInvestigator("CardPrefabs/core_invesigator_agnes_baker", 2);
-        _InitInvestigator("CardPrefabs/core_invesigator_skids_otoole", 3);
-        _InitInvestigator("CardPrefabs/core_invesigator_daisy_walker", 4);
+        _InitInvestigator("CardPrefabs/Investigator/core_invesigator_roland_banks", 0);
+        _InitInvestigator("CardPrefabs/Investigator/core_invesigator_wendy_adams", 1);
+        _InitInvestigator("CardPrefabs/Investigator/core_invesigator_agnes_baker", 2);
+        _InitInvestigator("CardPrefabs/Investigator/core_invesigator_skids_otoole", 3);
+        _InitInvestigator("CardPrefabs/Investigator/core_invesigator_daisy_walker", 4);
 
         _InitScenario("CardPrefabs/core_gathering", 0);
         _InitScenario("CardPrefabs/core_mask_of_midnight", 1);
@@ -125,7 +125,7 @@ public class SelectMenu : MonoBehaviour {
         m_selectRoleUI.SetActive(false);
         m_selectScenarioUI.SetActive(true);
 
-		Player.Get().m_investigatorCard = m_lstRoleInfo[m_selectRoleDropdown.value];
+		Player.Get().m_investigatorCard = m_lstRoleInfo[m_selectRoleDropdown.value].GetComponent<InvestigatorCard>();
 		// 如果有父对象被摧毁，其子对象也会被摧毁
 		Player.Get().m_investigatorCard.transform.SetParent(null);
 		DontDestroyOnLoad(Player.Get().m_investigatorCard);

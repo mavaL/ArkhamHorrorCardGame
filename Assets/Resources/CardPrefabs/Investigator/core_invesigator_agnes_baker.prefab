@@ -9,46 +9,52 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1699669398680370}
+  m_RootGameObject: {fileID: 1609351538639294}
   m_IsPrefabParent: 1
---- !u!1 &1699669398680370
+--- !u!1 &1609351538639294
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 224897971089742720}
-  - component: {fileID: 114462483758294420}
+  - component: {fileID: 224609077721864210}
+  - component: {fileID: 114986670318230928}
   m_Layer: 5
-  m_Name: core_invesigator_roland_banks
+  m_Name: core_invesigator_agnes_baker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114462483758294420
+--- !u!114 &114986670318230928
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1699669398680370}
+  m_GameObject: {fileID: 1609351538639294}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a14094d4a19987546b86e0b7b99c52eb, type: 3}
+  m_Script: {fileID: 11500000, guid: 90ba9b5232f99374da36bf3e60704167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_frontImage: {fileID: 21300008, guid: ec84ed0bc0aec604ca37408cce272616, type: 3}
-  m_backImage: {fileID: 21300008, guid: 23bec283faaa48e4886c8df63b8767b1, type: 3}
+  m_frontImage: {fileID: 21300010, guid: ec84ed0bc0aec604ca37408cce272616, type: 3}
+  m_backImage: {fileID: 21300010, guid: 23bec283faaa48e4886c8df63b8767b1, type: 3}
   m_image: {fileID: 0}
-  m_cardName: "\u7F57\u5170\u73ED\u514B\u65AF"
+  m_cardName: "\u5B89\u857E\u4E1D\u8D1D\u514B"
   m_canFocus: 1
---- !u!224 &224897971089742720
+  m_willPower: 5
+  m_intellect: 2
+  m_combat: 2
+  m_agility: 3
+  m_health: 6
+  m_sanity: 8
+--- !u!224 &224609077721864210
 RectTransform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1699669398680370}
+  m_GameObject: {fileID: 1609351538639294}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}

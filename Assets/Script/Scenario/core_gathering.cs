@@ -36,8 +36,10 @@ public class core_gathering : scenario_base
 					if (Player.Get().m_currentLocation.HowManyEnemyContainTheKeyword(EnemyCard.Keyword.Ghoul) > 0)
 					{
 						Player.Get().DecreaseHealth();
+						GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "结算混沌标记：受到1点伤害\n");
 					}
 					return -2;
+				case ChaosBag.ChaosTokenType.ElderSign
 				default:
 					break;
 			}
@@ -60,6 +62,7 @@ public class core_gathering : scenario_base
 			{
 				case ChaosBag.ChaosTokenType.Cultist:
 					Player.Get().DecreaseSanity();
+					GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "结算混沌标记：神智减1\n");
 					break;
 				default:
 					break;

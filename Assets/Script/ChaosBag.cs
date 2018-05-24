@@ -62,6 +62,31 @@ public class ChaosBag : MonoBehaviour
 		m_chaosBag.Add(ChaosTokenType.Tentacle);
 		m_chaosBag.Add(ChaosTokenType.ElderSign);
 	}
+
+	public static string GetChaosTokenName(ChaosTokenType t)
+	{
+		switch (t)
+		{
+			case ChaosTokenType.Add_1: return "加1";
+			case ChaosTokenType.Cultist: return "邪教徒";
+			case ChaosTokenType.ElderSign: return "远古印记";
+			case ChaosTokenType.ElderThing: return "古神";
+			case ChaosTokenType.Skully: return "骷髅头";
+			case ChaosTokenType.Substract_1: return "减1";
+			case ChaosTokenType.Substract_2: return "减2";
+			case ChaosTokenType.Substract_3: return "减3";
+			case ChaosTokenType.Substract_4: return "减4";
+			case ChaosTokenType.Substract_5: return "减5";
+			case ChaosTokenType.Substract_6: return "减6";
+			case ChaosTokenType.Substract_7: return "减7";
+			case ChaosTokenType.Substract_8: return "减8";
+			case ChaosTokenType.Tablet: return "碑盘";
+			case ChaosTokenType.Tentacle: return "触手";
+			case ChaosTokenType.Zero: return "零";
+		}
+
+		return "Assert in GetChaosTokenName()";
+	}
 	
 	public ChaosTokenType GetResult()
 	{
