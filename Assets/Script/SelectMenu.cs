@@ -125,10 +125,7 @@ public class SelectMenu : MonoBehaviour {
         m_selectRoleUI.SetActive(false);
         m_selectScenarioUI.SetActive(true);
 
-		Player.Get().m_investigatorCard = m_lstRoleInfo[m_selectRoleDropdown.value].GetComponent<InvestigatorCard>();
-		// 如果有父对象被摧毁，其子对象也会被摧毁
-		Player.Get().m_investigatorCard.transform.SetParent(null);
-		DontDestroyOnLoad(Player.Get().m_investigatorCard);
+        Player.Get().InitPlayer(m_lstRoleInfo[m_selectRoleDropdown.value].GetComponent<InvestigatorCard>());
 
 		Player.Get().m_playerToken = Instantiate(m_lstPlayerToken[m_selectRoleDropdown.value]);
 		Player.Get().m_playerToken.transform.SetParent(null);

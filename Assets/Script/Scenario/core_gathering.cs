@@ -39,8 +39,7 @@ public class core_gathering : scenario_base
 						GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "结算混沌标记：受到1点伤害\n");
 					}
 					return -2;
-				case ChaosBag.ChaosTokenType.ElderSign
-				default:
+                default:
 					break;
 			}
 		}

@@ -2844,10 +2844,10 @@ MonoBehaviour:
   m_lstScenarioInfo: []
   m_lstPlayerToken:
   - {fileID: 1823531552932138, guid: 116467700774cf343898c7ea94fbda71, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1241196668325226, guid: e5230dfc85ae5d24da2a6144305365f4, type: 2}
+  - {fileID: 1073043976014908, guid: 2c69f9ce0a0b50049833c22e44944fca, type: 2}
+  - {fileID: 1435520432236902, guid: 438f01e4a944fd441956c79172dad20d, type: 2}
+  - {fileID: 1381129960184742, guid: ab0abc0a2c097814da43d19031f305ce, type: 2}
   m_selectRoleUI: {fileID: 278521585}
   m_selectScenarioUI: {fileID: 153554955}
   m_selectRoleDropdown: {fileID: 74815794}

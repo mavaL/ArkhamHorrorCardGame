@@ -49,6 +49,15 @@ MonoBehaviour:
   m_agility: 3
   m_health: 6
   m_sanity: 8
+  m_investigatorAbility:
+    _target: {fileID: 114826646520924828, guid: 42cf98e759d197a48ae73a3ea8f139eb,
+      type: 2}
+    _methodName: OnElderSignAbility_Agnes
+    _args: []
+    _dynamic: 0
+    _typeName: InvestigatorCard+ElderSignAbility, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    dirty: 0
 --- !u!224 &224609077721864210
 RectTransform:
   m_ObjectHideFlags: 1

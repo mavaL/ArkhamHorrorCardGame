@@ -16,9 +16,12 @@ public class Player
 	public int					m_resources = -1;
 	public Faction				m_faction;
 
+    // Hand cards
 	private List<GameObject>	m_lstPlayerCards = new List<GameObject>();
+    // Asset cards played
+    private List<PlayerCard>    m_lstAssetCards = new List<PlayerCard>();
 
-	public Player()
+    public Player()
 	{
 		m_resources = 5;
 	}
@@ -32,6 +35,17 @@ public class Player
 
 		return s_player;
 	}
+
+    public void InitPlayer(InvestigatorCard card)
+    {
+        m_investigatorCard = card;
+        // 如果有父对象被摧毁，其子对象也会被摧毁
+        m_investigatorCard.transform.SetParent(null);
+        GameObject.DontDestroyOnLoad(m_investigatorCard);
+
+        m_health = m_investigatorCard.m_health;
+        m_sanity = m_investigatorCard.m_sanity;
+    }
 	
 	public void AddHandCard(GameObject go)
 	{
@@ -43,6 +57,18 @@ public class Player
 		return m_lstPlayerCards;
 	}
 
+    public bool IsAssetCardInPlay(string cardName)
+    {
+        for(int i=0; i<m_lstAssetCards.Count; ++i)
+        {
+            if(m_lstAssetCards[i].m_cardName == cardName)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 	public void DecreaseHealth()
 	{
 		m_health -= 1;
@@ -52,4 +78,9 @@ public class Player
 	{
 		m_sanity -= 1;
 	}
+
+    public int HowManySanityIsLost()
+    {
+        return m_investigatorCard.m_sanity - m_sanity;
+    }
 }

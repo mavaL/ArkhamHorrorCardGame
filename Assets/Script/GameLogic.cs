@@ -127,7 +127,10 @@ public class GameLogic
 			case ChaosBag.ChaosTokenType.Tentacle:
 				bAutoFailed = true;    // Auto failed...
 				break;
-			case ChaosBag.ChaosTokenType.Zero:
+            case ChaosBag.ChaosTokenType.ElderSign:
+                chaosResult = Player.Get().m_investigatorCard.m_investigatorAbility.Invoke();
+                break;
+            case ChaosBag.ChaosTokenType.Zero:
 			case ChaosBag.ChaosTokenType.Add_1:
 			case ChaosBag.ChaosTokenType.Substract_1:
 			case ChaosBag.ChaosTokenType.Substract_2:
@@ -157,7 +160,9 @@ public class GameLogic
 			shroudValue,
 			finalValue));
 
-		if (!bAutoFailed && finalValue >= 0)
+        bool bSucceed = !bAutoFailed && finalValue >= 0;
+
+		if (bSucceed)
 		{
 			// Succeed!
 			OutputGameLog("调查成功！\n");
@@ -168,6 +173,14 @@ public class GameLogic
 			OutputGameLog("调查失败！\n");
 			m_core_scenarios[0].AfterSkillTestFailed(chaosToken);
 		}
+
+        if(chaosToken == ChaosBag.ChaosTokenType.ElderSign)
+        {
+            if(Player.Get().m_investigatorCard.m_afterElderSignEvent.methodName != null)
+            {
+                Player.Get().m_investigatorCard.m_afterElderSignEvent.Invoke(bSucceed);
+            }
+        }
 	}
 
 	public int GetSkillIconNumInSelectCards(PlayerCard.SkillIcon type)
