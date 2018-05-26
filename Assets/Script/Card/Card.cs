@@ -7,6 +7,15 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour, IPointerClickHandler
 {
+	void Awake()
+	{
+		if (m_image == null)
+		{
+			m_image = gameObject.AddComponent<Image>();
+			m_image.sprite = m_frontImage;
+		}
+	}
+
 	public enum CardClickMode
 	{
 		Flip,
@@ -58,6 +67,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
     public Image    m_image = null;
     public string   m_cardName;
     public bool     m_canFocus = false;
+	public bool		m_canFlip = true;
 
     private bool    m_bIsFront = true;
     private bool    m_bIsFocus = false;
@@ -69,12 +79,6 @@ public class Card : MonoBehaviour, IPointerClickHandler
 	// Use this for initialization
 	void Start ()
     {
-        if(m_image == null)
-        {
-            m_image = this.gameObject.AddComponent<Image>();
-            m_image.sprite = m_frontImage;
-        }
-
 		if(m_canFocus)
 		{
 			var trigger = gameObject.AddComponent<EventTrigger>();
@@ -99,20 +103,25 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		}
 	}
 
+	public void FlipCard()
+	{
+		if (m_bIsFront)
+		{
+			m_image.sprite = m_backImage;
+			m_bIsFront = false;
+		}
+		else
+		{
+			m_image.sprite = m_frontImage;
+			m_bIsFront = true;
+		}
+	}
+
     public void OnPointerClick(PointerEventData eventData)
     {
-		if(GameLogic.Get().m_cardClickMode == CardClickMode.Flip)
+		if(m_canFlip && GameLogic.Get().m_cardClickMode == CardClickMode.Flip)
 		{
-			if (m_bIsFront)
-			{
-				m_image.sprite = m_backImage;
-				m_bIsFront = false;
-			}
-			else
-			{
-				m_image.sprite = m_frontImage;
-				m_bIsFront = true;
-			}
+			FlipCard();
 		}
         else if(GameLogic.Get().m_cardClickMode == CardClickMode.MultiSelect)
 		{

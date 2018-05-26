@@ -45,6 +45,7 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_cardName: "\u8D70\u5ECA"
   m_canFocus: 1
+  m_canFlip: 0
   m_clues: 0
   m_shroud: 0
   m_lstEnemies: []

@@ -16,6 +16,7 @@ public class Player
 	public int					m_resources = -1;
 	public Faction				m_faction;
 	public int					m_clues;
+	public int					m_actionUsed = 0;
 
     // Hand cards
 	private List<PlayerCard>	m_lstPlayerCards = new List<PlayerCard>();

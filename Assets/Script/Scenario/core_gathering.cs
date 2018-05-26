@@ -6,9 +6,30 @@ using UnityEngine.Assertions;
 
 public class core_gathering : scenario_base
 {
-	public core_gathering()
+	void Awake()
 	{
-		m_startLocation = (GameObject)GameObject.Instantiate(Resources.Load("CardPrefabs/Locations/core_location_study"));
+		GameLogic.Get().m_currentScenario = this;
+	}
+
+	void Start()
+	{
+		GameLogic.Get().m_currentPhase = TurnPhase.InvestigationPhase;
+
+		m_currentAct = Instantiate(m_lstActCards[0]).GetComponent<QuestCard>();
+		m_currentAgenda = Instantiate(m_lstAgendaCards[0]).GetComponent<QuestCard>();
+
+		GameLogic.DockCard(m_currentAct.gameObject, GameObject.Find("Act"));
+		GameLogic.DockCard(m_currentAgenda.gameObject, GameObject.Find("Agenda"));
+
+		m_startLocation = Instantiate(m_startLocation);
+
+		GameLogic.DockCard(m_startLocation, GameObject.Find("StartLocation"));
+		GameLogic.PlayerEnterLocation(m_startLocation);
+
+		m_revealedLocations.Add(m_startLocation);
+
+		string log = Player.Get().m_investigatorCard.m_cardName + "进入了场景。\n";
+		GameLogic.Get().OutputGameLog(log);
 	}
 
 	public override void ShowPlayInfo()
@@ -16,12 +37,19 @@ public class core_gathering : scenario_base
 		LocationCard card = m_revealedLocations[0].GetComponent<LocationCard>();
 
 		var textComp = GameObject.Find("ClueInfo").GetComponent<Text>();
-		textComp.text  = string.Format("持有资源：<color=orange>{0}</color>\n" +
-			"持有线索：<color=orange>{1}</color>\n" +
-			"<color=red>各地点的线索：</color>\n" +
-			"书房： <color=green>{2}</color>\n", 
+		textComp.text  = string.Format(
+			"剩余行动：<color=green>{0}</color>\n" +
+			"持有资源：<color=green>{1}</color>\n" +
+			"持有线索：<color=green>{2}</color>\n" +
+			"章节已推进标记数：<color=green>{3}</color>\n" +
+			"恶兆已逼近标记数：<color=red>{4}</color>\n" +
+			"各地点的线索：\n" +
+			"书房： <color=orange>{5}</color>\n", 
+			3 - Player.Get().m_actionUsed,
 			Player.Get().m_resources,
 			Player.Get().m_clues,
+			m_currentAct.m_currentToken,
+			m_currentAgenda.m_currentToken,
 			card.m_clues);
 	}
 

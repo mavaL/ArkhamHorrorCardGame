@@ -19,8 +19,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224122452683020774}
-  - component: {fileID: 114899602651917062}
   - component: {fileID: 222853336134230296}
+  - component: {fileID: 114317695266508338}
   m_Layer: 0
   m_Name: core_gathering_agenda_1
   m_TagString: Untagged
@@ -28,7 +28,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114899602651917062
+--- !u!114 &114317695266508338
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -36,7 +36,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1777014522220698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a14094d4a19987546b86e0b7b99c52eb, type: 3}
+  m_Script: {fileID: 11500000, guid: 37b3876b039ed034980967c4f500c702, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_lstKeywords: 
@@ -45,6 +45,8 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_cardName: "\u96C6\u7ED3-\u6076\u51461"
   m_canFocus: 1
+  m_canFlip: 0
+  m_tokenToAdvance: 3
 --- !u!222 &222853336134230296
 CanvasRenderer:
   m_ObjectHideFlags: 1

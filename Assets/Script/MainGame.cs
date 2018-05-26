@@ -13,19 +13,13 @@ public class MainGame : MonoBehaviour
 	public List<GameObject>		m_playerCardArea;
 	public Text					m_gameLog;
 	public Button				m_InvestigateBtn;
+	public Button				m_drawPlayerCardBtn;
+	public Button				m_gainResourceBtn;
+	public Button				m_enemyPhaseBtn;
+	public Button				m_advanceActBtn;
 	#endregion
 
 	public ChaosBag				m_chaosBag;
-
-	private GameObject			m_currentAct;
-	private GameObject			m_currentAgenda;
-
-	string[]	m_strScenarioPrefix = 
-	{
-		"cardprefabs/core_gathering_",
-		"cardprefabs/core_mask_of_midnight_",
-		"cardprefabs/core_devourer_below_",
-	};
 
 	string[]	m_roland_def_cards =
 	{
@@ -70,28 +64,10 @@ public class MainGame : MonoBehaviour
 	{
 		GameLogic.Get().m_logText = m_gameLog;
 
-		// Load and instantiate prefabs
-		string str = m_strScenarioPrefix[Player.Get().m_currentScenario];
-		string strAct1 = str + "act_1";
-		string strAgenda1 = str + "agenda_1";
-
-		GameObject act1 = (GameObject)Resources.Load(strAct1);
-		GameObject agenda1 = (GameObject)Resources.Load(strAgenda1);
-
-		m_currentAct = Instantiate(act1);
-		m_currentAgenda = Instantiate(agenda1);
-
 		GameLogic.DockCard(Player.Get().m_investigatorCard.gameObject, GameObject.Find("InvestigatorCard"));
-		GameLogic.DockCard(m_currentAct, m_actArea);
-		GameLogic.DockCard(m_currentAgenda, m_agendaArea);
 
 		_LoadPlayerCards(Player.Get().m_faction);
 		_DrawFiveOpenHands();
-
-		GameLogic.Get().StartScenario();
-
-		string log = Player.Get().m_investigatorCard.m_cardName + "进入了场景。\n";
-		GameLogic.Get().OutputGameLog(log);
 	}
 
 	private void _DrawFiveOpenHands()
@@ -127,6 +103,7 @@ public class MainGame : MonoBehaviour
 	public void	OnButtonDrawPlayerCard()
 	{
 		Player.Get().AddHandCard(GameLogic.Get().DrawPlayerCard());
+		Player.Get().m_actionUsed += 1;
 	}
 
 	public void OnButtonInvestigateCurrentLocation()
@@ -161,6 +138,7 @@ public class MainGame : MonoBehaviour
 	public void OnButtonGainOneResource()
 	{
 		Player.Get().m_resources += 1;
+		Player.Get().m_actionUsed += 1;
 	}
 
 	// Update is called once per frame
@@ -177,6 +155,40 @@ public class MainGame : MonoBehaviour
 		GameLogic.Get().Update();
 
 		// Update UI status
-		m_InvestigateBtn.GetComponent<Button>().interactable = Player.Get().m_currentLocation.m_clues > 0;
+		if (GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase)
+		{
+			if (Player.Get().m_actionUsed == 3)
+			{
+				m_InvestigateBtn.gameObject.SetActive(false);
+				m_drawPlayerCardBtn.gameObject.SetActive(false);
+				m_gainResourceBtn.gameObject.SetActive(false);
+				m_advanceActBtn.gameObject.SetActive(false);
+				m_enemyPhaseBtn.gameObject.SetActive(true);
+			}
+			else
+			{
+				m_InvestigateBtn.interactable = Player.Get().m_currentLocation.m_clues > 0;
+				m_enemyPhaseBtn.gameObject.SetActive(false);
+			}
+
+			m_advanceActBtn.gameObject.SetActive(true);
+
+			var scenario = GameLogic.Get().m_currentScenario;
+			m_advanceActBtn.interactable = scenario.m_currentAct.m_currentToken + Player.Get().m_clues >= scenario.m_currentAct.m_tokenToAdvance;
+		}
+		else
+		{
+			m_advanceActBtn.gameObject.SetActive(false);
+		}
+	}
+
+	public void OnButtonEnterEnemyPhase()
+	{
+		GameLogic.Get().m_currentPhase = TurnPhase.EnemyPhase;
+	}
+
+	public void OnButtonAdvanceAct()
+	{
+
 	}
 }

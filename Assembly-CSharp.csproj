@@ -64,6 +64,7 @@
     <Compile Include="Assets\Script\Card\InvestigatorCard.cs" />
     <Compile Include="Assets\Script\Card\LocationCard.cs" />
     <Compile Include="Assets\Script\Card\PlayerCard.cs" />
+    <Compile Include="Assets\Script\Card\QuestCard.cs" />
     <Compile Include="Assets\Script\ChaosBag.cs" />
     <Compile Include="Assets\Script\Code\Dictionary.cs" />
     <Compile Include="Assets\Script\GameLogic.cs" />

@@ -22,7 +22,13 @@ public enum Faction
 	Seeker
 }
 
-
+public enum TurnPhase
+{
+	MythosPhase,
+	InvestigationPhase,
+	EnemyPhase,
+	UpkeepPhase
+}
 
 public class GameLogic
 {
@@ -31,8 +37,6 @@ public class GameLogic
 	public GameLogic()
 	{
 		UnityEngine.Random.InitState((int)System.DateTime.Now.ToUniversalTime().ToBinary());
-
-		m_core_scenarios[0] = new core_gathering();
 	}
 
     static public GameLogic Get()
@@ -46,9 +50,10 @@ public class GameLogic
     }
 
 	public GameDifficulty	m_difficulty = GameDifficulty.Normal;
-	public scenario_base[]	m_core_scenarios = new scenario_base[3];
+	public scenario_base	m_currentScenario;
 	public Card.CardClickMode	m_cardClickMode = Card.CardClickMode.Flip;
 	public Text				m_logText;
+	public TurnPhase		m_currentPhase;
 
 	public List<GameObject> m_lstPlayerCards = new List<GameObject>();
 	public List<GameObject> m_lstEncounterCards = new List<GameObject>();
@@ -71,8 +76,10 @@ public class GameLogic
 	public static void PlayerEnterLocation(GameObject locationGO)
 	{
 		Player.Get().m_currentLocation = locationGO.GetComponent<LocationCard>();
+		Player.Get().m_currentLocation.m_canFlip = true;
+		Player.Get().m_currentLocation.FlipCard();
 
-		if(Player.Get().m_currentLocation == null)
+		if (Player.Get().m_currentLocation == null)
 		{
 			Debug.LogError("locationGO.GetComponent<LocationCard>() is null in PlayerEnterLocation()!!");
 		}
@@ -110,14 +117,9 @@ public class GameLogic
 		return card;
 	}
 
-	public void StartScenario()
-	{
-		m_core_scenarios[0].StartScenario();
-	}
-
 	public void Update()
 	{
-		m_core_scenarios[0].ShowPlayInfo();
+		m_currentScenario.ShowPlayInfo();
 	}
 
 	public void InvestigateCurrentLocation(ChaosBag bag)
@@ -147,7 +149,7 @@ public class GameLogic
 				chaosResult = (int)chaosToken;
 				break;
 			default:
-				chaosResult = m_core_scenarios[0].GetChaosTokenEffect(chaosToken);
+				chaosResult = m_currentScenario.GetChaosTokenEffect(chaosToken);
 				break;
 		}
 
@@ -177,7 +179,7 @@ public class GameLogic
 		{
 			// Failed..
 			OutputGameLog("调查失败！\n");
-			m_core_scenarios[0].AfterSkillTestFailed(chaosToken);
+			m_currentScenario.AfterSkillTestFailed(chaosToken);
 		}
 
         if(chaosToken == ChaosBag.ChaosTokenType.ElderSign)
@@ -187,6 +189,8 @@ public class GameLogic
                 Player.Get().m_investigatorCard.m_afterElderSignEvent.Invoke(bSucceed);
             }
         }
+
+		Player.Get().m_actionUsed += 1;
 	}
 
 	public int GetSkillIconNumInSelectCards(PlayerCard.SkillIcon type)

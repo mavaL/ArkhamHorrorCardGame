@@ -139,6 +139,17 @@ public class SelectMenu : MonoBehaviour {
 		Player.Get().m_faction = (Faction)m_selectRoleDropdown.value;
 		Player.Get().m_currentScenario = m_selectScenarioDropdown.value;
 
-		UnityEngine.SceneManagement.SceneManager.LoadScene("MainGame");
-    }
+		if(Player.Get().m_currentScenario == 0)
+		{
+			UnityEngine.SceneManagement.SceneManager.LoadScene("core_gathering");
+		}
+		else if (Player.Get().m_currentScenario == 1)
+		{
+			UnityEngine.SceneManagement.SceneManager.LoadScene("core_mask_of_midnight");
+		}
+		else if (Player.Get().m_currentScenario == 2)
+		{
+			UnityEngine.SceneManagement.SceneManager.LoadScene("core_devourer_below");
+		}
+	}
 }
