@@ -16,8 +16,12 @@ public class core_gathering : scenario_base
 		LocationCard card = m_revealedLocations[0].GetComponent<LocationCard>();
 
 		var textComp = GameObject.Find("ClueInfo").GetComponent<Text>();
-		textComp.text  = string.Format("当前资源：<color=orange>{0}</color>\n<color=red>各地点的线索：</color>\n书房： <color=green>{1}</color>\n", 
+		textComp.text  = string.Format("持有资源：<color=orange>{0}</color>\n" +
+			"持有线索：<color=orange>{1}</color>\n" +
+			"<color=red>各地点的线索：</color>\n" +
+			"书房： <color=green>{2}</color>\n", 
 			Player.Get().m_resources,
+			Player.Get().m_clues,
 			card.m_clues);
 	}
 
@@ -29,11 +33,11 @@ public class core_gathering : scenario_base
 			switch (t)
 			{
 				case ChaosBag.ChaosTokenType.Skully:
-					return 0 - Player.Get().m_currentLocation.HowManyEnemyContainTheKeyword(EnemyCard.Keyword.Ghoul);
+					return 0 - Card.HowManyEnemyCardContainTheKeyword(Player.Get().m_currentLocation.m_lstEnemies, Card.Keyword.Ghoul);
 				case ChaosBag.ChaosTokenType.Cultist:
 					return -1;
 				case ChaosBag.ChaosTokenType.Tablet:
-					if (Player.Get().m_currentLocation.HowManyEnemyContainTheKeyword(EnemyCard.Keyword.Ghoul) > 0)
+					if (Card.HowManyEnemyCardContainTheKeyword(Player.Get().m_currentLocation.m_lstEnemies, Card.Keyword.Ghoul) > 0)
 					{
 						Player.Get().DecreaseHealth();
 						GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "结算混沌标记：受到1点伤害\n");

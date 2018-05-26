@@ -35,18 +35,32 @@ public class InvestigatorAbility : MonoBehaviour
         return 2;
     }
 
-    public int AfterElderSignAbility_OToole(bool bSucceed)
+    public void AfterElderSignAbility_OToole(bool bSucceed)
     {
         if(bSucceed)
         {
             Player.Get().m_resources += 2;
             GameLogic.Get().OutputGameLog("奥图尔触发能力获得了2资源！\n");
         }
-        return 0;
     }
 
     public int OnElderSignAbility_Daisy()
     {
-        return Player.Get().m_currentLocation.m_clues;
+        return 0;
     }
+
+	public void AfterElderSignAbility_Daisy(bool bSucceed)
+	{
+		if (bSucceed)
+		{
+			int num = Card.HowManyPlayerCardContainTheKeyword(Player.Get().GetHandCards(), Card.Keyword.Tome);
+
+			for (int i = 0; i < num; ++i)
+			{
+				Player.Get().AddHandCard(GameLogic.Get().DrawPlayerCard());
+			}
+
+			GameLogic.Get().OutputGameLog(string.Format("黛西触发能力获得了{0}手牌！\n", num));
+		}
+	}
 }

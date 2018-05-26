@@ -18,6 +18,6 @@ public class InvestigatorCard : Card
     public ElderSignAbility m_investigatorAbility;
 
     [System.Serializable]
-    public class AfterElderSign : SerializableCallback<bool, int> { }
+    public class AfterElderSign : UnityEvent<bool> { }
     public AfterElderSign   m_afterElderSignEvent;
 }

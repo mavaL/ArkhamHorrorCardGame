@@ -13,7 +13,47 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		MultiSelect
 	}
 
-    public Sprite   m_frontImage;
+	public enum Keyword
+	{
+		Ghoul,
+		Item,
+		Tome
+	}
+
+	public List<Keyword> m_lstKeywords = new List<Keyword>();
+
+	public bool IsKeywordContain(Keyword k)
+	{
+		return m_lstKeywords.Contains(k);
+	}
+
+	public static int HowManyEnemyCardContainTheKeyword(List<EnemyCard> cards, Keyword k)
+	{
+		int num = 0;
+		for (int i = 0; i < cards.Count; ++i)
+		{
+			if (cards[i].m_lstKeywords.Contains(k))
+			{
+				++num;
+			}
+		}
+		return num;
+	}
+
+	public static int HowManyPlayerCardContainTheKeyword(List<PlayerCard> cards, Keyword k)
+	{
+		int num = 0;
+		for (int i = 0; i < cards.Count; ++i)
+		{
+			if (cards[i].m_lstKeywords.Contains(k))
+			{
+				++num;
+			}
+		}
+		return num;
+	}
+
+	public Sprite   m_frontImage;
     public Sprite   m_backImage;
     public Image    m_image = null;
     public string   m_cardName;
@@ -57,12 +97,6 @@ public class Card : MonoBehaviour, IPointerClickHandler
 				trigger.triggers.Add(entry);
 			}
 		}
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		
 	}
 
     public void OnPointerClick(PointerEventData eventData)
@@ -130,4 +164,6 @@ public class Card : MonoBehaviour, IPointerClickHandler
             m_bIsFocus = false;
         }
     }
+
+	public virtual void Discard() {}
 }

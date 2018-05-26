@@ -15,9 +15,10 @@ public class Player
 	private int					m_sanity = -1;
 	public int					m_resources = -1;
 	public Faction				m_faction;
+	public int					m_clues;
 
     // Hand cards
-	private List<GameObject>	m_lstPlayerCards = new List<GameObject>();
+	private List<PlayerCard>	m_lstPlayerCards = new List<PlayerCard>();
     // Asset cards played
     private List<PlayerCard>    m_lstAssetCards = new List<PlayerCard>();
 
@@ -49,10 +50,21 @@ public class Player
 	
 	public void AddHandCard(GameObject go)
 	{
-		m_lstPlayerCards.Add(go);
+		if(go != null)
+		{
+			m_lstPlayerCards.Add(go.GetComponent<PlayerCard>());
+		}
 	}
 
-	public List<GameObject> GetHandCards()
+	public void DiscardHandCard(PlayerCard card)
+	{
+		if(card != null)
+		{
+			m_lstPlayerCards.Remove(card);
+		}
+	}
+
+	public List<PlayerCard> GetHandCards()
 	{
 		return m_lstPlayerCards;
 	}

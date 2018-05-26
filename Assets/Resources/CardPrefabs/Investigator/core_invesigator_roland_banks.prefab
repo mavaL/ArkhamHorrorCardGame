@@ -38,6 +38,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ba9b5232f99374da36bf3e60704167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_lstKeywords: 
   m_frontImage: {fileID: 21300008, guid: ec84ed0bc0aec604ca37408cce272616, type: 3}
   m_backImage: {fileID: 21300008, guid: 23bec283faaa48e4886c8df63b8767b1, type: 3}
   m_image: {fileID: 0}
@@ -59,13 +60,10 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
     dirty: 0
   m_afterElderSignEvent:
-    _target: {fileID: 0}
-    _methodName: AfterElderSignAbility_OToole
-    _args: []
-    _dynamic: 0
-    _typeName: InvestigatorCard+AfterElderSign, Assembly-CSharp, Version=0.0.0.0,
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: InvestigatorCard+AfterElderSign, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-    dirty: 0
 --- !u!224 &224897971089742720
 RectTransform:
   m_ObjectHideFlags: 1

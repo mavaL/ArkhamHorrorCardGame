@@ -17,8 +17,16 @@ public class PlayerCard : Card
 		Intellect,
 		Combat,
 		Agility,
-		Wild	// Can be treat as anyone
+		Wild	// Can be treat as any other
 	}
 
 	public SkillIconDictionary m_skillIcons;
+
+	public override void Discard()
+	{
+		gameObject.transform.SetParent(GameObject.Find("Canvas").transform);
+		gameObject.SetActive(false);
+		Player.Get().DiscardHandCard(this);
+		GameLogic.Get().m_lstDiscardPlayerCards.Add(gameObject);
+	}
 }

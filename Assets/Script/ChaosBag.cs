@@ -90,7 +90,6 @@ public class ChaosBag : MonoBehaviour
 	
 	public ChaosTokenType GetResult()
 	{
-        return m_chaosBag[15];
 		return m_chaosBag[Random.Range(0, 16)];
 	}
 }

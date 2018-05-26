@@ -50,6 +50,10 @@ public class GameLogic
 	public Card.CardClickMode	m_cardClickMode = Card.CardClickMode.Flip;
 	public Text				m_logText;
 
+	public List<GameObject> m_lstPlayerCards = new List<GameObject>();
+	public List<GameObject> m_lstEncounterCards = new List<GameObject>();
+	public List<GameObject> m_lstDiscardPlayerCards = new List<GameObject>();
+
 	public static void Swap<T>(ref T a, ref T b)
 	{
 		T t = a;
@@ -92,15 +96,15 @@ public class GameLogic
 		}
 	}
 
-	public static GameObject DrawCard(List<GameObject> cards)
+	public GameObject DrawPlayerCard()
 	{
-		if(cards.Count == 0)
+		if(m_lstPlayerCards.Count == 0)
 		{
 			return null;
 		}
 
-		var card = cards[0];
-		cards.RemoveAt(0);
+		var card = m_lstPlayerCards[0];
+		m_lstPlayerCards.RemoveAt(0);
 		card.SetActive(true);
 
 		return card;
@@ -165,6 +169,8 @@ public class GameLogic
 		if (bSucceed)
 		{
 			// Succeed!
+			Player.Get().m_clues += 1;
+			Player.Get().m_currentLocation.m_clues -= 1;
 			OutputGameLog("调查成功！\n");
 		}
 		else
@@ -176,7 +182,7 @@ public class GameLogic
 
         if(chaosToken == ChaosBag.ChaosTokenType.ElderSign)
         {
-            if(Player.Get().m_investigatorCard.m_afterElderSignEvent.methodName != null)
+            if(Player.Get().m_investigatorCard.m_afterElderSignEvent.GetPersistentEventCount() > 0)
             {
                 Player.Get().m_investigatorCard.m_afterElderSignEvent.Invoke(bSucceed);
             }

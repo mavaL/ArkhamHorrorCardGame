@@ -5,12 +5,15 @@ using UnityEngine.UI;
 
 public class MainGame : MonoBehaviour
 {
+	#region game UI
 	public GameObject			m_actArea;
 	public GameObject			m_agendaArea;
 	public GameObject			m_selectCardInfo;
 	public GameObject			m_gameArea;
 	public List<GameObject>		m_playerCardArea;
 	public Text					m_gameLog;
+	public Button				m_InvestigateBtn;
+	#endregion
 
 	public ChaosBag				m_chaosBag;
 
@@ -62,9 +65,6 @@ public class MainGame : MonoBehaviour
 		"Neutral/core_paranoia",
 	};
 
-	private List<GameObject>		m_lstPlayerCards = new List<GameObject>();
-	private List<GameObject>		m_lstEncounterCards = new List<GameObject>();
-
 	// Use this for initialization
 	void Start ()
 	{
@@ -98,7 +98,7 @@ public class MainGame : MonoBehaviour
 	{
 		for(int i=0; i<5; ++i)
 		{
-			Player.Get().AddHandCard(GameLogic.DrawCard(m_lstPlayerCards));
+			Player.Get().AddHandCard(GameLogic.Get().DrawPlayerCard());
 		}
 	}
 
@@ -113,7 +113,7 @@ public class MainGame : MonoBehaviour
 				GameObject card = Instantiate((GameObject)Resources.Load(path));
 				card.SetActive(false);
 
-				m_lstPlayerCards.Add(card);
+				GameLogic.Get().m_lstPlayerCards.Add(card);
 			}
 		}
 		else
@@ -121,12 +121,12 @@ public class MainGame : MonoBehaviour
 			Debug.LogError("Error!!Not implement...");
 		}
 
-		GameLogic.Shuffle(m_lstPlayerCards);
+		GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
 	}
 
 	public void	OnButtonDrawPlayerCard()
 	{
-		Player.Get().AddHandCard(GameLogic.DrawCard(m_lstPlayerCards));
+		Player.Get().AddHandCard(GameLogic.Get().DrawPlayerCard());
 	}
 
 	public void OnButtonInvestigateCurrentLocation()
@@ -143,6 +143,15 @@ public class MainGame : MonoBehaviour
 	{
 		GameLogic.Get().InvestigateCurrentLocation(m_chaosBag);
 
+		Card.m_lstSelectCards.ForEach(card => 
+		{
+			// Restore position
+			RectTransform rt = (RectTransform)card.gameObject.GetComponent<RectTransform>().parent;
+			rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y - 30);
+
+			card.Discard();
+		});
+
 		m_gameArea.SetActive(true);
 		m_selectCardInfo.SetActive(false);
 		Card.m_lstSelectCards.Clear();
@@ -157,13 +166,17 @@ public class MainGame : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		// Display player hand cards
 		var cards = Player.Get().GetHandCards();
 
 		for(int i=0; i<cards.Count; ++i)
 		{
-			GameLogic.DockCard(cards[i], m_playerCardArea[i]);
+			GameLogic.DockCard(cards[i].gameObject, m_playerCardArea[i]);
 		}
 
 		GameLogic.Get().Update();
+
+		// Update UI status
+		m_InvestigateBtn.GetComponent<Button>().interactable = Player.Get().m_currentLocation.m_clues > 0;
 	}
 }

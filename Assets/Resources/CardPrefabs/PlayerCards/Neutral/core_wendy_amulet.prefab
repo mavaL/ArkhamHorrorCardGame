@@ -39,6 +39,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9af3d81cf6f68a4a890baa050bbc57d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_lstKeywords: 
   m_frontImage: {fileID: 21300016, guid: b028b3e710412a54db4091d4405dc803, type: 3}
   m_backImage: {fileID: 21300022, guid: b028b3e710412a54db4091d4405dc803, type: 3}
   m_image: {fileID: 0}
@@ -69,5 +70,5 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 341, y: 488}
+  m_SizeDelta: {x: 583, y: 834}
   m_Pivot: {x: 0.5, y: 0.5}
