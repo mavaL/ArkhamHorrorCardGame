@@ -6,8 +6,6 @@ using UnityEngine.Assertions;
 
 public class core_gathering : scenario_base
 {
-	public List<LocationCard>	m_lstOtherLocations;
-
 	void Awake()
 	{
 		GameLogic.Get().m_currentScenario = this;

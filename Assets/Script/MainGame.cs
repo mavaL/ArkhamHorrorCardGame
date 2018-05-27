@@ -19,6 +19,7 @@ public class MainGame : MonoBehaviour
 	public Button				m_advanceActBtn;
 	public Button				m_confirmActResultBtn;
 	public Button				m_confirmEnterLocationBtn;
+	public Dropdown				m_movementDropdown;
 	#endregion
 
 	string[]	m_roland_def_cards =
@@ -167,6 +168,7 @@ public class MainGame : MonoBehaviour
 				m_drawPlayerCardBtn.gameObject.SetActive(false);
 				m_gainResourceBtn.gameObject.SetActive(false);
 				m_advanceActBtn.gameObject.SetActive(false);
+				m_movementDropdown.gameObject.SetActive(false);
 				m_enemyPhaseBtn.gameObject.SetActive(true);
 			}
 			else
@@ -207,7 +209,10 @@ public class MainGame : MonoBehaviour
 	// 0 means ActCard, 1 means LocationCard
 	public void OnButtonConfirmCardHighlight(int type)
 	{
-		if(type == 0)
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = true;
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = true;
+
+		if (type == 0)
 		{
 			m_confirmActResultBtn.gameObject.SetActive(false);
 
@@ -224,8 +229,26 @@ public class MainGame : MonoBehaviour
 			Player.Get().m_currentLocation.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 			Player.Get().m_currentLocation.EnterLocation();
 		}
+	}
 
-		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = true;
-		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = true;
+	public void OnMovementDestinationChanged(Dropdown d)
+	{
+		if(d.value == 0)
+		{
+			// No movement
+			return;
+		}
+
+		string locName = d.options[d.value].text;
+		var locList = GameLogic.Get().m_currentScenario.m_lstOtherLocations;
+
+		for(int i=0; i<locList.Count; ++i)
+		{
+			if(locList[i].m_cardName == locName)
+			{
+				GameLogic.Get().PlayerEnterLocation(locList[i].gameObject);
+				break;
+			}
+		}
 	}
 }

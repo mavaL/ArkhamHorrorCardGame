@@ -79,10 +79,36 @@ public class GameLogic
 	{
 		Player.Get().m_currentLocation = locationGO.GetComponent<LocationCard>();
 
-		// Show player the result of the current act.
-		ShowHighlightCardExclusive(Player.Get().m_currentLocation, false);
+		// First time visit
+		if (!Player.Get().m_currentLocation.m_isVisit)
+		{
+			ShowHighlightCardExclusive(Player.Get().m_currentLocation, false);
 
-		m_mainGameUI.m_confirmEnterLocationBtn.gameObject.SetActive(true);
+			m_mainGameUI.m_confirmEnterLocationBtn.gameObject.SetActive(true);
+		}
+		else
+		{
+			Player.Get().m_currentLocation.EnterLocation();
+		}
+
+		// Update movement destination list
+		var destList = Player.Get().m_currentLocation.m_lstDestinations;
+		if (destList.Count > 0)
+		{
+			m_mainGameUI.m_movementDropdown.ClearOptions();
+
+			List<string> destNames = new List<string>();
+			destNames.Add("移动到...");
+			destList.ForEach(dest => { destNames.Add(dest.m_cardName); });
+			m_mainGameUI.m_movementDropdown.AddOptions(destNames);
+
+			m_mainGameUI.m_movementDropdown.value = 0;
+			m_mainGameUI.m_movementDropdown.interactable = true;
+		}
+		else
+		{
+			m_mainGameUI.m_movementDropdown.interactable = false;
+		}
 	}
 
 	public void ShowHighlightCardExclusive(Card card, bool bFlip)

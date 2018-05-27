@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public abstract class scenario_base : MonoBehaviour
 {
+	public List<LocationCard> m_lstOtherLocations;
 	public GameObject		m_startLocation;
 	public Text				m_playerInfoText;
 	[System.NonSerialized]

@@ -48,6 +48,8 @@ MonoBehaviour:
   m_canFlip: 0
   m_clues: 2
   m_shroud: 1
+  m_lstDestinations:
+  - {fileID: 114412937034069572, guid: 18948378c0d871244874e9b65a4f1ed5, type: 2}
 --- !u!222 &222553420831153340
 CanvasRenderer:
   m_ObjectHideFlags: 1
