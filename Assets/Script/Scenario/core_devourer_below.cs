@@ -4,10 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
 
-public class core_gathering : scenario_base
+public class core_devourer_below : scenario_base
 {
-	public List<LocationCard>	m_lstOtherLocations;
-
 	void Awake()
 	{
 		GameLogic.Get().m_currentScenario = this;
@@ -30,8 +28,6 @@ public class core_gathering : scenario_base
 
 		m_revealedLocations.Add(m_startLocation);
 
-		m_lstOtherLocations.ForEach(location => { location.gameObject.SetActive(false); });
-
 		string log = Player.Get().m_investigatorCard.m_cardName + "进入了场景。\n";
 		GameLogic.Get().OutputGameLog(log);
 	}
@@ -40,15 +36,16 @@ public class core_gathering : scenario_base
 	{
 		LocationCard card = m_revealedLocations[0].GetComponent<LocationCard>();
 
-		m_playerInfoText.text  = string.Format(
+		var textComp = GameObject.Find("ClueInfo").GetComponent<Text>();
+		textComp.text  = string.Format(
 			"剩余行动：<color=green>{0}</color>\n" +
 			"持有资源：<color=green>{1}</color>\n" +
 			"持有线索：<color=green>{2}</color>\n" +
 			"章节已推进标记数：<color=green>{3}</color>\n" +
 			"恶兆已逼近标记数：<color=red>{4}</color>\n" +
 			"各地点的线索：\n" +
-			"书房： <color=orange>{5}</color>\n",
-			Player.Get().m_totalActions - Player.Get().m_actionUsed,
+			"书房： <color=orange>{5}</color>\n", 
+			3 - Player.Get().m_actionUsed,
 			Player.Get().m_resources,
 			Player.Get().m_clues,
 			m_currentAct.m_currentToken,
@@ -111,30 +108,6 @@ public class core_gathering : scenario_base
 
 	public override void AdvanceAct()
 	{
-		++m_indexCurrentAct;
-
-		if (m_indexCurrentAct >= m_lstActCards.Count)
-		{
-
-		}
-		else
-		{
-			m_currentAct = Instantiate(m_lstActCards[m_indexCurrentAct]).GetComponent<QuestCard>();
-			GameLogic.DockCard(m_currentAct.gameObject, GameObject.Find("Act"));
-
-			if (m_indexCurrentAct == 1)
-			{
-				// Act 2
-				m_startLocation.SetActive(false);
-				m_lstOtherLocations.ForEach(location => { location.gameObject.SetActive(true); });
-
-				// Player start at hallway
-				GameLogic.Get().PlayerEnterLocation(m_lstOtherLocations[0].gameObject);
-			}
-			else
-			{
-				// Act 3
-			}
-		}
+		throw new System.NotImplementedException();
 	}
 }

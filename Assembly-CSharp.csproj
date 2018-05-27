@@ -72,7 +72,9 @@
     <Compile Include="Assets\Script\MainGame.cs" />
     <Compile Include="Assets\Script\MainMenu.cs" />
     <Compile Include="Assets\Script\Player.cs" />
+    <Compile Include="Assets\Script\Scenario\core_devourer_below.cs" />
     <Compile Include="Assets\Script\Scenario\core_gathering.cs" />
+    <Compile Include="Assets\Script\Scenario\core_mask_of_midnight.cs" />
     <Compile Include="Assets\Script\Scenario\scenario_base.cs" />
     <Compile Include="Assets\Script\SelectMenu.cs" />
     <Compile Include="Assets\ThirdParty\SerializableCallback-master\InvokableCallback.cs" />

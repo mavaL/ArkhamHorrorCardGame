@@ -17,6 +17,7 @@ public class Player
 	public Faction				m_faction;
 	public int					m_clues;
 	public int					m_actionUsed = 0;
+	public int					m_totalActions = 999;
 
     // Hand cards
 	private List<PlayerCard>	m_lstPlayerCards = new List<PlayerCard>();

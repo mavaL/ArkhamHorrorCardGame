@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaosBag : MonoBehaviour
+public class ChaosBag
 {
 	// https://community.fantasyflightgames.com/topic/235139-chaos-token-symbols/
 	public enum ChaosTokenType
@@ -28,9 +28,9 @@ public class ChaosBag : MonoBehaviour
 	public List<ChaosTokenType>	m_chaosBag = new List<ChaosTokenType>();
 
 	// Use this for initialization
-	void Start ()
+	public void Init (GameDifficulty d)
 	{
-		switch(GameLogic.Get().m_difficulty)
+		switch(d)
 		{
 			case GameDifficulty.Normal:
 				_InitNormal();

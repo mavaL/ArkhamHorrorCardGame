@@ -17,9 +17,9 @@ public class MainGame : MonoBehaviour
 	public Button				m_gainResourceBtn;
 	public Button				m_enemyPhaseBtn;
 	public Button				m_advanceActBtn;
+	public Button				m_confirmActResultBtn;
+	public Button				m_confirmEnterLocationBtn;
 	#endregion
-
-	public ChaosBag				m_chaosBag;
 
 	string[]	m_roland_def_cards =
 	{
@@ -59,11 +59,15 @@ public class MainGame : MonoBehaviour
 		"Neutral/core_paranoia",
 	};
 
+	private void Awake()
+	{
+		GameLogic.Get().m_logText = m_gameLog;
+		GameLogic.Get().m_mainGameUI = this;
+	}
+
 	// Use this for initialization
 	void Start ()
 	{
-		GameLogic.Get().m_logText = m_gameLog;
-
 		GameLogic.DockCard(Player.Get().m_investigatorCard.gameObject, GameObject.Find("InvestigatorCard"));
 
 		_LoadPlayerCards(Player.Get().m_faction);
@@ -118,7 +122,7 @@ public class MainGame : MonoBehaviour
 
 	public void OnButtonConfirmSelectCard()
 	{
-		GameLogic.Get().InvestigateCurrentLocation(m_chaosBag);
+		GameLogic.Get().InvestigateCurrentLocation(GameLogic.Get().m_chaosBag);
 
 		Card.m_lstSelectCards.ForEach(card => 
 		{
@@ -157,7 +161,7 @@ public class MainGame : MonoBehaviour
 		// Update UI status
 		if (GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase)
 		{
-			if (Player.Get().m_actionUsed == 3)
+			if (Player.Get().m_actionUsed == Player.Get().m_totalActions)
 			{
 				m_InvestigateBtn.gameObject.SetActive(false);
 				m_drawPlayerCardBtn.gameObject.SetActive(false);
@@ -189,6 +193,39 @@ public class MainGame : MonoBehaviour
 
 	public void OnButtonAdvanceAct()
 	{
+		var scenario = GameLogic.Get().m_currentScenario;
+		Player.Get().m_clues -= scenario.m_currentAct.m_tokenToAdvance - scenario.m_currentAct.m_currentToken;
 
+		UnityEngine.Assertions.Assert.IsTrue(Player.Get().m_clues >= 0, "Assert failed in OnButtonAdvanceAct()!!");
+
+		// Show player the result of the current act.
+		GameLogic.Get().ShowHighlightCardExclusive(scenario.m_currentAct, true);
+
+		m_confirmActResultBtn.gameObject.SetActive(true);
+	}
+
+	// 0 means ActCard, 1 means LocationCard
+	public void OnButtonConfirmCardHighlight(int type)
+	{
+		if(type == 0)
+		{
+			m_confirmActResultBtn.gameObject.SetActive(false);
+
+			var scenario = GameLogic.Get().m_currentScenario;
+			scenario.m_currentAct.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+
+			// Show next act or reach the end
+			scenario.AdvanceAct();
+		}
+		else if(type == 1)
+		{
+			m_confirmEnterLocationBtn.gameObject.SetActive(false);
+
+			Player.Get().m_currentLocation.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+			Player.Get().m_currentLocation.EnterLocation();
+		}
+
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = true;
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = true;
 	}
 }

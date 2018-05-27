@@ -117,7 +117,7 @@ public class SelectMenu : MonoBehaviour {
 
     public void OnSelectDifficultyChanged(Dropdown d)
     {
-
+		GameLogic.Get().m_difficulty = (GameDifficulty)d.value;
     }
 
     public void OnButtonNextToSelectScenario()
@@ -136,6 +136,8 @@ public class SelectMenu : MonoBehaviour {
 
     public void OnButtonStartGame()
     {
+		GameLogic.Get().InitChaosBag();
+
 		Player.Get().m_faction = (Faction)m_selectRoleDropdown.value;
 		Player.Get().m_currentScenario = m_selectScenarioDropdown.value;
 

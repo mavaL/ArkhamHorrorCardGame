@@ -7,7 +7,7 @@ using UnityEngine.Assertions;
 
 public enum GameDifficulty
 {
-    Easy,
+    Easy = 0,
     Normal,
     Hard,
     Expert
@@ -39,7 +39,7 @@ public class GameLogic
 		UnityEngine.Random.InitState((int)System.DateTime.Now.ToUniversalTime().ToBinary());
 	}
 
-    static public GameLogic Get()
+	static public GameLogic Get()
     {
         if(s_gameLogic == null)
         {
@@ -54,6 +54,8 @@ public class GameLogic
 	public Card.CardClickMode	m_cardClickMode = Card.CardClickMode.Flip;
 	public Text				m_logText;
 	public TurnPhase		m_currentPhase;
+	public ChaosBag			m_chaosBag = new ChaosBag();
+	public MainGame			m_mainGameUI;
 
 	public List<GameObject> m_lstPlayerCards = new List<GameObject>();
 	public List<GameObject> m_lstEncounterCards = new List<GameObject>();
@@ -66,31 +68,34 @@ public class GameLogic
 		b = t;
 	}
 
-	public static void DockCard(GameObject go, GameObject parent)
+	public static void DockCard(GameObject go, GameObject parent, bool bWorldPosStays = true)
 	{
-		go.transform.SetParent(parent.transform);
+		go.transform.SetParent(parent.transform, bWorldPosStays);
 		go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 		go.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 	}
 
-	public static void PlayerEnterLocation(GameObject locationGO)
+	public void PlayerEnterLocation(GameObject locationGO)
 	{
 		Player.Get().m_currentLocation = locationGO.GetComponent<LocationCard>();
-		Player.Get().m_currentLocation.m_canFlip = true;
-		Player.Get().m_currentLocation.FlipCard();
 
-		if (Player.Get().m_currentLocation == null)
-		{
-			Debug.LogError("locationGO.GetComponent<LocationCard>() is null in PlayerEnterLocation()!!");
-		}
+		// Show player the result of the current act.
+		ShowHighlightCardExclusive(Player.Get().m_currentLocation, false);
 
-		Player.Get().m_playerToken.transform.SetParent(locationGO.transform);
-
-		var rt = Player.Get().m_playerToken.GetComponent<RectTransform>();
-		rt.anchoredPosition = new Vector2(rt.sizeDelta.x/2, rt.sizeDelta.y/2);
-		rt.localScale = new Vector3(1, 1, 1);
+		m_mainGameUI.m_confirmEnterLocationBtn.gameObject.SetActive(true);
 	}
 
+	public void ShowHighlightCardExclusive(Card card, bool bFlip)
+	{
+		if(bFlip)
+		{
+			card.FlipCard();
+		}
+		
+		card.OnPointerEnter(new UnityEngine.EventSystems.BaseEventData(null));
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
+	}
 
 	public static void Shuffle(List<GameObject> cards)
 	{
@@ -101,6 +106,11 @@ public class GameLogic
 			cards[i] = cards[newPos];
 			cards[newPos] = t;
 		}
+	}
+
+	public void InitChaosBag()
+	{
+		m_chaosBag.Init(m_difficulty);
 	}
 
 	public GameObject DrawPlayerCard()

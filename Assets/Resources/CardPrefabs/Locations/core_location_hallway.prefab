@@ -47,8 +47,7 @@ MonoBehaviour:
   m_canFocus: 1
   m_canFlip: 0
   m_clues: 0
-  m_shroud: 0
-  m_lstEnemies: []
+  m_shroud: 1
 --- !u!222 &222016231380554736
 CanvasRenderer:
   m_ObjectHideFlags: 1

@@ -45,6 +45,7 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_cardName: "\u96C6\u7ED3-\u6076\u51463"
   m_canFocus: 1
+  m_canFlip: 1
 --- !u!222 &222419619093013804
 CanvasRenderer:
   m_ObjectHideFlags: 1

@@ -546,7 +546,7 @@ MonoBehaviour:
   m_CaptionImage: {fileID: 0}
   m_ItemText: {fileID: 813511458}
   m_ItemImage: {fileID: 0}
-  m_Value: 0
+  m_Value: 1
   m_Options:
     m_Options:
     - m_Text: "\u7B80\u5355"
@@ -1302,7 +1302,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u7B80\u5355"
+  m_Text: "\u6807\u51C6"
 --- !u!222 &527911545
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -156,10 +156,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
             m_focusImage = GameObject.Instantiate(gameObject);
 			m_focusImage.GetComponent<Image>().raycastTarget = false;
 
-            RectTransform rt = (RectTransform)m_image.GetComponent<RectTransform>().parent;
-            m_focusImage.GetComponent<RectTransform>().SetParent(GameObject.Find("Canvas").transform, false);
-            m_focusImage.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-            m_focusImage.GetComponent<RectTransform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
+			GameLogic.DockCard(m_focusImage, GameObject.Find("Canvas"), false);
 
             m_bIsFocus = true;
         }
