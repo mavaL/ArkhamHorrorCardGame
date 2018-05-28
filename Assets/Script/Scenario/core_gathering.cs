@@ -93,7 +93,7 @@ public class core_gathering : scenario_base
 			switch (t)
 			{
 				case ChaosBag.ChaosTokenType.Cultist:
-					Player.Get().DecreaseSanity();
+					Player.Get().DecreaseSanity(1);
 					GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "结算混沌标记：神智减1\n");
 					break;
 				default:

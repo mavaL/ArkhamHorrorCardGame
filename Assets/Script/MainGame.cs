@@ -19,7 +19,9 @@ public class MainGame : MonoBehaviour
 	public Button				m_advanceActBtn;
 	public Button				m_confirmActResultBtn;
 	public Button				m_confirmEnterLocationBtn;
+	public Button				m_confirmChooseCardBtn;
 	public Dropdown				m_movementDropdown;
+	public Dropdown				m_chooseCardDropdown;
 	#endregion
 
 	string[]	m_roland_def_cards =
@@ -250,5 +252,10 @@ public class MainGame : MonoBehaviour
 				break;
 			}
 		}
+	}
+
+	public void OnChooseCardChanged(Dropdown d)
+	{
+
 	}
 }

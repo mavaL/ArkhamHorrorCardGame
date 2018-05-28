@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LocationCard : Card
 {
@@ -11,6 +12,10 @@ public class LocationCard : Card
 	public List<EnemyCard>		m_lstEnemies = new List<EnemyCard>();
 	[System.NonSerialized]
 	public bool					m_isVisit = false;
+
+	[System.Serializable]
+	public class LocationCallback : UnityEvent<LocationCard> { }
+	public LocationCallback		m_locationCallback;
 
 	public void EnterLocation()
 	{

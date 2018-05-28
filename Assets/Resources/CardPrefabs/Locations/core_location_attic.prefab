@@ -50,6 +50,23 @@ MonoBehaviour:
   m_shroud: 1
   m_lstDestinations:
   - {fileID: 114412937034069572, guid: 18948378c0d871244874e9b65a4f1ed5, type: 2}
+  m_locationCallback:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114117390136027524, guid: b96fd708c93dca146b82647e10f24c8e,
+          type: 2}
+        m_MethodName: OnEnterLocation_Attic
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 114781912577853608}
+          m_ObjectArgumentAssemblyTypeName: LocationCard, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!222 &222553420831153340
 CanvasRenderer:
   m_ObjectHideFlags: 1

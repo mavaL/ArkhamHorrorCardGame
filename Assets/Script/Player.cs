@@ -88,9 +88,9 @@ public class Player
 		m_health -= 1;
 	}
 
-	public void DecreaseSanity()
+	public void DecreaseSanity(int mount)
 	{
-		m_sanity -= 1;
+		m_sanity -= mount;
 	}
 
     public int HowManySanityIsLost()
