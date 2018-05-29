@@ -55,6 +55,7 @@ public class Player
 		if(go != null)
 		{
 			m_lstPlayerCards.Add(go.GetComponent<PlayerCard>());
+			go.SetActive(true);
 		}
 	}
 

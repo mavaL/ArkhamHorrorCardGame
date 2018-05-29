@@ -15,7 +15,8 @@ public class LocationCard : Card
 
 	[System.Serializable]
 	public class LocationCallback : UnityEvent<LocationCard> { }
-	public LocationCallback		m_locationCallback;
+	public LocationCallback		m_enterLocationCallback;
+	public LocationCallback		m_locationAbilityCallback;
 
 	public void EnterLocation()
 	{
@@ -35,10 +36,14 @@ public class LocationCard : Card
 		}
 		GameLogic.Get().OutputGameLog(log);
 
+		m_enterLocationCallback.Invoke(this);
+
 		Player.Get().m_playerToken.transform.SetParent(gameObject.transform);
 
 		var rt = Player.Get().m_playerToken.GetComponent<RectTransform>();
 		rt.anchoredPosition = new Vector2(rt.sizeDelta.x / 2, rt.sizeDelta.y / 2);
 		rt.localScale = new Vector3(1, 1, 1);
+
+		GameLogic.Get().m_mainGameUI.m_useLocationAbilityBtn.gameObject.SetActive(m_locationAbilityCallback.GetPersistentEventCount() > 0);
 	}
 }

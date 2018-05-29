@@ -9,57 +9,61 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1845805188880084}
+  m_RootGameObject: {fileID: 1698888351884348}
   m_IsPrefabParent: 1
---- !u!1 &1845805188880084
+--- !u!1 &1698888351884348
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 224747264362120646}
-  - component: {fileID: 222553420831153340}
-  - component: {fileID: 114781912577853608}
+  - component: {fileID: 224282432416878076}
+  - component: {fileID: 222844930097281092}
+  - component: {fileID: 114792872393864958}
   m_Layer: 0
-  m_Name: core_location_attic
+  m_Name: core_location_miskatonic_university
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114781912577853608
+--- !u!114 &114792872393864958
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1845805188880084}
+  m_GameObject: {fileID: 1698888351884348}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd63b616aa9410c4eaf6af6140c197b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_lstKeywords: 
-  m_frontImage: {fileID: 21300004, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
-  m_backImage: {fileID: 21300004, guid: ef1214a00c1281d43a2caa62587b38ec, type: 3}
+  m_frontImage: {fileID: 21300020, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_backImage: {fileID: 21300020, guid: ef1214a00c1281d43a2caa62587b38ec, type: 3}
   m_image: {fileID: 0}
-  m_cardName: "\u9601\u697C"
+  m_cardName: "\u7C73\u65AF\u5361\u5854\u5C3C\u514B\u5927\u5B66"
   m_canFocus: 1
   m_canFlip: 0
   m_clues: 2
-  m_shroud: 1
-  m_lstDestinations:
-  - {fileID: 114412937034069572, guid: 18948378c0d871244874e9b65a4f1ed5, type: 2}
+  m_shroud: 4
+  m_lstDestinations: []
   m_enterLocationCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_locationAbilityCallback:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114117390136027524, guid: b96fd708c93dca146b82647e10f24c8e,
           type: 2}
-        m_MethodName: OnEnterLocation_Attic
-        m_Mode: 0
+        m_MethodName: OnLocationAction_Miskatonic_University
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 114792872393864958}
+          m_ObjectArgumentAssemblyTypeName: LocationCard, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -67,23 +71,18 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_locationAbilityCallback:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
---- !u!222 &222553420831153340
+--- !u!222 &222844930097281092
 CanvasRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1845805188880084}
---- !u!224 &224747264362120646
+  m_GameObject: {fileID: 1698888351884348}
+--- !u!224 &224282432416878076
 RectTransform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1845805188880084}
+  m_GameObject: {fileID: 1698888351884348}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}

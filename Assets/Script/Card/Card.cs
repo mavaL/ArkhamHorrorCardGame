@@ -154,6 +154,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
     {
         if(m_canFocus)
         {
+			gameObject.SetActive(true);
             m_focusImage = GameObject.Instantiate(gameObject);
 			m_focusImage.GetComponent<Image>().raycastTarget = false;
 

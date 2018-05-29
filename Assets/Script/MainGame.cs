@@ -20,9 +20,14 @@ public class MainGame : MonoBehaviour
 	public Button				m_confirmActResultBtn;
 	public Button				m_confirmEnterLocationBtn;
 	public Button				m_confirmChooseCardBtn;
+	public Button				m_useLocationAbilityBtn;
 	public Dropdown				m_movementDropdown;
 	public Dropdown				m_chooseCardDropdown;
 	#endregion
+
+	// Used by LocationEvent
+	[System.NonSerialized]
+	public List<PlayerCard> m_lstCardChoice = new List<PlayerCard>(0);
 
 	string[]	m_roland_def_cards =
 	{
@@ -170,13 +175,14 @@ public class MainGame : MonoBehaviour
 				m_drawPlayerCardBtn.gameObject.SetActive(false);
 				m_gainResourceBtn.gameObject.SetActive(false);
 				m_advanceActBtn.gameObject.SetActive(false);
+				m_useLocationAbilityBtn.gameObject.SetActive(false);
 				m_movementDropdown.gameObject.SetActive(false);
 				m_enemyPhaseBtn.gameObject.SetActive(true);
 			}
 			else
 			{
 				m_InvestigateBtn.interactable = Player.Get().m_currentLocation.m_clues > 0;
-				m_enemyPhaseBtn.gameObject.SetActive(false);
+				m_enemyPhaseBtn.gameObject.SetActive(false);			
 			}
 
 			m_advanceActBtn.gameObject.SetActive(true);
@@ -254,8 +260,8 @@ public class MainGame : MonoBehaviour
 		}
 	}
 
-	public void OnChooseCardChanged(Dropdown d)
+	public void OnButtonUseLocationAbility()
 	{
-
+		Player.Get().m_currentLocation.m_locationAbilityCallback.Invoke(Player.Get().m_currentLocation);
 	}
 }

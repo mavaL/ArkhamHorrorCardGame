@@ -56,6 +56,7 @@ public class GameLogic
 	public TurnPhase		m_currentPhase;
 	public ChaosBag			m_chaosBag = new ChaosBag();
 	public MainGame			m_mainGameUI;
+	public Card				m_highlightCard;
 
 	public List<GameObject> m_lstPlayerCards = new List<GameObject>();
 	public List<GameObject> m_lstEncounterCards = new List<GameObject>();
@@ -117,7 +118,8 @@ public class GameLogic
 		{
 			card.FlipCard();
 		}
-		
+
+		m_highlightCard = card;
 		card.OnPointerEnter(new UnityEngine.EventSystems.BaseEventData(null));
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;

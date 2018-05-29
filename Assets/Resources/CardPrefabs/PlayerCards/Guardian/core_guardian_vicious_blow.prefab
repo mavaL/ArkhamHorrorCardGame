@@ -45,6 +45,7 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_cardName: "\u6B8B\u5FCD\u6253\u51FB"
   m_canFocus: 1
+  m_canFlip: 1
   m_skillIcons:
     _keys: 02000000
     _values: 01000000
