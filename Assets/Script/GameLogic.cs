@@ -59,7 +59,7 @@ public class GameLogic
 	public Card				m_highlightCard;
 
 	public List<GameObject> m_lstPlayerCards = new List<GameObject>();
-	public List<GameObject> m_lstEncounterCards = new List<GameObject>();
+	public List<GameObject> m_lstDiscardEncounterCards = new List<GameObject>();
 	public List<GameObject> m_lstDiscardPlayerCards = new List<GameObject>();
 	public List<GameObject> m_lstEnemyCards = new List<GameObject>();
 
@@ -156,6 +156,23 @@ public class GameLogic
 
 		var card = m_lstPlayerCards[0];
 		m_lstPlayerCards.RemoveAt(0);
+		card.SetActive(true);
+
+		return card;
+	}
+
+	public GameObject DrawEncounterCard()
+	{
+		// If encounter card pile is run out, shuffle the discard pile to form a new pile
+		if (m_currentScenario.m_lstEncounterCards.Count == 0)
+		{
+			m_currentScenario.m_lstEncounterCards.AddRange(m_lstDiscardEncounterCards);
+			Shuffle(m_currentScenario.m_lstEncounterCards);
+			m_lstDiscardEncounterCards.Clear();
+		}
+
+		var card = m_currentScenario.m_lstEncounterCards[0];
+		m_currentScenario.m_lstEncounterCards.RemoveAt(0);
 		card.SetActive(true);
 
 		return card;

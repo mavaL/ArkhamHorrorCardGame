@@ -339,9 +339,13 @@ MonoBehaviour:
   - {fileID: 1860970082764374, guid: 5b96f362af0e34c4b8ccf6076f308b78, type: 2}
   - {fileID: 1551973241798932, guid: a1b0499dc228b754c8ee19c4600b8d3b, type: 2}
   m_lstAgendaCards:
-  - {fileID: 1777014522220698, guid: 62df2e453893f534c8a8e888ef08f92c, type: 2}
+  - {fileID: 1663982882883288, guid: fc421da96bfad6e4396f2e3966ae98db, type: 2}
   - {fileID: 1663982882883288, guid: fc421da96bfad6e4396f2e3966ae98db, type: 2}
   - {fileID: 1613507560164418, guid: 44d7eeee8aca3a3428fea3de9eb1b568, type: 2}
+  m_lstEncounterCards:
+  - {fileID: 1315489162840404, guid: 05a95b4749caa4c4491e9f7230223b4b, type: 2}
+  - {fileID: 1315489162840404, guid: 05a95b4749caa4c4491e9f7230223b4b, type: 2}
+  - {fileID: 1315489162840404, guid: 05a95b4749caa4c4491e9f7230223b4b, type: 2}
 --- !u!4 &1335655214
 Transform:
   m_ObjectHideFlags: 0
@@ -558,6 +562,21 @@ Prefab:
     - target: {fileID: 224223587555217790, guid: baa70eb1f725e1144a1b3bf0addc5798,
         type: 2}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224149437771811110, guid: baa70eb1f725e1144a1b3bf0addc5798,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 224149437771811110, guid: baa70eb1f725e1144a1b3bf0addc5798,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224223587555217790, guid: baa70eb1f725e1144a1b3bf0addc5798,
+        type: 2}
+      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

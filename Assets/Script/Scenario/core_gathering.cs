@@ -167,7 +167,7 @@ public class core_gathering : scenario_base
 				mainUI.m_choiceDropdown.AddOptions(options);
 				mainUI.m_choiceDropdown.gameObject.SetActive(true);
 				mainUI.m_confirmChoiceBtn.gameObject.SetActive(true);
-				mainUI.m_choiceMode = MainGame.DropdownChoice.TextOnly;
+				mainUI.m_choiceMode = MainGame.ConfirmButtonMode.TextOnly;
 
 				mainUI.m_lstChoiceEvent.Clear();
 				mainUI.m_lstChoiceEvent.Add(new UnityEvent());
@@ -178,7 +178,8 @@ public class core_gathering : scenario_base
 			}
 			else
 			{
-				// Act 3
+				// Agenda 3
+
 			}
 		}
 	}

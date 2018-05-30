@@ -46,7 +46,7 @@ public class LocationEvent : MonoBehaviour
 			GameLogic.Get().ShowHighlightCardExclusive(lstCards[0], false);
 			GameLogic.Get().m_mainGameUI.m_confirmChoiceBtn.gameObject.SetActive(true);
 
-			GameLogic.Get().m_mainGameUI.m_choiceMode = MainGame.DropdownChoice.SelectCard;
+			GameLogic.Get().m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SelectCard;
 		}
 		else
 		{

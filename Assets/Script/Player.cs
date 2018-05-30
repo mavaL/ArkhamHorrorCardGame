@@ -23,8 +23,10 @@ public class Player
 	private List<PlayerCard>	m_lstPlayerCards = new List<PlayerCard>();
     // Asset cards played
     private List<PlayerCard>    m_lstAssetCards = new List<PlayerCard>();
+	// Engaged enemies
+	private List<EnemyCard>		m_lstEnemyCards = new List<EnemyCard>();
 
-    public Player()
+	public Player()
 	{
 		m_resources = 5;
 	}
@@ -116,12 +118,22 @@ public class Player
 		if(ActionLeft() == 0)
 		{
 			GameLogic.Get().m_mainGameUI.EnterEnemyPhase();
-			m_actionUsed = 0;
 		}
+	}
+
+	public void ResetAction()
+	{
+		m_actionUsed = 0;
 	}
 
 	public int ActionLeft()
 	{
 		return m_totalActions - m_actionUsed;
+	}
+
+	public void AddEngagedEnemy(EnemyCard enemy)
+	{
+		m_lstEnemyCards.Add(enemy);
+		GameLogic.Get().OutputGameLog(string.Format("{0}与<{1}>发生了交战！\n", m_investigatorCard.m_cardName, enemy.m_cardName));
 	}
 }

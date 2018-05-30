@@ -13,6 +13,7 @@ public abstract class scenario_base : MonoBehaviour
 
 	public List<GameObject>		m_lstActCards;
 	public List<GameObject>		m_lstAgendaCards;
+	public List<GameObject>		m_lstEncounterCards;
 
 	[System.NonSerialized]
 	public QuestCard			m_currentAct;
