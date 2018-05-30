@@ -50,6 +50,28 @@ MonoBehaviour:
   m_shroud: 4
   m_lstDestinations:
   - {fileID: 114412937034069572, guid: 18948378c0d871244874e9b65a4f1ed5, type: 2}
+  m_enterLocationCallback:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114117390136027524, guid: b96fd708c93dca146b82647e10f24c8e,
+          type: 2}
+        m_MethodName: OnEnterLocation_Cellar
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_locationAbilityCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!222 &222135415046548670
 CanvasRenderer:
   m_ObjectHideFlags: 1

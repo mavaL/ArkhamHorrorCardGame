@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class MainGame : MonoBehaviour
 {
@@ -16,15 +17,29 @@ public class MainGame : MonoBehaviour
 	public Button				m_drawPlayerCardBtn;
 	public Button				m_gainResourceBtn;
 	public Button				m_enemyPhaseBtn;
+	public Button				m_UpkeepPhaseBtn;
+	public Button				m_MythosPhaseBtn;
+	public Button				m_InvestigationPhaseBtn;
 	public Button				m_advanceActBtn;
 	public Button				m_confirmActResultBtn;
+	public Button				m_confirmAgendaResultBtn;
 	public Button				m_confirmEnterLocationBtn;
-	public Button				m_confirmChooseCardBtn;
+	public Button				m_confirmChoiceBtn;
 	public Button				m_useLocationAbilityBtn;
 	public Dropdown				m_movementDropdown;
-	public Dropdown				m_chooseCardDropdown;
+	public Dropdown				m_choiceDropdown;
 	#endregion
 
+	public enum DropdownChoice
+	{
+		None,
+		SelectCard,
+		TextOnly
+	}
+	[System.NonSerialized]
+	public DropdownChoice	m_choiceMode = DropdownChoice.None;
+	[System.NonSerialized]
+	public List<UnityEvent> m_lstChoiceEvent = new List<UnityEvent>();
 	// Used by LocationEvent
 	[System.NonSerialized]
 	public List<PlayerCard> m_lstCardChoice = new List<PlayerCard>(0);
@@ -114,8 +129,12 @@ public class MainGame : MonoBehaviour
 
 	public void	OnButtonDrawPlayerCard()
 	{
-		Player.Get().AddHandCard(GameLogic.Get().DrawPlayerCard());
-		Player.Get().m_actionUsed += 1;
+		var card = GameLogic.Get().DrawPlayerCard();
+		Player.Get().AddHandCard(card);
+
+		GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了<{1}>\n", Player.Get().m_investigatorCard.m_cardName, card.GetComponent<PlayerCard>().m_cardName));
+
+		Player.Get().ActionDone();
 	}
 
 	public void OnButtonInvestigateCurrentLocation()
@@ -125,7 +144,7 @@ public class MainGame : MonoBehaviour
 
 		GameLogic.Get().m_cardClickMode = Card.CardClickMode.MultiSelect;
 
-		GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "调查了" + Player.Get().m_currentLocation.m_cardName + "\n");
+		GameLogic.Get().OutputGameLog(string.Format("{0}调查了{1}\n", Player.Get().m_investigatorCard.m_cardName, Player.Get().m_currentLocation.m_cardName));
 	}
 
 	public void OnButtonConfirmSelectCard()
@@ -150,7 +169,8 @@ public class MainGame : MonoBehaviour
 	public void OnButtonGainOneResource()
 	{
 		Player.Get().m_resources += 1;
-		Player.Get().m_actionUsed += 1;
+		GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了1资源\n", Player.Get().m_investigatorCard.m_cardName));
+		Player.Get().ActionDone();
 	}
 
 	// Update is called once per frame
@@ -165,40 +185,92 @@ public class MainGame : MonoBehaviour
 		}
 
 		GameLogic.Get().Update();
+	}
 
-		// Update UI status
-		if (GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase)
-		{
-			if (Player.Get().m_actionUsed == Player.Get().m_totalActions)
-			{
-				m_InvestigateBtn.gameObject.SetActive(false);
-				m_drawPlayerCardBtn.gameObject.SetActive(false);
-				m_gainResourceBtn.gameObject.SetActive(false);
-				m_advanceActBtn.gameObject.SetActive(false);
-				m_useLocationAbilityBtn.gameObject.SetActive(false);
-				m_movementDropdown.gameObject.SetActive(false);
-				m_enemyPhaseBtn.gameObject.SetActive(true);
-			}
-			else
-			{
-				m_InvestigateBtn.interactable = Player.Get().m_currentLocation.m_clues > 0;
-				m_enemyPhaseBtn.gameObject.SetActive(false);			
-			}
+	public void EnterEnemyPhase()
+	{
+		m_InvestigateBtn.gameObject.SetActive(false);
+		m_drawPlayerCardBtn.gameObject.SetActive(false);
+		m_gainResourceBtn.gameObject.SetActive(false);
+		m_advanceActBtn.gameObject.SetActive(false);
+		m_useLocationAbilityBtn.gameObject.SetActive(false);
+		m_movementDropdown.gameObject.SetActive(false);
+		m_enemyPhaseBtn.gameObject.SetActive(true);
 
-			m_advanceActBtn.gameObject.SetActive(true);
-
-			var scenario = GameLogic.Get().m_currentScenario;
-			m_advanceActBtn.interactable = scenario.m_currentAct.m_currentToken + Player.Get().m_clues >= scenario.m_currentAct.m_tokenToAdvance;
-		}
-		else
-		{
-			m_advanceActBtn.gameObject.SetActive(false);
-		}
+		GameLogic.Get().m_currentPhase = TurnPhase.EnemyPhase;
 	}
 
 	public void OnButtonEnterEnemyPhase()
 	{
-		GameLogic.Get().m_currentPhase = TurnPhase.EnemyPhase;
+		GameLogic.Get().OutputGameLog("游戏进入敌人阶段\n");
+
+		if(GameLogic.Get().m_lstEnemyCards.Count > 0)
+		{
+
+		}
+		else
+		{
+			m_enemyPhaseBtn.gameObject.SetActive(false);
+			m_UpkeepPhaseBtn.gameObject.SetActive(true);
+		}
+	}
+
+	public void OnButtonEnterUpkeepPhase()
+	{
+		GameLogic.Get().OutputGameLog("游戏进入维持阶段\n");
+		GameLogic.Get().m_currentPhase = TurnPhase.UpkeepPhase;
+
+		// TODO: Upkeep phase not finished!
+		var card = GameLogic.Get().DrawPlayerCard();
+		Player.Get().AddHandCard(card);
+		Player.Get().m_resources += 1;
+
+		GameLogic.Get().OutputGameLog(string.Format("{0}在维持阶段获得了1手牌，1资源\n", Player.Get().m_investigatorCard.m_cardName));
+
+		m_UpkeepPhaseBtn.gameObject.SetActive(false);
+		m_MythosPhaseBtn.gameObject.SetActive(true);
+	}
+
+	public void OnButtonEnterMythosPhase()
+	{
+		GameLogic.Get().OutputGameLog("游戏进入神话阶段\n");
+		GameLogic.Get().m_currentPhase = TurnPhase.MythosPhase;
+
+		var agenda = GameLogic.Get().m_currentScenario.m_currentAgenda;
+		if (agenda.AddDoom())
+		{
+			GameLogic.Get().OutputGameLog("恶兆已集满，触发事件！\n");
+
+			GameLogic.Get().ShowHighlightCardExclusive(agenda, true);
+
+			m_confirmAgendaResultBtn.gameObject.SetActive(true);
+		}
+		else
+		{
+			m_InvestigationPhaseBtn.gameObject.SetActive(true);
+		}
+		m_MythosPhaseBtn.gameObject.SetActive(false);
+	}
+
+	public void OnButtonEnterInvestigationPhase()
+	{
+		GameLogic.Get().OutputGameLog("游戏进入调查阶段\n");
+		GameLogic.Get().m_currentPhase = TurnPhase.InvestigationPhase;
+
+		m_InvestigationPhaseBtn.gameObject.SetActive(false);
+		m_InvestigateBtn.interactable = Player.Get().m_currentLocation.m_clues > 0;
+		m_enemyPhaseBtn.gameObject.SetActive(false);
+		m_advanceActBtn.gameObject.SetActive(true);
+
+		var scenario = GameLogic.Get().m_currentScenario;
+		m_advanceActBtn.interactable = scenario.m_currentAct.m_currentToken + Player.Get().m_clues >= scenario.m_currentAct.m_tokenToAdvance;
+
+		m_InvestigateBtn.gameObject.SetActive(true);
+		m_drawPlayerCardBtn.gameObject.SetActive(true);
+		m_gainResourceBtn.gameObject.SetActive(true);
+		m_advanceActBtn.gameObject.SetActive(true);
+		m_movementDropdown.gameObject.SetActive(true);
+		m_useLocationAbilityBtn.gameObject.SetActive(Player.Get().m_currentLocation.m_locationAbilityCallback.GetPersistentEventCount() > 0);
 	}
 
 	public void OnButtonAdvanceAct()
@@ -214,7 +286,7 @@ public class MainGame : MonoBehaviour
 		m_confirmActResultBtn.gameObject.SetActive(true);
 	}
 
-	// 0 means ActCard, 1 means LocationCard
+	// 0 means ActCard, 1 means LocationCard, 2 means AgendaCard
 	public void OnButtonConfirmCardHighlight(int type)
 	{
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -236,6 +308,15 @@ public class MainGame : MonoBehaviour
 
 			Player.Get().m_currentLocation.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 			Player.Get().m_currentLocation.EnterLocation();
+		}
+		else if(type == 2)
+		{
+			m_confirmAgendaResultBtn.gameObject.SetActive(false);
+
+			var scenario = GameLogic.Get().m_currentScenario;
+			scenario.m_currentAgenda.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+
+			scenario.AdvanceAgenda();
 		}
 	}
 
@@ -263,5 +344,47 @@ public class MainGame : MonoBehaviour
 	public void OnButtonUseLocationAbility()
 	{
 		Player.Get().m_currentLocation.m_locationAbilityCallback.Invoke(Player.Get().m_currentLocation);
+	}
+
+	public void OnChoiceChanged(Dropdown d)
+	{
+		if(m_choiceMode == DropdownChoice.SelectCard)
+		{
+			if (GameLogic.Get().m_highlightCard != null)
+			{
+				GameLogic.Get().m_highlightCard.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+			}
+			GameLogic.Get().ShowHighlightCardExclusive(m_lstCardChoice[d.value], false);
+		}
+		else if (m_choiceMode == DropdownChoice.TextOnly)
+		{
+			GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
+			GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
+		}
+	}
+
+	public void OnButtonConfirmChoice()
+	{
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = true;
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = true;
+
+		m_confirmChoiceBtn.gameObject.SetActive(false);
+		m_choiceDropdown.gameObject.SetActive(false);
+
+		if (m_choiceMode == DropdownChoice.SelectCard)
+		{
+			PlayerCard card = m_lstCardChoice[m_choiceDropdown.value];
+			Player.Get().AddHandCard(card.gameObject);
+
+			GameLogic.Get().m_lstPlayerCards.Remove(card.gameObject);
+			GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
+
+			card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+			GameLogic.Get().OutputGameLog(string.Format("{0}获取了手牌：{1}\n", Player.Get().m_investigatorCard.m_cardName, card.m_cardName));
+		}
+		else if (m_choiceMode == DropdownChoice.TextOnly)
+		{
+			m_lstChoiceEvent[m_choiceDropdown.value].Invoke();
+		}
 	}
 }

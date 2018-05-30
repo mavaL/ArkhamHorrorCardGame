@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 
 public class core_gathering : scenario_base
 {
@@ -13,8 +14,6 @@ public class core_gathering : scenario_base
 
 	void Start()
 	{
-		GameLogic.Get().m_currentPhase = TurnPhase.InvestigationPhase;
-
 		m_currentAct = Instantiate(m_lstActCards[0]).GetComponent<QuestCard>();
 		m_currentAgenda = Instantiate(m_lstAgendaCards[0]).GetComponent<QuestCard>();
 
@@ -24,34 +23,39 @@ public class core_gathering : scenario_base
 		m_startLocation = Instantiate(m_startLocation);
 
 		GameLogic.DockCard(m_startLocation, GameObject.Find("StartLocation"));
-		GameLogic.Get().PlayerEnterLocation(m_startLocation);
-
-		m_revealedLocations.Add(m_startLocation);
+		GameLogic.Get().PlayerEnterLocation(m_startLocation, false);
 
 		m_lstOtherLocations.ForEach(location => { location.gameObject.SetActive(false); });
 
 		string log = Player.Get().m_investigatorCard.m_cardName + "进入了场景。\n";
 		GameLogic.Get().OutputGameLog(log);
+
+		GameLogic.Get().m_mainGameUI.OnButtonEnterInvestigationPhase();
 	}
 
 	public override void ShowPlayInfo()
 	{
-		LocationCard card = m_revealedLocations[0].GetComponent<LocationCard>();
-
 		m_playerInfoText.text  = string.Format(
-			"剩余行动：<color=green>{0}</color>\n" +
-			"持有资源：<color=green>{1}</color>\n" +
-			"持有线索：<color=green>{2}</color>\n" +
-			"章节已推进标记数：<color=green>{3}</color>\n" +
-			"恶兆已逼近标记数：<color=red>{4}</color>\n" +
-			"各地点的线索：\n" +
-			"书房： <color=orange>{5}</color>\n",
-			Player.Get().m_totalActions - Player.Get().m_actionUsed,
+			"血量：<color=green>{0}</color>\n" +
+			"神智：<color=green>{1}</color>\n" +
+			"剩余行动：<color=green>{2}</color>\n" +
+			"持有资源：<color=green>{3}</color>\n" +
+			"持有线索：<color=green>{4}</color>\n" +
+			"章节已推进标记数：<color=green>{5}</color>\n" +
+			"恶兆已逼近标记数：<color=red>{6}</color>\n" +
+			"各地点的线索：\n",
+			Player.Get().GetHp(),
+			Player.Get().GetSan(),
+			Player.Get().ActionLeft(),
 			Player.Get().m_resources,
 			Player.Get().m_clues,
 			m_currentAct.m_currentToken,
-			m_currentAgenda.m_currentToken,
-			card.m_clues);
+			m_currentAgenda.m_currentToken);
+
+		m_revealedLocations.ForEach(loc => 
+		{
+			m_playerInfoText.text += string.Format("{0}： <color=orange>{1}</color>\n", loc.m_cardName, loc.m_clues);
+		});
 	}
 
 	public override int GetChaosTokenEffect(ChaosBag.ChaosTokenType t)
@@ -94,7 +98,7 @@ public class core_gathering : scenario_base
 			{
 				case ChaosBag.ChaosTokenType.Cultist:
 					Player.Get().DecreaseSanity(1);
-					GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "结算混沌标记：神智减1\n");
+					GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "结算混沌标记：受到1点恐怖\n");
 					break;
 				default:
 					break;
@@ -103,7 +107,7 @@ public class core_gathering : scenario_base
 		}
 		else
 		{
-			Debug.Log("Hard/Expert difficulty not impl in AfterSkillTest()!!");
+			throw new System.NotImplementedException("Hard/Expert difficulty not impl in AfterSkillTest()!!");
 		}
 	}
 
@@ -124,6 +128,8 @@ public class core_gathering : scenario_base
 			{
 				// Act 2
 				m_startLocation.SetActive(false);
+				m_revealedLocations.Remove(m_startLocation.GetComponent<LocationCard>());
+
 				m_lstOtherLocations.ForEach(location => { location.gameObject.SetActive(true); });
 
 				// Player start at hallway
@@ -134,5 +140,64 @@ public class core_gathering : scenario_base
 				// Act 3
 			}
 		}
+	}
+
+	public override void AdvanceAgenda()
+	{
+		++m_indexCurrentAgenda;
+
+		if (m_indexCurrentAgenda >= m_lstAgendaCards.Count)
+		{
+
+		}
+		else
+		{
+			m_currentAgenda= Instantiate(m_lstAgendaCards[m_indexCurrentAgenda]).GetComponent<QuestCard>();
+			GameLogic.DockCard(m_currentAgenda.gameObject, GameObject.Find("Agenda"));
+
+			if (m_indexCurrentAgenda == 1)
+			{
+				// Agenda 2
+				List<string> options = new List<string>();
+				options.Add("每位调查员受到2点恐怖");
+				options.Add("每位调查员丢弃一张随机手牌");
+
+				var mainUI = GameLogic.Get().m_mainGameUI;
+				mainUI.m_choiceDropdown.ClearOptions();
+				mainUI.m_choiceDropdown.AddOptions(options);
+				mainUI.m_choiceDropdown.gameObject.SetActive(true);
+				mainUI.m_confirmChoiceBtn.gameObject.SetActive(true);
+				mainUI.m_choiceMode = MainGame.DropdownChoice.TextOnly;
+
+				mainUI.m_lstChoiceEvent.Clear();
+				mainUI.m_lstChoiceEvent.Add(new UnityEvent());
+				mainUI.m_lstChoiceEvent.Add(new UnityEvent());
+
+				mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction(OnAgenda1_Option1));
+				mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction(OnAgenda1_Option2));
+			}
+			else
+			{
+				// Act 3
+			}
+		}
+	}
+
+	public void OnAgenda1_Option1()
+	{
+		Player.Get().DecreaseSanity(2);
+		GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "选择了恶兆影响：受到2点恐怖\n");
+		GameLogic.Get().m_mainGameUI.m_InvestigationPhaseBtn.gameObject.SetActive(true);
+	}
+
+	public void OnAgenda1_Option2()
+	{
+		var cards = Player.Get().GetHandCards();
+		var cardToDiscard = cards[Random.Range(0, cards.Count-1)];
+
+		GameLogic.Get().OutputGameLog(string.Format("{0}选择了恶兆影响：丢弃1张随机手牌<{1}>\n", Player.Get().m_investigatorCard.m_cardName, cardToDiscard.m_cardName));
+
+		cardToDiscard.Discard();
+		GameLogic.Get().m_mainGameUI.m_InvestigationPhaseBtn.gameObject.SetActive(true);
 	}
 }

@@ -41,7 +41,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_lstKeywords: 
   m_frontImage: {fileID: 21300030, guid: c562ac0b74f28d54dbf3dae603d427a3, type: 3}
-  m_backImage: {fileID: 21300014, guid: 746b50161d1535041a7b2c619eaf2bc1, type: 3}
+  m_backImage: {fileID: 21300030, guid: 746b50161d1535041a7b2c619eaf2bc1, type: 3}
   m_image: {fileID: 0}
   m_cardName: "\u96C6\u7ED3-\u6076\u51461"
   m_canFocus: 1

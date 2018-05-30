@@ -16,8 +16,8 @@ public class Player
 	public int					m_resources = -1;
 	public Faction				m_faction;
 	public int					m_clues;
-	public int					m_actionUsed = 0;
-	public int					m_totalActions = 999;
+	private int					m_actionUsed = 0;
+	public int					m_totalActions = 3;
 
     // Hand cards
 	private List<PlayerCard>	m_lstPlayerCards = new List<PlayerCard>();
@@ -84,12 +84,22 @@ public class Player
         return false;
     }
 
-	public void DecreaseHealth()
+	public int GetHp()
 	{
-		m_health -= 1;
+		return m_health;
 	}
 
-	public void DecreaseSanity(int mount)
+	public int GetSan()
+	{
+		return m_sanity;
+	}
+
+	public void DecreaseHealth(int mount = 1)
+	{
+		m_health -= mount;
+	}
+
+	public void DecreaseSanity(int mount = 1)
 	{
 		m_sanity -= mount;
 	}
@@ -98,4 +108,20 @@ public class Player
     {
         return m_investigatorCard.m_sanity - m_sanity;
     }
+
+	public void ActionDone()
+	{
+		m_actionUsed += 1;
+
+		if(ActionLeft() == 0)
+		{
+			GameLogic.Get().m_mainGameUI.EnterEnemyPhase();
+			m_actionUsed = 0;
+		}
+	}
+
+	public int ActionLeft()
+	{
+		return m_totalActions - m_actionUsed;
+	}
 }

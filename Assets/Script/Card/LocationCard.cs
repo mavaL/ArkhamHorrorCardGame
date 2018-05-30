@@ -28,6 +28,7 @@ public class LocationCard : Card
 			FlipCard();
 			m_isVisit = true;
 
+			GameLogic.Get().m_currentScenario.m_revealedLocations.Add(this);
 			log = string.Format("{0}发现了{1}\n", Player.Get().m_investigatorCard.m_cardName, m_cardName);
 		}
 		else

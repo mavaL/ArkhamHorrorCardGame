@@ -61,6 +61,7 @@ public class GameLogic
 	public List<GameObject> m_lstPlayerCards = new List<GameObject>();
 	public List<GameObject> m_lstEncounterCards = new List<GameObject>();
 	public List<GameObject> m_lstDiscardPlayerCards = new List<GameObject>();
+	public List<GameObject> m_lstEnemyCards = new List<GameObject>();
 
 	public static void Swap<T>(ref T a, ref T b)
 	{
@@ -76,7 +77,7 @@ public class GameLogic
 		go.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 	}
 
-	public void PlayerEnterLocation(GameObject locationGO)
+	public void PlayerEnterLocation(GameObject locationGO, bool bUseAction = true)
 	{
 		Player.Get().m_currentLocation = locationGO.GetComponent<LocationCard>();
 
@@ -86,6 +87,11 @@ public class GameLogic
 			ShowHighlightCardExclusive(Player.Get().m_currentLocation, false);
 
 			m_mainGameUI.m_confirmEnterLocationBtn.gameObject.SetActive(true);
+
+			if (bUseAction)
+			{
+				Player.Get().ActionDone();
+			}
 		}
 		else
 		{
@@ -228,7 +234,7 @@ public class GameLogic
             }
         }
 
-		Player.Get().m_actionUsed += 1;
+		Player.Get().ActionDone();
 	}
 
 	public int GetSkillIconNumInSelectCards(PlayerCard.SkillIcon type)
