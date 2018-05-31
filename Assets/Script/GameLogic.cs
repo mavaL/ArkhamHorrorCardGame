@@ -183,21 +183,21 @@ public class GameLogic
 		m_currentScenario.ShowPlayInfo();
 	}
 
-	public void InvestigateCurrentLocation(ChaosBag bag)
+	public bool SkillTest(SkillType skill, int AgainstValue, out ChaosBag.ChaosTokenType chaosToken)
 	{
 		bool bAutoFailed = false;
 		int chaosResult = 0;
-		var chaosToken = bag.GetResult();
+		chaosToken = m_chaosBag.GetResult();
 
-		switch(chaosToken)
+		switch (chaosToken)
 		{
 			case ChaosBag.ChaosTokenType.Tentacle:
 				bAutoFailed = true;    // Auto failed...
 				break;
-            case ChaosBag.ChaosTokenType.ElderSign:
-                chaosResult = Player.Get().m_investigatorCard.m_investigatorAbility.Invoke();
-                break;
-            case ChaosBag.ChaosTokenType.Zero:
+			case ChaosBag.ChaosTokenType.ElderSign:
+				chaosResult = Player.Get().m_investigatorCard.m_investigatorAbility.Invoke();
+				break;
+			case ChaosBag.ChaosTokenType.Zero:
 			case ChaosBag.ChaosTokenType.Add_1:
 			case ChaosBag.ChaosTokenType.Substract_1:
 			case ChaosBag.ChaosTokenType.Substract_2:
@@ -214,20 +214,44 @@ public class GameLogic
 				break;
 		}
 
-		int shroudValue = Player.Get().m_currentLocation.m_shroud;
-		int skillIconValue = GetSkillIconNumInSelectCards(PlayerCard.SkillIcon.Intellect);
-		int playerSkillValue = Player.Get().m_investigatorCard.m_intellect;
-		int finalValue = skillIconValue + chaosResult + playerSkillValue - shroudValue;
+		int skillIconValue = GetSkillIconNumInSelectCards(skill);
+		int playerSkillValue = Player.Get().GetSkillValueByType(skill);
+		int finalValue = skillIconValue + chaosResult + playerSkillValue - AgainstValue;
 
-		OutputGameLog(string.Format("知识：{0}\n打出技能图标：{1}\n混沌标记（{2}）：{3}\n笼罩：{4}\n最终结果：{5}\n",
+		OutputGameLog(string.Format("技能检定如下：\n对应技能：<color=green>{0}</color>\n打出技能图标：<color=green>{1}</color>\n混沌标记<{2}>：<color=orange>{3}</color>\n检定值：<color=red>{4}</color>\n最终结果：{5}\n",
 			playerSkillValue,
 			skillIconValue,
 			ChaosBag.GetChaosTokenName(chaosToken),
 			chaosResult,
-			shroudValue,
+			-AgainstValue,
 			finalValue));
 
-        bool bSucceed = !bAutoFailed && finalValue >= 0;
+		bool bSucceed = !bAutoFailed && finalValue >= 0;
+		return bSucceed;
+	}
+
+	public void AfterSkillTest(bool bSucceed, ChaosBag.ChaosTokenType chaosToken)
+	{
+		if(!bSucceed)
+		{
+			m_currentScenario.AfterSkillTestFailed(chaosToken);
+		}
+
+		if (chaosToken == ChaosBag.ChaosTokenType.ElderSign)
+		{
+			if (Player.Get().m_investigatorCard.m_afterElderSignEvent.GetPersistentEventCount() > 0)
+			{
+				Player.Get().m_investigatorCard.m_afterElderSignEvent.Invoke(bSucceed);
+			}
+		}
+	}
+
+	public void InvestigateCurrentLocation()
+	{
+		int shroudValue = Player.Get().m_currentLocation.m_shroud;
+
+		ChaosBag.ChaosTokenType chaosToken;
+		bool bSucceed = SkillTest(SkillType.Intellect, shroudValue, out chaosToken);
 
 		if (bSucceed)
 		{
@@ -240,21 +264,14 @@ public class GameLogic
 		{
 			// Failed..
 			OutputGameLog("调查失败！\n");
-			m_currentScenario.AfterSkillTestFailed(chaosToken);
 		}
 
-        if(chaosToken == ChaosBag.ChaosTokenType.ElderSign)
-        {
-            if(Player.Get().m_investigatorCard.m_afterElderSignEvent.GetPersistentEventCount() > 0)
-            {
-                Player.Get().m_investigatorCard.m_afterElderSignEvent.Invoke(bSucceed);
-            }
-        }
+        AfterSkillTest(bSucceed, chaosToken);
 
 		Player.Get().ActionDone();
 	}
 
-	public int GetSkillIconNumInSelectCards(PlayerCard.SkillIcon type)
+	public int GetSkillIconNumInSelectCards(SkillType type)
 	{
 		int result = 0;
 
@@ -268,9 +285,9 @@ public class GameLogic
 				result += pc.m_skillIcons[type];
 			}
 
-			if (pc.m_skillIcons.ContainsKey(PlayerCard.SkillIcon.Wild))
+			if (pc.m_skillIcons.ContainsKey(SkillType.Wild))
 			{
-				result += pc.m_skillIcons[PlayerCard.SkillIcon.Wild];
+				result += pc.m_skillIcons[SkillType.Wild];
 			}
 		}
 		return result;

@@ -9,10 +9,11 @@ public class MainGame : MonoBehaviour
 	#region game UI
 	public GameObject			m_actArea;
 	public GameObject			m_agendaArea;
-	public GameObject			m_selectCardInfo;
 	public GameObject			m_gameArea;
 	public List<GameObject>		m_playerCardArea;
+	public List<GameObject>		m_threatArea;
 	public Text					m_gameLog;
+	public Text					m_confirmSkillTestText;
 	public Button				m_InvestigateBtn;
 	public Button				m_drawPlayerCardBtn;
 	public Button				m_gainResourceBtn;
@@ -34,10 +35,12 @@ public class MainGame : MonoBehaviour
 	public enum ConfirmButtonMode
 	{
 		None,
-		SelectCard,
+		GainCard,
 		TextOnly,
 		DrawPlayerCard,
-		DrawEncounterCard
+		DrawEncounterCard,
+		Investigate,
+		SkillTest
 	}
 	[System.NonSerialized]
 	public ConfirmButtonMode	m_choiceMode = ConfirmButtonMode.None;
@@ -143,31 +146,10 @@ public class MainGame : MonoBehaviour
 
 	public void OnButtonInvestigateCurrentLocation()
 	{
-		m_gameArea.SetActive(false);
-		m_selectCardInfo.SetActive(true);
-
-		GameLogic.Get().m_cardClickMode = Card.CardClickMode.MultiSelect;
+		m_choiceMode = MainGame.ConfirmButtonMode.Investigate;
+		BeginSelectCardToSpend();
 
 		GameLogic.Get().OutputGameLog(string.Format("{0}调查了{1}\n", Player.Get().m_investigatorCard.m_cardName, Player.Get().m_currentLocation.m_cardName));
-	}
-
-	public void OnButtonConfirmSelectCard()
-	{
-		GameLogic.Get().InvestigateCurrentLocation(GameLogic.Get().m_chaosBag);
-
-		Card.m_lstSelectCards.ForEach(card => 
-		{
-			// Restore position
-			RectTransform rt = (RectTransform)card.gameObject.GetComponent<RectTransform>().parent;
-			rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y - 30);
-
-			card.Discard();
-		});
-
-		m_gameArea.SetActive(true);
-		m_selectCardInfo.SetActive(false);
-		Card.m_lstSelectCards.Clear();
-		GameLogic.Get().m_cardClickMode = Card.CardClickMode.Flip;
 	}
 
 	public void OnButtonGainOneResource()
@@ -187,6 +169,18 @@ public class MainGame : MonoBehaviour
 		{
 			GameLogic.DockCard(cards[i].gameObject, m_playerCardArea[i]);
 		}
+
+		// Display player threat area
+		var enemies = Player.Get().GetEnemyCards();
+
+		for (int i = 0; i < enemies.Count; ++i)
+		{
+			GameLogic.DockCard(enemies[i].gameObject, m_threatArea[i]);
+		}
+
+		var scenario = GameLogic.Get().m_currentScenario;
+		m_advanceActBtn.interactable = scenario.m_currentAct.m_currentToken + Player.Get().m_clues >= scenario.m_currentAct.m_tokenToAdvance;
+		m_InvestigateBtn.interactable = Player.Get().m_currentLocation.m_clues > 0;
 
 		GameLogic.Get().Update();
 	}
@@ -276,9 +270,6 @@ public class MainGame : MonoBehaviour
 		m_enemyPhaseBtn.gameObject.SetActive(false);
 		m_advanceActBtn.gameObject.SetActive(true);
 
-		var scenario = GameLogic.Get().m_currentScenario;
-		m_advanceActBtn.interactable = scenario.m_currentAct.m_currentToken + Player.Get().m_clues >= scenario.m_currentAct.m_tokenToAdvance;
-
 		m_InvestigateBtn.gameObject.SetActive(true);
 		m_drawPlayerCardBtn.gameObject.SetActive(true);
 		m_gainResourceBtn.gameObject.SetActive(true);
@@ -362,7 +353,7 @@ public class MainGame : MonoBehaviour
 
 	public void OnChoiceChanged(Dropdown d)
 	{
-		if(m_choiceMode == ConfirmButtonMode.SelectCard)
+		if(m_choiceMode == ConfirmButtonMode.GainCard)
 		{
 			if (GameLogic.Get().m_highlightCard != null)
 			{
@@ -383,9 +374,8 @@ public class MainGame : MonoBehaviour
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = true;
 
 		m_confirmChoiceBtn.gameObject.SetActive(false);
-		m_choiceDropdown.gameObject.SetActive(false);
 
-		if (m_choiceMode == ConfirmButtonMode.SelectCard)
+		if (m_choiceMode == ConfirmButtonMode.GainCard)
 		{
 			PlayerCard card = m_lstCardChoice[m_choiceDropdown.value];
 			Player.Get().AddHandCard(card.gameObject);
@@ -393,11 +383,13 @@ public class MainGame : MonoBehaviour
 			GameLogic.Get().m_lstPlayerCards.Remove(card.gameObject);
 			GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
 
+			m_choiceDropdown.gameObject.SetActive(false);
 			card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 			GameLogic.Get().OutputGameLog(string.Format("{0}获取了手牌：{1}\n", Player.Get().m_investigatorCard.m_cardName, card.m_cardName));
 		}
 		else if (m_choiceMode == ConfirmButtonMode.TextOnly)
 		{
+			m_choiceDropdown.gameObject.SetActive(false);
 			m_lstChoiceEvent[m_choiceDropdown.value].Invoke();
 		}
 		else if(m_choiceMode == ConfirmButtonMode.DrawPlayerCard)
@@ -421,10 +413,58 @@ public class MainGame : MonoBehaviour
 			{
 				EnemyCard enemy = card as EnemyCard;
 				Player.Get().AddEngagedEnemy(enemy);
-			}
 
-			card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
-			m_tempHighlightCard = null;
+				card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+				m_tempHighlightCard = null;
+			}
+			else if(card is TreacheryCard)
+			{
+				GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
+				GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
+
+				GameLogic.Get().m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
+				GameLogic.Get().m_mainGameUI.BeginSelectCardToSpend();		
+			}
 		}
+		else if(m_choiceMode == ConfirmButtonMode.Investigate)
+		{
+			GameLogic.Get().InvestigateCurrentLocation();
+			EndSelectCardToSpend();
+		}
+		else if(m_choiceMode == ConfirmButtonMode.SkillTest)
+		{
+			TreacheryCard treachery = Instantiate(m_tempHighlightCard).GetComponent<TreacheryCard>();
+			treachery.m_skillTestEvent.Invoke(0);
+			treachery.Discard();
+
+			m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+			m_tempHighlightCard = null;
+			EndSelectCardToSpend();
+		}
+	}
+
+	public void BeginSelectCardToSpend()
+	{
+		m_confirmChoiceBtn.gameObject.SetActive(true);
+		m_confirmSkillTestText.gameObject.SetActive(true);
+		m_gameArea.SetActive(true);
+		GameLogic.Get().m_cardClickMode = Card.CardClickMode.MultiSelect;
+	}
+
+	public void EndSelectCardToSpend()
+	{
+		Card.m_lstSelectCards.ForEach(card =>
+		{
+			// Restore position
+			RectTransform rt = (RectTransform)card.gameObject.GetComponent<RectTransform>().parent;
+			rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y - 30);
+
+			card.Discard();
+		});
+
+		Card.m_lstSelectCards.Clear();
+		m_gameArea.SetActive(true);
+		GameLogic.Get().m_cardClickMode = Card.CardClickMode.Flip;
+		m_confirmSkillTestText.gameObject.SetActive(false);
 	}
 }

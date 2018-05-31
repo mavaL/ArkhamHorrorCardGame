@@ -74,7 +74,12 @@ public class Player
 		return m_lstPlayerCards;
 	}
 
-    public bool IsAssetCardInPlay(string cardName)
+	public List<EnemyCard> GetEnemyCards()
+	{
+		return m_lstEnemyCards;
+	}
+
+	public bool IsAssetCardInPlay(string cardName)
     {
         for(int i=0; i<m_lstAssetCards.Count; ++i)
         {
@@ -133,7 +138,23 @@ public class Player
 
 	public void AddEngagedEnemy(EnemyCard enemy)
 	{
-		m_lstEnemyCards.Add(enemy);
+		var inst = GameObject.Instantiate(enemy.gameObject);
+		m_lstEnemyCards.Add(inst.GetComponent<EnemyCard>());
+		inst.SetActive(true);
+
 		GameLogic.Get().OutputGameLog(string.Format("{0}与<{1}>发生了交战！\n", m_investigatorCard.m_cardName, enemy.m_cardName));
+	}
+
+	public int GetSkillValueByType(SkillType skill)
+	{
+		switch (skill)
+		{
+			case SkillType.Agility: return m_investigatorCard.m_agility;
+			case SkillType.Combat: return m_investigatorCard.m_combat;
+			case SkillType.Intellect: return m_investigatorCard.m_intellect;
+			case SkillType.Willpower: return m_investigatorCard.m_willPower;
+		}
+
+		return -999;
 	}
 }

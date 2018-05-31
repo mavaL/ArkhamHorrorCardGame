@@ -27,7 +27,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		Ghoul,
 		Item,
 		Tome,
-		Spell
+		Spell,
+		Hunter,
+		Hazard
 	}
 
 	public List<Keyword> m_lstKeywords = new List<Keyword>();
