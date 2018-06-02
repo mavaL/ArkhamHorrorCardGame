@@ -62,6 +62,23 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: SkillTestEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  m_skillTestResultEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114902594422151592, guid: 86141fb62e04b1b41bbe3ef4f25d8201,
+          type: 2}
+        m_MethodName: SkillTestFailedWithDamage
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: SkillTestEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!224 &224725604440361014
 RectTransform:
   m_ObjectHideFlags: 1

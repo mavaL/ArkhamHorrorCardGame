@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4399276592317930}
   - component: {fileID: 114902594422151592}
   m_Layer: 0
-  m_Name: EncounterEvents
+  m_Name: SkillTestEvents
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

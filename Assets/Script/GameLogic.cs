@@ -58,10 +58,11 @@ public class GameLogic
 	public MainGame			m_mainGameUI;
 	public Card				m_highlightCard;
 
-	public List<GameObject> m_lstPlayerCards = new List<GameObject>();
-	public List<GameObject> m_lstDiscardEncounterCards = new List<GameObject>();
-	public List<GameObject> m_lstDiscardPlayerCards = new List<GameObject>();
-	public List<GameObject> m_lstEnemyCards = new List<GameObject>();
+	public List<GameObject>			m_lstPlayerCards = new List<GameObject>();
+	public List<GameObject>			m_lstDiscardEncounterCards = new List<GameObject>();
+	public List<GameObject>			m_lstDiscardPlayerCards = new List<GameObject>();
+	static public List<Card>		m_lstExhaustedCards = new List<Card>();
+	static public List<EnemyCard>	m_lstUnengagedEnemyCards = new List<EnemyCard>();
 
 	public static void Swap<T>(ref T a, ref T b)
 	{
@@ -87,11 +88,6 @@ public class GameLogic
 			ShowHighlightCardExclusive(Player.Get().m_currentLocation, false);
 
 			m_mainGameUI.m_confirmEnterLocationBtn.gameObject.SetActive(true);
-
-			if (bUseAction)
-			{
-				Player.Get().ActionDone();
-			}
 		}
 		else
 		{
@@ -108,6 +104,7 @@ public class GameLogic
 			destNames.Add("移动到...");
 			destList.ForEach(dest => { destNames.Add(dest.m_cardName); });
 			m_mainGameUI.m_movementDropdown.AddOptions(destNames);
+			m_mainGameUI.m_movementDropdown.RefreshShownValue();
 
 			m_mainGameUI.m_movementDropdown.value = 0;
 			m_mainGameUI.m_movementDropdown.interactable = true;
@@ -116,6 +113,21 @@ public class GameLogic
 		{
 			m_mainGameUI.m_movementDropdown.interactable = false;
 		}
+
+		if (bUseAction)
+		{
+			Player.Get().ActionDone();
+		}
+	}
+
+	public void PlayerFightEnemy(EnemyCard enemy)
+	{
+		m_mainGameUI.m_confirmChoiceBtn.gameObject.SetActive(true);
+		m_mainGameUI.m_tempHighlightCard = enemy.gameObject;
+		m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
+		m_mainGameUI.BeginSelectCardToSpend();
+
+		Player.Get().ActionDone();
 	}
 
 	public void ShowHighlightCardExclusive(Card card, bool bFlip)
@@ -183,16 +195,18 @@ public class GameLogic
 		m_currentScenario.ShowPlayInfo();
 	}
 
-	public bool SkillTest(SkillType skill, int AgainstValue, out ChaosBag.ChaosTokenType chaosToken)
+	public int SkillTest(SkillType skill, int AgainstValue, out ChaosBag.ChaosTokenType chaosToken)
 	{
-		bool bAutoFailed = false;
 		int chaosResult = 0;
+		int skillIconValue = GetSkillIconNumInSelectCards(skill);
+		int playerSkillValue = Player.Get().GetSkillValueByType(skill);
 		chaosToken = m_chaosBag.GetResult();
 
 		switch (chaosToken)
 		{
 			case ChaosBag.ChaosTokenType.Tentacle:
-				bAutoFailed = true;    // Auto failed...
+				// Auto failed...
+				chaosResult = -skillIconValue - playerSkillValue;
 				break;
 			case ChaosBag.ChaosTokenType.ElderSign:
 				chaosResult = Player.Get().m_investigatorCard.m_investigatorAbility.Invoke();
@@ -214,8 +228,7 @@ public class GameLogic
 				break;
 		}
 
-		int skillIconValue = GetSkillIconNumInSelectCards(skill);
-		int playerSkillValue = Player.Get().GetSkillValueByType(skill);
+		
 		int finalValue = skillIconValue + chaosResult + playerSkillValue - AgainstValue;
 
 		OutputGameLog(string.Format("技能检定如下：\n对应技能：<color=green>{0}</color>\n打出技能图标：<color=green>{1}</color>\n混沌标记<{2}>：<color=orange>{3}</color>\n检定值：<color=red>{4}</color>\n最终结果：{5}\n",
@@ -226,8 +239,7 @@ public class GameLogic
 			-AgainstValue,
 			finalValue));
 
-		bool bSucceed = !bAutoFailed && finalValue >= 0;
-		return bSucceed;
+		return finalValue;
 	}
 
 	public void AfterSkillTest(bool bSucceed, ChaosBag.ChaosTokenType chaosToken)
@@ -251,9 +263,9 @@ public class GameLogic
 		int shroudValue = Player.Get().m_currentLocation.m_shroud;
 
 		ChaosBag.ChaosTokenType chaosToken;
-		bool bSucceed = SkillTest(SkillType.Intellect, shroudValue, out chaosToken);
+		int result = SkillTest(SkillType.Intellect, shroudValue, out chaosToken);
 
-		if (bSucceed)
+		if (result>=0)
 		{
 			// Succeed!
 			Player.Get().m_clues += 1;
@@ -266,7 +278,7 @@ public class GameLogic
 			OutputGameLog("调查失败！\n");
 		}
 
-        AfterSkillTest(bSucceed, chaosToken);
+        AfterSkillTest(result >= 0, chaosToken);
 
 		Player.Get().ActionDone();
 	}

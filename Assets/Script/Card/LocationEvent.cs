@@ -41,6 +41,8 @@ public class LocationEvent : MonoBehaviour
 			lstCards.ForEach(card => { cardNames.Add(card.m_cardName); });
 			GameLogic.Get().m_mainGameUI.m_choiceDropdown.ClearOptions();
 			GameLogic.Get().m_mainGameUI.m_choiceDropdown.AddOptions(cardNames);
+			GameLogic.Get().m_mainGameUI.m_movementDropdown.RefreshShownValue();
+
 			GameLogic.Get().m_mainGameUI.m_choiceDropdown.gameObject.SetActive(true);
 
 			GameLogic.Get().ShowHighlightCardExclusive(lstCards[0], false);

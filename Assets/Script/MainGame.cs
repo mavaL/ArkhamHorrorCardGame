@@ -29,6 +29,7 @@ public class MainGame : MonoBehaviour
 	public Button				m_useLocationAbilityBtn;
 	public Dropdown				m_movementDropdown;
 	public Dropdown				m_choiceDropdown;
+	public Dropdown				m_fightDropdown;
 	#endregion
 
 	// A single button functions many way
@@ -49,7 +50,8 @@ public class MainGame : MonoBehaviour
 	// Used by LocationEvent
 	[System.NonSerialized]
 	public List<PlayerCard> m_lstCardChoice = new List<PlayerCard>(0);
-	private GameObject		m_tempHighlightCard;
+	[System.NonSerialized]
+	public GameObject		m_tempHighlightCard;
 
 	string[]	m_roland_def_cards =
 	{
@@ -102,6 +104,8 @@ public class MainGame : MonoBehaviour
 
 		_LoadPlayerCards(Player.Get().m_faction);
 		_DrawFiveOpenHands();
+
+		OnPlayerThreatAreaChnaged();
 	}
 
 	private void _DrawFiveOpenHands()
@@ -193,6 +197,7 @@ public class MainGame : MonoBehaviour
 		m_advanceActBtn.gameObject.SetActive(false);
 		m_useLocationAbilityBtn.gameObject.SetActive(false);
 		m_movementDropdown.gameObject.SetActive(false);
+		m_fightDropdown.gameObject.SetActive(false);
 		m_enemyPhaseBtn.gameObject.SetActive(true);
 
 		GameLogic.Get().m_currentPhase = TurnPhase.EnemyPhase;
@@ -202,15 +207,25 @@ public class MainGame : MonoBehaviour
 	{
 		GameLogic.Get().OutputGameLog("游戏进入敌人阶段\n");
 
-		if(GameLogic.Get().m_lstEnemyCards.Count > 0)
-		{
+		var enemies = GameLogic.m_lstUnengagedEnemyCards;
 
-		}
-		else
+		// 1. Unengaged hunter enemies move
+		if (enemies.Count > 0)
 		{
-			m_enemyPhaseBtn.gameObject.SetActive(false);
-			m_UpkeepPhaseBtn.gameObject.SetActive(true);
+			foreach(var enemy in enemies)
+			{
+				if(enemy.IsKeywordContain(Card.Keyword.Hunter))
+				{
+					enemy.HunterMoveToNearestInvestigator();
+				}
+			}
 		}
+
+		// 2. Resolve engaged enemy attacks
+		Player.Get().ResolveEngagedEnemyAttack();
+
+		m_enemyPhaseBtn.gameObject.SetActive(false);
+		m_UpkeepPhaseBtn.gameObject.SetActive(true);
 	}
 
 	public void OnButtonEnterUpkeepPhase()
@@ -218,12 +233,24 @@ public class MainGame : MonoBehaviour
 		GameLogic.Get().OutputGameLog("游戏进入维持阶段\n");
 		GameLogic.Get().m_currentPhase = TurnPhase.UpkeepPhase;
 
-		// TODO: Upkeep phase not finished!
+		// 1. Reset actions
+		Player.Get().ResetAction();
+
+		// 2. Ready exhausted cards
+		foreach(var exhausted in GameLogic.m_lstExhaustedCards)
+		{
+			exhausted.m_exhausted = false;
+		}
+		GameLogic.m_lstExhaustedCards.Clear();
+
+		// 3. Each investigator draws 1 card and gains 1 resource
 		var card = GameLogic.Get().DrawPlayerCard();
 		Player.Get().AddHandCard(card);
 		Player.Get().m_resources += 1;
 
-		GameLogic.Get().OutputGameLog(string.Format("{0}在维持阶段获得了1手牌，1资源\n", Player.Get().m_investigatorCard.m_cardName));
+		GameLogic.Get().OutputGameLog(string.Format("{0}在维持阶段获得了1资源，1手牌<{1}>\n", Player.Get().m_investigatorCard.m_cardName, card.GetComponent<Card>().m_cardName));
+
+		// 4. Each investigator checks hand size
 
 		m_UpkeepPhaseBtn.gameObject.SetActive(false);
 		m_MythosPhaseBtn.gameObject.SetActive(true);
@@ -263,8 +290,6 @@ public class MainGame : MonoBehaviour
 		GameLogic.Get().OutputGameLog("游戏进入调查阶段\n");
 		GameLogic.Get().m_currentPhase = TurnPhase.InvestigationPhase;
 
-		Player.Get().ResetAction();
-
 		m_InvestigationPhaseBtn.gameObject.SetActive(false);
 		m_InvestigateBtn.interactable = Player.Get().m_currentLocation.m_clues > 0;
 		m_enemyPhaseBtn.gameObject.SetActive(false);
@@ -275,6 +300,7 @@ public class MainGame : MonoBehaviour
 		m_gainResourceBtn.gameObject.SetActive(true);
 		m_advanceActBtn.gameObject.SetActive(true);
 		m_movementDropdown.gameObject.SetActive(true);
+		m_fightDropdown.gameObject.SetActive(true);
 		m_useLocationAbilityBtn.gameObject.SetActive(Player.Get().m_currentLocation.m_locationAbilityCallback.GetPersistentEventCount() > 0);
 	}
 
@@ -398,10 +424,10 @@ public class MainGame : MonoBehaviour
 
 			m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 			Player.Get().AddHandCard(m_tempHighlightCard);
-			m_tempHighlightCard = null;
 
 			GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了<{1}>\n", Player.Get().m_investigatorCard.m_cardName, m_tempHighlightCard.GetComponent<PlayerCard>().m_cardName));
 			Player.Get().ActionDone();
+			m_tempHighlightCard = null;
 		}
 		else if(m_choiceMode == ConfirmButtonMode.DrawEncounterCard)
 		{
@@ -419,9 +445,6 @@ public class MainGame : MonoBehaviour
 			}
 			else if(card is TreacheryCard)
 			{
-				GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
-				GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
-
 				GameLogic.Get().m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 				GameLogic.Get().m_mainGameUI.BeginSelectCardToSpend();		
 			}
@@ -433,11 +456,10 @@ public class MainGame : MonoBehaviour
 		}
 		else if(m_choiceMode == ConfirmButtonMode.SkillTest)
 		{
-			TreacheryCard treachery = Instantiate(m_tempHighlightCard).GetComponent<TreacheryCard>();
-			treachery.m_skillTestEvent.Invoke(0);
-			treachery.Discard();
+			Card card = m_tempHighlightCard.GetComponent<Card>();
+			card.OnSkillTest();
 
-			m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+			card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 			m_tempHighlightCard = null;
 			EndSelectCardToSpend();
 		}
@@ -445,10 +467,17 @@ public class MainGame : MonoBehaviour
 
 	public void BeginSelectCardToSpend()
 	{
-		m_confirmChoiceBtn.gameObject.SetActive(true);
+		m_confirmChoiceBtn.gameObject.SetActive(true);	
 		m_confirmSkillTestText.gameObject.SetActive(true);
-		m_gameArea.SetActive(true);
+		m_gameArea.SetActive(false);
 		GameLogic.Get().m_cardClickMode = Card.CardClickMode.MultiSelect;
+
+		// ...................Seems like Unity's BUG.......................
+		ScrollRect dropDownList = m_fightDropdown.GetComponentInChildren<ScrollRect>();
+		if (dropDownList != null)
+		{
+			Destroy(dropDownList.gameObject);
+		}
 	}
 
 	public void EndSelectCardToSpend()
@@ -466,5 +495,29 @@ public class MainGame : MonoBehaviour
 		m_gameArea.SetActive(true);
 		GameLogic.Get().m_cardClickMode = Card.CardClickMode.Flip;
 		m_confirmSkillTestText.gameObject.SetActive(false);
+	}
+
+	public void OnFightTargetChanged(Dropdown d)
+	{
+		// Option 0 is reserved
+		if(d.value == 0)
+		{
+			return;
+		}
+
+		GameLogic.Get().PlayerFightEnemy(Player.Get().GetEnemyCards()[d.value-1]);
+	}
+
+	public void OnPlayerThreatAreaChnaged()
+	{
+		m_fightDropdown.ClearOptions();
+
+		List<string> cardNames = new List<string>();
+		cardNames.Add("请选择攻击目标...");
+		var enemies = Player.Get().GetEnemyCards();
+
+		enemies.ForEach(enemy => { cardNames.Add(enemy.m_cardName); });
+		m_fightDropdown.AddOptions(cardNames);
+		m_fightDropdown.RefreshShownValue();
 	}
 }

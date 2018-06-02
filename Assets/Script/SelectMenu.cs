@@ -39,16 +39,18 @@ public class SelectMenu : MonoBehaviour {
             roleNames.Add(card.m_cardName);
         }
         m_selectRoleDropdown.AddOptions(roleNames);
+		m_selectRoleDropdown.RefreshShownValue();
 
-        List<string> scenarioNames = new List<string>();
+		List<string> scenarioNames = new List<string>();
         for (int i = 0; i < m_lstScenarioInfo.Count; ++i)
         {
             Card card = m_lstScenarioInfo[i].GetComponent<Card>();
             scenarioNames.Add(card.m_cardName);
         }
         m_selectScenarioDropdown.AddOptions(scenarioNames);
+		m_selectScenarioDropdown.RefreshShownValue();
 
-        m_selectRoleUI.SetActive(true);
+		m_selectRoleUI.SetActive(true);
         m_selectScenarioUI.SetActive(false);
     }
 	

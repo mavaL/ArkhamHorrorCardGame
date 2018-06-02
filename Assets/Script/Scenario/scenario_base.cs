@@ -8,6 +8,7 @@ public abstract class scenario_base : MonoBehaviour
 	public List<LocationCard>	m_lstOtherLocations;
 	public GameObject			m_startLocation;
 	public Text					m_playerInfoText;
+	public SkillTestEvents		m_skillTest;
 	[System.NonSerialized]
 	public List<LocationCard>	m_revealedLocations = new List<LocationCard>();
 
@@ -29,4 +30,12 @@ public abstract class scenario_base : MonoBehaviour
 	public abstract void AfterSkillTestFailed(ChaosBag.ChaosTokenType t);
 	public abstract void AdvanceAct();
 	public abstract void AdvanceAgenda();
+
+	public void InstantiateCards()
+	{
+		for(int i=0; i< m_lstEncounterCards.Count; ++i)
+		{
+			m_lstEncounterCards[i] = Instantiate(m_lstEncounterCards[i]);
+		}
+	}
 }

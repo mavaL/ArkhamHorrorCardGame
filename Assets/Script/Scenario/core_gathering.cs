@@ -9,6 +9,7 @@ public class core_gathering : scenario_base
 {
 	void Awake()
 	{
+		InstantiateCards();
 		GameLogic.Get().m_currentScenario = this;
 	}
 
@@ -165,6 +166,8 @@ public class core_gathering : scenario_base
 				var mainUI = GameLogic.Get().m_mainGameUI;
 				mainUI.m_choiceDropdown.ClearOptions();
 				mainUI.m_choiceDropdown.AddOptions(options);
+				mainUI.m_movementDropdown.RefreshShownValue();
+
 				mainUI.m_choiceDropdown.gameObject.SetActive(true);
 				mainUI.m_confirmChoiceBtn.gameObject.SetActive(true);
 				mainUI.m_choiceMode = MainGame.ConfirmButtonMode.TextOnly;

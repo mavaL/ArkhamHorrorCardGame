@@ -138,11 +138,20 @@ public class Player
 
 	public void AddEngagedEnemy(EnemyCard enemy)
 	{
-		var inst = GameObject.Instantiate(enemy.gameObject);
-		m_lstEnemyCards.Add(inst.GetComponent<EnemyCard>());
-		inst.SetActive(true);
+		enemy.m_engaged = true;
+		m_lstEnemyCards.Add(enemy);
+		GameLogic.m_lstUnengagedEnemyCards.Remove(enemy);
+		enemy.gameObject.SetActive(true);
 
+		GameLogic.Get().m_mainGameUI.OnPlayerThreatAreaChnaged();
 		GameLogic.Get().OutputGameLog(string.Format("{0}与<{1}>发生了交战！\n", m_investigatorCard.m_cardName, enemy.m_cardName));
+	}
+
+	public void RemoveEngagedEnemy(EnemyCard enemy)
+	{
+		enemy.gameObject.SetActive(false);
+		m_lstEnemyCards.Remove(enemy);
+		GameLogic.Get().m_mainGameUI.OnPlayerThreatAreaChnaged();
 	}
 
 	public int GetSkillValueByType(SkillType skill)
@@ -156,5 +165,22 @@ public class Player
 		}
 
 		return -999;
+	}
+
+	public void ResolveEngagedEnemyAttack()
+	{
+		foreach(var enemy in m_lstEnemyCards)
+		{
+			if(!enemy.m_exhausted)
+			{
+				m_health -= enemy.m_damage;
+				m_sanity -= enemy.m_horror;
+
+				GameLogic.Get().OutputGameLog(string.Format("{0}被<{1}>攻击，受到：{2}点伤害，{3}点恐怖！\n", m_investigatorCard.m_cardName, enemy.m_cardName, enemy.m_damage, enemy.m_horror));
+
+				enemy.m_exhausted = true;
+				GameLogic.m_lstExhaustedCards.Add(enemy);
+			}
+		}
 	}
 }

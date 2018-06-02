@@ -77,6 +77,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 	private bool	m_bSelected = false;
     private GameObject			m_focusImage;
 	public static List<Card>	m_lstSelectCards = new List<Card>();
+	public bool		m_exhausted { set; get; } = false;
 
 
 	// Use this for initialization
@@ -176,4 +177,6 @@ public class Card : MonoBehaviour, IPointerClickHandler
     }
 
 	public virtual void Discard() {}
+	public virtual void OnSkillTest() {}
+	public virtual void OnSkillTestResult(int result) {}
 }
