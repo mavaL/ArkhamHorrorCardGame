@@ -21,7 +21,8 @@ public enum SkillType
 
 public class PlayerCard : Card
 {
-	public SkillIconDictionary m_skillIcons;
+	public SkillIconDictionary	m_skillIcons;
+	public bool					m_isPlayerDeck = true;
 
 	public override void Discard()
 	{

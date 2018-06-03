@@ -56,7 +56,6 @@ public class GameLogic
 	public TurnPhase		m_currentPhase;
 	public ChaosBag			m_chaosBag = new ChaosBag();
 	public MainGame			m_mainGameUI;
-	public Card				m_highlightCard;
 
 	public List<GameObject>			m_lstPlayerCards = new List<GameObject>();
 	public List<GameObject>			m_lstDiscardEncounterCards = new List<GameObject>();
@@ -71,11 +70,28 @@ public class GameLogic
 		b = t;
 	}
 
-	public static void DockCard(GameObject go, GameObject parent, bool bWorldPosStays = true)
+	public static void DockCard(GameObject go, GameObject parent, float yOffset = 0, bool bWorldPosStays = true, bool bDockLocation = false)
 	{
-		go.transform.SetParent(parent.transform, bWorldPosStays);
-		go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-		go.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+		if (bDockLocation)
+		{
+			var destination = parent.GetComponent<LocationCard>();
+			var card = go.GetComponent<Card>();
+
+			card.m_currentLocation = destination;
+			destination.m_lstCardsAtHere.Add(card);
+
+			go.transform.SetParent(parent.transform.parent, bWorldPosStays);
+			go.transform.SetAsFirstSibling();
+
+			RectTransform rt = parent.GetComponent<RectTransform>();
+			go.GetComponent<RectTransform>().anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y + destination.m_lstCardsAtHere.Count * yOffset);
+		}
+		else
+		{
+			go.transform.SetParent(parent.transform, bWorldPosStays);
+			go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+		}
+		go.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);	
 	}
 
 	public void PlayerEnterLocation(GameObject locationGO, bool bUseAction = true)
@@ -98,6 +114,13 @@ public class GameLogic
 		var destList = Player.Get().m_currentLocation.m_lstDestinations;
 		if (destList.Count > 0)
 		{
+			// ...................Seems like Unity's BUG.......................
+			ScrollRect dropDownList = m_mainGameUI.m_movementDropdown.GetComponentInChildren<ScrollRect>();
+			if (dropDownList != null)
+			{
+				GameObject.Destroy(dropDownList.gameObject);
+			}
+
 			m_mainGameUI.m_movementDropdown.ClearOptions();
 
 			List<string> destNames = new List<string>();
@@ -132,15 +155,7 @@ public class GameLogic
 
 	public void ShowHighlightCardExclusive(Card card, bool bFlip)
 	{
-		if(bFlip)
-		{
-			card.FlipCard();
-		}
-
-		m_highlightCard = card;
-		card.OnPointerEnter(new UnityEngine.EventSystems.BaseEventData(null));
-		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
-		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
+		m_mainGameUI.ShowHighlightCardExclusive(card, bFlip);
 	}
 
 	public static void Shuffle(List<GameObject> cards)
@@ -258,31 +273,6 @@ public class GameLogic
 		}
 	}
 
-	public void InvestigateCurrentLocation()
-	{
-		int shroudValue = Player.Get().m_currentLocation.m_shroud;
-
-		ChaosBag.ChaosTokenType chaosToken;
-		int result = SkillTest(SkillType.Intellect, shroudValue, out chaosToken);
-
-		if (result>=0)
-		{
-			// Succeed!
-			Player.Get().m_clues += 1;
-			Player.Get().m_currentLocation.m_clues -= 1;
-			OutputGameLog("调查成功！\n");
-		}
-		else
-		{
-			// Failed..
-			OutputGameLog("调查失败！\n");
-		}
-
-        AfterSkillTest(result >= 0, chaosToken);
-
-		Player.Get().ActionDone();
-	}
-
 	public int GetSkillIconNumInSelectCards(SkillType type)
 	{
 		int result = 0;
@@ -308,5 +298,35 @@ public class GameLogic
 	public void OutputGameLog(string log)
 	{
 		m_logText.text += log;
+	}
+
+	public bool IsClueEnoughToAdvanceAct()
+	{
+		return m_currentScenario.m_currentAct.m_currentToken + Player.Get().m_clues >= m_currentScenario.m_currentAct.m_tokenToAdvance;
+	}
+
+	// Just reveal, not enter it
+	public void RevealLocation(LocationCard card)
+	{
+		m_mainGameUI.m_tempHighlightCard = card.gameObject;
+
+		ShowHighlightCardExclusive(card, true);
+
+		m_mainGameUI.m_confirmChoiceBtn.gameObject.SetActive(true);
+		m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.RevealCard;
+	}
+
+	public void SpawnAtLocation(Card card, LocationCard destination)
+	{
+		m_mainGameUI.m_tempHighlightCard = card.gameObject;
+		ShowHighlightCardExclusive(card, false);
+		m_mainGameUI.m_confirmChoiceBtn.gameObject.SetActive(true);
+		m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.RevealCard;
+
+		GameLogic.DockCard(card.gameObject, destination.gameObject, 300, true, true);
+
+		card.OnSpawnAtLocation(destination);
+
+		GameLogic.Get().OutputGameLog(string.Format("<{0}>出现在了<{1}>\n", card.m_cardName, destination.m_cardName));
 	}
 }

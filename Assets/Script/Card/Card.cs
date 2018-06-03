@@ -29,7 +29,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		Tome,
 		Spell,
 		Hunter,
-		Hazard
+		Hazard,
+		Elite,
+		Retaliate
 	}
 
 	public List<Keyword> m_lstKeywords = new List<Keyword>();
@@ -39,12 +41,12 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		return m_lstKeywords.Contains(k);
 	}
 
-	public static int HowManyEnemyCardContainTheKeyword(List<EnemyCard> cards, Keyword k)
+	public static int HowManyEnemyCardContainTheKeyword(List<Card> cards, Keyword k)
 	{
 		int num = 0;
 		for (int i = 0; i < cards.Count; ++i)
 		{
-			if (cards[i].m_lstKeywords.Contains(k))
+			if (cards[i] is EnemyCard && cards[i].m_lstKeywords.Contains(k))
 			{
 				++num;
 			}
@@ -77,7 +79,8 @@ public class Card : MonoBehaviour, IPointerClickHandler
 	private bool	m_bSelected = false;
     private GameObject			m_focusImage;
 	public static List<Card>	m_lstSelectCards = new List<Card>();
-	public bool		m_exhausted { set; get; } = false;
+	public bool					m_exhausted { set; get; } = false;
+	public LocationCard			m_currentLocation { set; get; }
 
 
 	// Use this for initialization
@@ -161,7 +164,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
             m_focusImage = GameObject.Instantiate(gameObject);
 			m_focusImage.GetComponent<Image>().raycastTarget = false;
 
-			GameLogic.DockCard(m_focusImage, GameObject.Find("Canvas"), false);
+			GameLogic.DockCard(m_focusImage, GameObject.Find("Canvas"), 0, false);
 
             m_bIsFocus = true;
         }
@@ -179,4 +182,5 @@ public class Card : MonoBehaviour, IPointerClickHandler
 	public virtual void Discard() {}
 	public virtual void OnSkillTest() {}
 	public virtual void OnSkillTestResult(int result) {}
+	public virtual void OnSpawnAtLocation(LocationCard loc) { }
 }

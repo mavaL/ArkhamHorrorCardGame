@@ -9,7 +9,7 @@ public class LocationCard : Card
 	public int					m_shroud = 0;
 	public List<LocationCard>	m_lstDestinations;
 	[System.NonSerialized]
-	public List<EnemyCard>		m_lstEnemies = new List<EnemyCard>();
+	public List<Card>			m_lstCardsAtHere = new List<Card>();
 	[System.NonSerialized]
 	public bool					m_isVisit = false;
 
@@ -46,5 +46,27 @@ public class LocationCard : Card
 		rt.localScale = new Vector3(1, 1, 1);
 
 		GameLogic.Get().m_mainGameUI.m_useLocationAbilityBtn.gameObject.SetActive(m_locationAbilityCallback.GetPersistentEventCount() > 0);
+	}
+
+	public override void OnSkillTest()
+	{
+		GameLogic.Get().OutputGameLog(string.Format("{0}调查了{1}\n", Player.Get().m_investigatorCard.m_cardName, m_cardName));
+		GameLogic.Get().m_currentScenario.m_skillTest.IntellectTest(m_shroud);
+	}
+
+	public override void OnSkillTestResult(int result)
+	{
+		if (result >= 0)
+		{
+			// Succeed!
+			Player.Get().m_clues += 1;
+			m_clues -= 1;
+			GameLogic.Get().OutputGameLog("调查成功！\n");
+		}
+		else
+		{
+			// Failed..
+			GameLogic.Get().OutputGameLog("调查失败！\n");
+		}
 	}
 }

@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Script\Card\AllyCard.cs" />
     <Compile Include="Assets\Script\Card\Card.cs" />
     <Compile Include="Assets\Script\Card\EnemyCard.cs" />
     <Compile Include="Assets\Script\Card\InvestigatorAbility.cs" />

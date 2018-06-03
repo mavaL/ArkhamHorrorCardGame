@@ -38,9 +38,8 @@ public class MainGame : MonoBehaviour
 		None,
 		GainCard,
 		TextOnly,
-		DrawPlayerCard,
+		RevealCard,
 		DrawEncounterCard,
-		Investigate,
 		SkillTest
 	}
 	[System.NonSerialized]
@@ -52,6 +51,7 @@ public class MainGame : MonoBehaviour
 	public List<PlayerCard> m_lstCardChoice = new List<PlayerCard>(0);
 	[System.NonSerialized]
 	public GameObject		m_tempHighlightCard;
+	public bool				m_bConfirmModeEnd { get; set; }
 
 	string[]	m_roland_def_cards =
 	{
@@ -145,15 +145,17 @@ public class MainGame : MonoBehaviour
 		GameLogic.Get().ShowHighlightCardExclusive(m_tempHighlightCard.GetComponent<Card>(), false);
 
 		m_confirmChoiceBtn.gameObject.SetActive(true);
-		m_choiceMode = MainGame.ConfirmButtonMode.DrawPlayerCard;
+		m_choiceMode = MainGame.ConfirmButtonMode.RevealCard;
 	}
 
 	public void OnButtonInvestigateCurrentLocation()
 	{
-		m_choiceMode = MainGame.ConfirmButtonMode.Investigate;
-		BeginSelectCardToSpend();
+		m_tempHighlightCard = Player.Get().m_currentLocation.gameObject;
+		m_confirmChoiceBtn.gameObject.SetActive(true);
+		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 
-		GameLogic.Get().OutputGameLog(string.Format("{0}调查了{1}\n", Player.Get().m_investigatorCard.m_cardName, Player.Get().m_currentLocation.m_cardName));
+		BeginSelectCardToSpend();
+		Player.Get().ActionDone();
 	}
 
 	public void OnButtonGainOneResource()
@@ -182,8 +184,7 @@ public class MainGame : MonoBehaviour
 			GameLogic.DockCard(enemies[i].gameObject, m_threatArea[i]);
 		}
 
-		var scenario = GameLogic.Get().m_currentScenario;
-		m_advanceActBtn.interactable = scenario.m_currentAct.m_currentToken + Player.Get().m_clues >= scenario.m_currentAct.m_tokenToAdvance;
+		m_advanceActBtn.interactable = GameLogic.Get().IsClueEnoughToAdvanceAct();
 		m_InvestigateBtn.interactable = Player.Get().m_currentLocation.m_clues > 0;
 
 		GameLogic.Get().Update();
@@ -194,7 +195,6 @@ public class MainGame : MonoBehaviour
 		m_InvestigateBtn.gameObject.SetActive(false);
 		m_drawPlayerCardBtn.gameObject.SetActive(false);
 		m_gainResourceBtn.gameObject.SetActive(false);
-		m_advanceActBtn.gameObject.SetActive(false);
 		m_useLocationAbilityBtn.gameObject.SetActive(false);
 		m_movementDropdown.gameObject.SetActive(false);
 		m_fightDropdown.gameObject.SetActive(false);
@@ -206,6 +206,7 @@ public class MainGame : MonoBehaviour
 	public void OnButtonEnterEnemyPhase()
 	{
 		GameLogic.Get().OutputGameLog("游戏进入敌人阶段\n");
+		m_advanceActBtn.gameObject.SetActive(false);
 
 		var enemies = GameLogic.m_lstUnengagedEnemyCards;
 
@@ -339,6 +340,7 @@ public class MainGame : MonoBehaviour
 
 			Player.Get().m_currentLocation.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 			Player.Get().m_currentLocation.EnterLocation();
+			m_bConfirmModeEnd = true;
 		}
 		else if(type == 2)
 		{
@@ -381,9 +383,9 @@ public class MainGame : MonoBehaviour
 	{
 		if(m_choiceMode == ConfirmButtonMode.GainCard)
 		{
-			if (GameLogic.Get().m_highlightCard != null)
+			if (m_tempHighlightCard != null)
 			{
-				GameLogic.Get().m_highlightCard.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+				m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 			}
 			GameLogic.Get().ShowHighlightCardExclusive(m_lstCardChoice[d.value], false);
 		}
@@ -418,15 +420,28 @@ public class MainGame : MonoBehaviour
 			m_choiceDropdown.gameObject.SetActive(false);
 			m_lstChoiceEvent[m_choiceDropdown.value].Invoke();
 		}
-		else if(m_choiceMode == ConfirmButtonMode.DrawPlayerCard)
+		else if(m_choiceMode == ConfirmButtonMode.RevealCard)
 		{
 			UnityEngine.Assertions.Assert.IsNotNull(m_tempHighlightCard, "Assert failed in OnButtonConfirmChoice()-DrawPlayerCard!!");
+			Card card = m_tempHighlightCard.GetComponent<Card>();
 
-			m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
-			Player.Get().AddHandCard(m_tempHighlightCard);
+			if (card is PlayerCard)
+			{			
+				PlayerCard pc = card as PlayerCard;
+				if(pc.m_isPlayerDeck)
+				{
+					Player.Get().AddHandCard(m_tempHighlightCard);
 
-			GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了<{1}>\n", Player.Get().m_investigatorCard.m_cardName, m_tempHighlightCard.GetComponent<PlayerCard>().m_cardName));
-			Player.Get().ActionDone();
+					GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了<{1}>\n", Player.Get().m_investigatorCard.m_cardName, card.m_cardName));
+					Player.Get().ActionDone();
+				}
+			}
+			else if(card is LocationCard)
+			{
+				GameLogic.Get().OutputGameLog(string.Format("地点<{0}>被揭示\n", card.m_cardName));
+			}
+
+			card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 			m_tempHighlightCard = null;
 		}
 		else if(m_choiceMode == ConfirmButtonMode.DrawEncounterCard)
@@ -449,11 +464,6 @@ public class MainGame : MonoBehaviour
 				GameLogic.Get().m_mainGameUI.BeginSelectCardToSpend();		
 			}
 		}
-		else if(m_choiceMode == ConfirmButtonMode.Investigate)
-		{
-			GameLogic.Get().InvestigateCurrentLocation();
-			EndSelectCardToSpend();
-		}
 		else if(m_choiceMode == ConfirmButtonMode.SkillTest)
 		{
 			Card card = m_tempHighlightCard.GetComponent<Card>();
@@ -463,6 +473,7 @@ public class MainGame : MonoBehaviour
 			m_tempHighlightCard = null;
 			EndSelectCardToSpend();
 		}
+		m_bConfirmModeEnd = true;
 	}
 
 	public void BeginSelectCardToSpend()
@@ -519,5 +530,20 @@ public class MainGame : MonoBehaviour
 		enemies.ForEach(enemy => { cardNames.Add(enemy.m_cardName); });
 		m_fightDropdown.AddOptions(cardNames);
 		m_fightDropdown.RefreshShownValue();
+	}
+
+	public void ShowHighlightCardExclusive(Card card, bool bFlip)
+	{
+		m_bConfirmModeEnd = false;
+
+		if (bFlip)
+		{
+			card.FlipCard();
+		}
+
+		m_tempHighlightCard = card.gameObject;
+		card.OnPointerEnter(new UnityEngine.EventSystems.BaseEventData(null));
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
 	}
 }

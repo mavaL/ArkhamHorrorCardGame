@@ -7,9 +7,18 @@ using UnityEngine.Events;
 
 public class core_gathering : scenario_base
 {
+	public AllyCard		m_lita;
+	public EnemyCard	m_ghoulPriest;
+
 	void Awake()
 	{
 		InstantiateCards();
+
+		m_lita = Instantiate(m_lita.gameObject).GetComponent<AllyCard>();
+		m_lita.m_isPlayerDeck = false;
+
+		m_ghoulPriest = Instantiate(m_ghoulPriest.gameObject).GetComponent<EnemyCard>();
+
 		GameLogic.Get().m_currentScenario = this;
 	}
 
@@ -22,14 +31,12 @@ public class core_gathering : scenario_base
 		GameLogic.DockCard(m_currentAgenda.gameObject, GameObject.Find("Agenda"));
 
 		m_startLocation = Instantiate(m_startLocation);
-
-		GameLogic.DockCard(m_startLocation, GameObject.Find("StartLocation"));
 		GameLogic.Get().PlayerEnterLocation(m_startLocation, false);
+		GameLogic.DockCard(m_startLocation, GameObject.Find("StartLocation"));
 
 		m_lstOtherLocations.ForEach(location => { location.gameObject.SetActive(false); });
 
-		string log = Player.Get().m_investigatorCard.m_cardName + "进入了场景。\n";
-		GameLogic.Get().OutputGameLog(log);
+		GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "进入了场景\n章节1开始\n");
 
 		GameLogic.Get().m_mainGameUI.OnButtonEnterInvestigationPhase();
 	}
@@ -57,6 +64,14 @@ public class core_gathering : scenario_base
 		{
 			m_playerInfoText.text += string.Format("{0}： <color=orange>{1}</color>\n", loc.m_cardName, loc.m_clues);
 		});
+
+		m_playerInfoText.text += "威胁区敌人血量：\n";
+
+		var enemies = Player.Get().GetEnemyCards();
+		enemies.ForEach(enemy =>
+		{
+			m_playerInfoText.text += string.Format("{0}： <color=red>{1}</color>\n", enemy.m_cardName, enemy.m_health);
+		});
 	}
 
 	public override int GetChaosTokenEffect(ChaosBag.ChaosTokenType t)
@@ -67,11 +82,11 @@ public class core_gathering : scenario_base
 			switch (t)
 			{
 				case ChaosBag.ChaosTokenType.Skully:
-					return 0 - Card.HowManyEnemyCardContainTheKeyword(Player.Get().m_currentLocation.m_lstEnemies, Card.Keyword.Ghoul);
+					return 0 - Card.HowManyEnemyCardContainTheKeyword(Player.Get().m_currentLocation.m_lstCardsAtHere, Card.Keyword.Ghoul);
 				case ChaosBag.ChaosTokenType.Cultist:
 					return -1;
 				case ChaosBag.ChaosTokenType.Tablet:
-					if (Card.HowManyEnemyCardContainTheKeyword(Player.Get().m_currentLocation.m_lstEnemies, Card.Keyword.Ghoul) > 0)
+					if (Card.HowManyEnemyCardContainTheKeyword(Player.Get().m_currentLocation.m_lstCardsAtHere, Card.Keyword.Ghoul) > 0)
 					{
 						Player.Get().DecreaseHealth();
 						GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "结算混沌标记：受到1点伤害\n");
@@ -128,19 +143,34 @@ public class core_gathering : scenario_base
 			if (m_indexCurrentAct == 1)
 			{
 				// Act 2
+				GameLogic.Get().OutputGameLog("章节2开始\n");
+
 				m_startLocation.SetActive(false);
 				m_revealedLocations.Remove(m_startLocation.GetComponent<LocationCard>());
 
 				m_lstOtherLocations.ForEach(location => { location.gameObject.SetActive(true); });
 
 				// Player start at hallway
-				GameLogic.Get().PlayerEnterLocation(m_lstOtherLocations[0].gameObject);
+				GameLogic.Get().PlayerEnterLocation(m_lstOtherLocations[0].gameObject, false);
 			}
 			else
 			{
 				// Act 3
+				GameLogic.Get().OutputGameLog("章节3开始\n");
+				StartCoroutine(Act3Setup());
 			}
 		}
+	}
+
+	IEnumerator Act3Setup()
+	{
+		GameLogic.Get().RevealLocation(m_lstOtherLocations[3]);
+		yield return new WaitUntil(() => GameLogic.Get().m_mainGameUI.m_bConfirmModeEnd == true);
+
+		GameLogic.Get().SpawnAtLocation(m_lita, m_lstOtherLocations[3]);
+		yield return new WaitUntil(() => GameLogic.Get().m_mainGameUI.m_bConfirmModeEnd == true);
+
+		GameLogic.Get().SpawnAtLocation(m_ghoulPriest, m_lstOtherLocations[0]);
 	}
 
 	public override void AdvanceAgenda()
@@ -203,5 +233,22 @@ public class core_gathering : scenario_base
 
 		cardToDiscard.Discard();
 		GameLogic.Get().m_mainGameUI.m_InvestigationPhaseBtn.gameObject.SetActive(true);
+	}
+
+	void Update()
+	{
+		if(m_indexCurrentAct == 1)
+		{
+			if (GameLogic.Get().m_currentPhase == TurnPhase.UpkeepPhase &&
+				Player.Get().m_currentLocation == m_lstOtherLocations[0] &&
+				GameLogic.Get().IsClueEnoughToAdvanceAct())
+			{
+				GameLogic.Get().m_mainGameUI.m_advanceActBtn.gameObject.SetActive(true);
+			}
+			else
+			{
+				GameLogic.Get().m_mainGameUI.m_advanceActBtn.gameObject.SetActive(false);
+			}
+		}
 	}
 }

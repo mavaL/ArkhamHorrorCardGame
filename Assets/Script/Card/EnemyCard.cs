@@ -66,4 +66,12 @@ public class EnemyCard : Card
 			GameLogic.Get().OutputGameLog(string.Format("{0}被消灭了！\n", m_cardName));
 		}
 	}
+
+	public override void OnSpawnAtLocation(LocationCard loc)
+	{
+		if(loc.m_cardName == Player.Get().m_currentLocation.m_cardName)
+		{
+
+		}
+	}
 }
