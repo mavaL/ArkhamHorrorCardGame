@@ -56,7 +56,10 @@ public class Player
 	{
 		if(go != null)
 		{
-			m_lstPlayerCards.Add(go.GetComponent<PlayerCard>());
+			PlayerCard pc = go.GetComponent<PlayerCard>();
+			pc.m_currentLocation = null;
+
+			m_lstPlayerCards.Add(pc);
 			go.SetActive(true);
 		}
 	}

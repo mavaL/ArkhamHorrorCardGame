@@ -111,31 +111,7 @@ public class GameLogic
 		}
 
 		// Update movement destination list
-		var destList = Player.Get().m_currentLocation.m_lstDestinations;
-		if (destList.Count > 0)
-		{
-			// ...................Seems like Unity's BUG.......................
-			ScrollRect dropDownList = m_mainGameUI.m_movementDropdown.GetComponentInChildren<ScrollRect>();
-			if (dropDownList != null)
-			{
-				GameObject.Destroy(dropDownList.gameObject);
-			}
-
-			m_mainGameUI.m_movementDropdown.ClearOptions();
-
-			List<string> destNames = new List<string>();
-			destNames.Add("移动到...");
-			destList.ForEach(dest => { destNames.Add(dest.m_cardName); });
-			m_mainGameUI.m_movementDropdown.AddOptions(destNames);
-			m_mainGameUI.m_movementDropdown.RefreshShownValue();
-
-			m_mainGameUI.m_movementDropdown.value = 0;
-			m_mainGameUI.m_movementDropdown.interactable = true;
-		}
-		else
-		{
-			m_mainGameUI.m_movementDropdown.interactable = false;
-		}
+		m_mainGameUI.UpdateMovementDropdown();
 
 		if (bUseAction)
 		{
@@ -314,6 +290,7 @@ public class GameLogic
 
 		m_mainGameUI.m_confirmChoiceBtn.gameObject.SetActive(true);
 		m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.RevealCard;
+		card.m_isVisit = true;
 	}
 
 	public void SpawnAtLocation(Card card, LocationCard destination)

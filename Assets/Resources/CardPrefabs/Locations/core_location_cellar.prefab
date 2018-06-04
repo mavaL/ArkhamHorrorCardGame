@@ -9,18 +9,18 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1683970690559960}
+  m_RootGameObject: {fileID: 1381389968869288}
   m_IsPrefabParent: 1
---- !u!1 &1683970690559960
+--- !u!1 &1381389968869288
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 224753328707607896}
-  - component: {fileID: 222135415046548670}
-  - component: {fileID: 114507077981242058}
+  - component: {fileID: 224747339525630618}
+  - component: {fileID: 222113847821624606}
+  - component: {fileID: 114982510114424366}
   m_Layer: 0
   m_Name: core_location_cellar
   m_TagString: Untagged
@@ -28,12 +28,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114507077981242058
+--- !u!114 &114982510114424366
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1683970690559960}
+  m_GameObject: {fileID: 1381389968869288}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd63b616aa9410c4eaf6af6140c197b4, type: 3}
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_clues: 2
   m_shroud: 4
   m_lstDestinations:
-  - {fileID: 114412937034069572, guid: 18948378c0d871244874e9b65a4f1ed5, type: 2}
+  - {fileID: 114831296439093564, guid: 18948378c0d871244874e9b65a4f1ed5, type: 2}
   m_enterLocationCallback:
     m_PersistentCalls:
       m_Calls:
@@ -72,18 +72,18 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
---- !u!222 &222135415046548670
+--- !u!222 &222113847821624606
 CanvasRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1683970690559960}
---- !u!224 &224753328707607896
+  m_GameObject: {fileID: 1381389968869288}
+--- !u!224 &224747339525630618
 RectTransform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1683970690559960}
+  m_GameObject: {fileID: 1381389968869288}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -93,6 +93,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 337, y: 0}
   m_SizeDelta: {x: 583, y: 833}
   m_Pivot: {x: 0.5, y: 0.5}

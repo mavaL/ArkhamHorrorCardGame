@@ -7,29 +7,29 @@ using UnityEngine.Events;
 public class MainGame : MonoBehaviour
 {
 	#region game UI
-	public GameObject			m_actArea;
-	public GameObject			m_agendaArea;
-	public GameObject			m_gameArea;
-	public List<GameObject>		m_playerCardArea;
-	public List<GameObject>		m_threatArea;
-	public Text					m_gameLog;
-	public Text					m_confirmSkillTestText;
-	public Button				m_InvestigateBtn;
-	public Button				m_drawPlayerCardBtn;
-	public Button				m_gainResourceBtn;
-	public Button				m_enemyPhaseBtn;
-	public Button				m_UpkeepPhaseBtn;
-	public Button				m_MythosPhaseBtn;
-	public Button				m_InvestigationPhaseBtn;
-	public Button				m_advanceActBtn;
-	public Button				m_confirmActResultBtn;
-	public Button				m_confirmAgendaResultBtn;
-	public Button				m_confirmEnterLocationBtn;
-	public Button				m_confirmChoiceBtn;
-	public Button				m_useLocationAbilityBtn;
-	public Dropdown				m_movementDropdown;
-	public Dropdown				m_choiceDropdown;
-	public Dropdown				m_fightDropdown;
+	public GameObject m_actArea;
+	public GameObject m_agendaArea;
+	public GameObject m_gameArea;
+	public List<GameObject> m_playerCardArea;
+	public List<GameObject> m_threatArea;
+	public Text m_gameLog;
+	public Text m_confirmSkillTestText;
+	public Button m_InvestigateBtn;
+	public Button m_drawPlayerCardBtn;
+	public Button m_gainResourceBtn;
+	public Button m_enemyPhaseBtn;
+	public Button m_UpkeepPhaseBtn;
+	public Button m_MythosPhaseBtn;
+	public Button m_InvestigationPhaseBtn;
+	public Button m_advanceActBtn;
+	public Button m_confirmActResultBtn;
+	public Button m_confirmAgendaResultBtn;
+	public Button m_confirmEnterLocationBtn;
+	public Button m_confirmChoiceBtn;
+	public Button m_useLocationAbilityBtn;
+	public Dropdown m_movementDropdown;
+	public Dropdown m_choiceDropdown;
+	public Dropdown m_fightDropdown;
 	#endregion
 
 	// A single button functions many way
@@ -40,20 +40,21 @@ public class MainGame : MonoBehaviour
 		TextOnly,
 		RevealCard,
 		DrawEncounterCard,
-		SkillTest
+		SkillTest,
+		ParleyWithLita
 	}
 	[System.NonSerialized]
-	public ConfirmButtonMode	m_choiceMode = ConfirmButtonMode.None;
+	public ConfirmButtonMode m_choiceMode = ConfirmButtonMode.None;
 	[System.NonSerialized]
 	public List<UnityEvent> m_lstChoiceEvent = new List<UnityEvent>();
 	// Used by LocationEvent
 	[System.NonSerialized]
 	public List<PlayerCard> m_lstCardChoice = new List<PlayerCard>(0);
 	[System.NonSerialized]
-	public GameObject		m_tempHighlightCard;
-	public bool				m_bConfirmModeEnd { get; set; }
+	public GameObject m_tempHighlightCard;
+	public bool m_bConfirmModeEnd { get; set; }
 
-	string[]	m_roland_def_cards =
+	string[] m_roland_def_cards =
 	{
 		"Neutral/core_roland_dot38_special",
 		"Neutral/core_cover_up",
@@ -98,7 +99,7 @@ public class MainGame : MonoBehaviour
 	}
 
 	// Use this for initialization
-	void Start ()
+	void Start()
 	{
 		GameLogic.DockCard(Player.Get().m_investigatorCard.gameObject, GameObject.Find("InvestigatorCard"));
 
@@ -110,7 +111,7 @@ public class MainGame : MonoBehaviour
 
 	private void _DrawFiveOpenHands()
 	{
-		for(int i=0; i<5; ++i)
+		for (int i = 0; i < 5; ++i)
 		{
 			Player.Get().AddHandCard(GameLogic.Get().DrawPlayerCard());
 		}
@@ -119,9 +120,9 @@ public class MainGame : MonoBehaviour
 	private void _LoadPlayerCards(Faction faction)
 	{
 		// Currently using default card set
-		if(faction == Faction.Guardian)
+		if (faction == Faction.Guardian)
 		{
-			for(int i=0; i<m_roland_def_cards.Length; ++i)
+			for (int i = 0; i < m_roland_def_cards.Length; ++i)
 			{
 				string path = "CardPrefabs/PlayerCards/" + m_roland_def_cards[i];
 				GameObject card = Instantiate((GameObject)Resources.Load(path));
@@ -138,7 +139,7 @@ public class MainGame : MonoBehaviour
 		GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
 	}
 
-	public void	OnButtonDrawPlayerCard()
+	public void OnButtonDrawPlayerCard()
 	{
 		m_tempHighlightCard = GameLogic.Get().DrawPlayerCard();
 
@@ -166,12 +167,12 @@ public class MainGame : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	void Update ()
+	void Update()
 	{
 		// Display player hand cards
 		var cards = Player.Get().GetHandCards();
 
-		for(int i=0; i<cards.Count; ++i)
+		for (int i = 0; i < cards.Count; ++i)
 		{
 			GameLogic.DockCard(cards[i].gameObject, m_playerCardArea[i]);
 		}
@@ -213,9 +214,9 @@ public class MainGame : MonoBehaviour
 		// 1. Unengaged hunter enemies move
 		if (enemies.Count > 0)
 		{
-			foreach(var enemy in enemies)
+			foreach (var enemy in enemies)
 			{
-				if(enemy.IsKeywordContain(Card.Keyword.Hunter))
+				if (enemy.IsKeywordContain(Card.Keyword.Hunter))
 				{
 					enemy.HunterMoveToNearestInvestigator();
 				}
@@ -238,7 +239,7 @@ public class MainGame : MonoBehaviour
 		Player.Get().ResetAction();
 
 		// 2. Ready exhausted cards
-		foreach(var exhausted in GameLogic.m_lstExhaustedCards)
+		foreach (var exhausted in GameLogic.m_lstExhaustedCards)
 		{
 			exhausted.m_exhausted = false;
 		}
@@ -259,6 +260,11 @@ public class MainGame : MonoBehaviour
 
 	public void OnButtonEnterMythosPhase()
 	{
+		StartCoroutine(OnButtonEnterMythosPhase_Coroutine());
+	}
+
+	private IEnumerator OnButtonEnterMythosPhase_Coroutine()
+	{
 		GameLogic.Get().OutputGameLog("游戏进入神话阶段\n");
 		GameLogic.Get().m_currentPhase = TurnPhase.MythosPhase;
 
@@ -267,10 +273,11 @@ public class MainGame : MonoBehaviour
 		if (agenda.AddDoom())
 		{
 			GameLogic.Get().OutputGameLog("恶兆已集满，触发事件！\n");
-
 			GameLogic.Get().ShowHighlightCardExclusive(agenda, true);
-
 			m_confirmAgendaResultBtn.gameObject.SetActive(true);
+
+			m_bConfirmModeEnd = false;
+			yield return new WaitUntil(() => m_bConfirmModeEnd == true);
 		}
 		else
 		{
@@ -376,7 +383,7 @@ public class MainGame : MonoBehaviour
 
 	public void OnButtonUseLocationAbility()
 	{
-		Player.Get().m_currentLocation.m_locationAbilityCallback.Invoke(Player.Get().m_currentLocation);
+		Player.Get().m_currentLocation.m_locationAbilityCallback.Invoke(null);
 	}
 
 	public void OnChoiceChanged(Dropdown d)
@@ -545,5 +552,34 @@ public class MainGame : MonoBehaviour
 		card.OnPointerEnter(new UnityEngine.EventSystems.BaseEventData(null));
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
+	}
+
+	public void UpdateMovementDropdown()
+	{
+		var destList = Player.Get().m_currentLocation.m_lstDestinations;
+		if (destList.Count > 0)
+		{
+			// ...................Seems like Unity's BUG.......................
+			ScrollRect dropDownList = m_movementDropdown.GetComponentInChildren<ScrollRect>();
+			if (dropDownList != null)
+			{
+				GameObject.Destroy(dropDownList.gameObject);
+			}
+
+			m_movementDropdown.ClearOptions();
+
+			List<string> destNames = new List<string>();
+			destNames.Add("移动到...");
+			destList.ForEach(dest => { destNames.Add(dest.m_cardName); });
+			m_movementDropdown.AddOptions(destNames);
+			m_movementDropdown.RefreshShownValue();
+
+			m_movementDropdown.value = 0;
+			m_movementDropdown.interactable = true;
+		}
+		else
+		{
+			m_movementDropdown.interactable = false;
+		}
 	}
 }

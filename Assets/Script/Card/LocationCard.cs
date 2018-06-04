@@ -39,13 +39,15 @@ public class LocationCard : Card
 
 		m_enterLocationCallback.Invoke(this);
 
+		// Player token
 		Player.Get().m_playerToken.transform.SetParent(gameObject.transform);
 
 		var rt = Player.Get().m_playerToken.GetComponent<RectTransform>();
 		rt.anchoredPosition = new Vector2(rt.sizeDelta.x / 2, rt.sizeDelta.y / 2);
 		rt.localScale = new Vector3(1, 1, 1);
 
-		GameLogic.Get().m_mainGameUI.m_useLocationAbilityBtn.gameObject.SetActive(m_locationAbilityCallback.GetPersistentEventCount() > 0);
+		bool bLocationHasAbility = m_locationAbilityCallback.GetPersistentEventCount() > 0;
+		GameLogic.Get().m_mainGameUI.m_useLocationAbilityBtn.gameObject.SetActive(bLocationHasAbility);
 	}
 
 	public override void OnSkillTest()
@@ -56,7 +58,7 @@ public class LocationCard : Card
 
 	public override void OnSkillTestResult(int result)
 	{
-		if (result >= 0)
+		if (/*result >= 0*/true)
 		{
 			// Succeed!
 			Player.Get().m_clues += 1;

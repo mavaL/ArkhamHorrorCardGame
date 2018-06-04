@@ -71,7 +71,7 @@ public class EnemyCard : Card
 	{
 		if(loc.m_cardName == Player.Get().m_currentLocation.m_cardName)
 		{
-
+			Player.Get().AddEngagedEnemy(this);
 		}
 	}
 }

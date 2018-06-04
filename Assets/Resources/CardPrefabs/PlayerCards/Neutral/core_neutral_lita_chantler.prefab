@@ -48,6 +48,9 @@ MonoBehaviour:
   m_skillIcons:
     _keys: 
     _values: 
+  m_isPlayerDeck: 0
+  m_health: 3
+  m_sanity: 3
 --- !u!224 &224561744103363788
 RectTransform:
   m_ObjectHideFlags: 1

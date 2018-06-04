@@ -56,4 +56,9 @@ public class LocationEvent : MonoBehaviour
 			GameLogic.Get().OutputGameLog(string.Format("{0}使用了米斯卡塔尼克大学的地点行动：没搜索到对应卡牌！\n", Player.Get().m_investigatorCard.m_cardName));
 		}
 	}
+
+	public void OnLocationAction_Parlor(LocationCard loc)
+	{
+		GameLogic.Get().OutputGameLog(string.Format("{0}使用了客厅的地点行动：撤退\n", Player.Get().m_investigatorCard.m_cardName));
+	}
 }

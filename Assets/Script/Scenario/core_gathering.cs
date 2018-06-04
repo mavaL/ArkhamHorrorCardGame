@@ -9,6 +9,8 @@ public class core_gathering : scenario_base
 {
 	public AllyCard		m_lita;
 	public EnemyCard	m_ghoulPriest;
+	public Button		m_parleyBtn;
+	private UnityAction	m_parleyAction;
 
 	void Awake()
 	{
@@ -37,6 +39,9 @@ public class core_gathering : scenario_base
 		m_lstOtherLocations.ForEach(location => { location.gameObject.SetActive(false); });
 
 		GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "进入了场景\n章节1开始\n");
+
+		m_parleyBtn.gameObject.SetActive(false);
+		m_parleyAction = new UnityAction(OnButtonParleyConfirm);
 
 		GameLogic.Get().m_mainGameUI.OnButtonEnterInvestigationPhase();
 	}
@@ -165,12 +170,17 @@ public class core_gathering : scenario_base
 	IEnumerator Act3Setup()
 	{
 		GameLogic.Get().RevealLocation(m_lstOtherLocations[3]);
+
+		m_lstOtherLocations[0].m_lstDestinations.Add(m_lstOtherLocations[3]);
+		GameLogic.Get().m_mainGameUI.UpdateMovementDropdown();
+
 		yield return new WaitUntil(() => GameLogic.Get().m_mainGameUI.m_bConfirmModeEnd == true);
 
 		GameLogic.Get().SpawnAtLocation(m_lita, m_lstOtherLocations[3]);
 		yield return new WaitUntil(() => GameLogic.Get().m_mainGameUI.m_bConfirmModeEnd == true);
 
 		GameLogic.Get().SpawnAtLocation(m_ghoulPriest, m_lstOtherLocations[0]);
+		m_parleyBtn.gameObject.SetActive(true);
 	}
 
 	public override void AdvanceAgenda()
@@ -250,5 +260,65 @@ public class core_gathering : scenario_base
 				GameLogic.Get().m_mainGameUI.m_advanceActBtn.gameObject.SetActive(false);
 			}
 		}
+		else if(m_indexCurrentAct == 2)
+		{
+			if(GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase &&
+				!m_lita.m_hasOwner &&
+				m_lita.m_currentLocation &&
+				Player.Get().m_currentLocation.m_cardName == m_lita.m_currentLocation.m_cardName)
+			{
+				m_parleyBtn.interactable = true;
+			}
+			else
+			{
+				m_parleyBtn.interactable = false;
+			}
+		}
+	}
+
+	public void OnButtonParley()
+	{
+		var ui = GameLogic.Get().m_mainGameUI;
+		ui.m_confirmChoiceBtn.gameObject.SetActive(true);
+		ui.m_choiceMode = MainGame.ConfirmButtonMode.ParleyWithLita;
+		ui.m_confirmChoiceBtn.onClick.AddListener(m_parleyAction);
+
+		ui.BeginSelectCardToSpend();
+		Player.Get().ActionDone();
+	}
+
+	public void OnButtonParleyConfirm()
+	{
+		Player.Get().ActionDone();
+		GameLogic.Get().OutputGameLog(string.Format("{0}执行行动与丽塔谈判\n", Player.Get().m_investigatorCard.m_cardName));
+
+		var ui = GameLogic.Get().m_mainGameUI;
+		UnityEngine.Assertions.Assert.AreEqual(MainGame.ConfirmButtonMode.ParleyWithLita, ui.m_choiceMode, "Assert failed in OnButtonParleyConfirm()!!");
+
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = true;
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = true;
+
+		ui.m_confirmChoiceBtn.gameObject.SetActive(false);
+		ui.m_confirmChoiceBtn.onClick.RemoveListener(m_parleyAction);
+
+		ChaosBag.ChaosTokenType chaosToken;
+		int result = GameLogic.Get().SkillTest(SkillType.Intellect, 4, out chaosToken);
+		bool bSucceed = result >= 0;
+
+		if(bSucceed)
+		{
+			Player.Get().AddHandCard(m_lita.gameObject);
+			m_lita.m_hasOwner = true;
+			GameLogic.Get().OutputGameLog("谈判成功，丽塔成为了盟友！\n");
+		}
+		else
+		{
+			GameLogic.Get().OutputGameLog("谈判失败！\n");
+		}
+
+		GameLogic.Get().AfterSkillTest(bSucceed, chaosToken);
+
+		m_lstOtherLocations[3].OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+		ui.EndSelectCardToSpend();
 	}
 }
