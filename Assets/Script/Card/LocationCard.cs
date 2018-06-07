@@ -9,6 +9,8 @@ public class LocationCard : Card
 	public int					m_shroud = 0;
 	public List<LocationCard>	m_lstDestinations;
 	[System.NonSerialized]
+	public SkillTestEvent		m_onLocationInvestigate = new SkillTestEvent();
+	[System.NonSerialized]
 	public List<Card>			m_lstCardsAtHere = new List<Card>();
 	[System.NonSerialized]
 	public bool					m_isVisit = false;
@@ -82,5 +84,7 @@ public class LocationCard : Card
 			// Failed..
 			GameLogic.Get().OutputGameLog("调查失败！\n");
 		}
+
+		m_onLocationInvestigate.Invoke(result);
 	}
 }

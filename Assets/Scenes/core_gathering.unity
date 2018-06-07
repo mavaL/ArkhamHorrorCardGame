@@ -580,7 +580,7 @@ Prefab:
     - target: {fileID: 224163478464057620, guid: ffb9add71e1cecd44b1b7e0fa3445078,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 120.0009
+      value: 119.998
       objectReference: {fileID: 0}
     - target: {fileID: 224527472669308594, guid: ffb9add71e1cecd44b1b7e0fa3445078,
         type: 2}
@@ -772,7 +772,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90f2a4a11c3831947ac58e93cf88cd7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_chaosBag: 
 --- !u!4 &1064446123
 Transform:
   m_ObjectHideFlags: 0
@@ -943,8 +942,8 @@ MonoBehaviour:
   - {fileID: 1663982882883288, guid: fc421da96bfad6e4396f2e3966ae98db, type: 2}
   - {fileID: 1613507560164418, guid: 44d7eeee8aca3a3428fea3de9eb1b568, type: 2}
   m_lstEncounterCards:
-  - {fileID: 1088051942712442, guid: 400b72a3d43ce374d9669ea92438e11b, type: 2}
-  - {fileID: 1088051942712442, guid: 400b72a3d43ce374d9669ea92438e11b, type: 2}
+  - {fileID: 1980398586421094, guid: 4cf8a2279dec17343a0ad619be13712c, type: 2}
+  - {fileID: 1441055645324898, guid: a9d4af758044465418d997121e4644c9, type: 2}
   - {fileID: 1804929542902170, guid: 1a27420f7f892ec4095a454fc877948f, type: 2}
   - {fileID: 1804929542902170, guid: 1a27420f7f892ec4095a454fc877948f, type: 2}
   m_lita: {fileID: 114023195593983030, guid: 9bd2a7ccc35ab094fbfe11d3aa6da3d8, type: 2}

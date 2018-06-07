@@ -293,14 +293,17 @@ public class GameLogic
 		card.m_isVisit = true;
 	}
 
-	public void SpawnAtLocation(Card card, LocationCard destination)
+	public void SpawnAtLocation(Card card, LocationCard destination, bool bHighlight)
 	{
-		m_mainGameUI.m_tempHighlightCard = card.gameObject;
-		ShowHighlightCardExclusive(card, false);
-		m_mainGameUI.m_confirmChoiceBtn.gameObject.SetActive(true);
-		m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.RevealCard;
-
-		GameLogic.DockCard(card.gameObject, destination.gameObject, 300, true, true);
+		if(bHighlight)
+		{
+			m_mainGameUI.m_tempHighlightCard = card.gameObject;
+			ShowHighlightCardExclusive(card, false);
+			m_mainGameUI.m_confirmChoiceBtn.gameObject.SetActive(true);
+			m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.RevealCard;
+		}
+		
+		DockCard(card.gameObject, destination.gameObject, 300, true, true);
 
 		card.OnSpawnAtLocation(destination);
 	}

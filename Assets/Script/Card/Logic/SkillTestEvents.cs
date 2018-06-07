@@ -55,4 +55,28 @@ public class SkillTestEvents : MonoBehaviour
 			GameLogic.Get().OutputGameLog(string.Format("{0}因为技能检定失败受到了{1}点恐怖！\n", Player.Get().m_investigatorCard.m_cardName, -result));
 		}
 	}
+
+	public void OnTreacheryReveal_Ancient_Evils()
+	{
+		var agenda = GameLogic.Get().m_currentScenario.m_currentAgenda;
+
+		if (agenda.AddDoom())
+		{
+			GameLogic.Get().OutputGameLog("恶兆已集满，触发事件！\n");
+			GameLogic.Get().ShowHighlightCardExclusive(agenda, true);
+			GameLogic.Get().m_mainGameUI.m_confirmAgendaResultBtn.gameObject.SetActive(true);
+		}
+	}
+
+	public void OnSkillTestResult_Crypt_Chill(int result)
+	{
+		if(result < 0)
+		{
+			if(!Player.Get().ChooseAndDiscardAssetCard())
+			{
+				Player.Get().DecreaseHealth(2);
+				GameLogic.Get().OutputGameLog(string.Format("{0}结算<地穴恶寒>，因为没有在场资产牌，受到了2点伤害！\n", Player.Get().m_investigatorCard.m_cardName));
+			}
+		}
+	}
 }

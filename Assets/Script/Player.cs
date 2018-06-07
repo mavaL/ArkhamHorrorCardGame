@@ -115,6 +115,12 @@ public class Player
         return false;
     }
 
+	public bool ChooseAndDiscardAssetCard()
+	{
+		// TODO: Asset card impl
+		return false;
+	}
+
 	public int GetHp()
 	{
 		return m_health;

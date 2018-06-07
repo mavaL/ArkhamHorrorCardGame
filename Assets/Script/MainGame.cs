@@ -512,18 +512,25 @@ public class MainGame : MonoBehaviour
 			}
 			else if(card is TreacheryCard)
 			{
+				TreacheryCard treacheryCard = card as TreacheryCard;
+				treacheryCard.m_onRevealEvent.Invoke();
+
 				Treachery treachery = card.GetComponent<Treachery>();
 
 				if (treachery != null)
 				{
-					treachery.OnReveal(card as TreacheryCard);
-					card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
-					m_tempHighlightCard = null;
+					treachery.OnReveal(treacheryCard);
 				}
-				else
+				
+				if(treacheryCard.m_skillTestEvent.GetPersistentEventCount() > 0)
 				{
 					GameLogic.Get().m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 					GameLogic.Get().m_mainGameUI.BeginSelectCardToSpend();
+				}
+				else
+				{
+					card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+					m_tempHighlightCard = null;
 				}
 			}
 		}

@@ -176,10 +176,10 @@ public class core_gathering : scenario_base
 
 		yield return new WaitUntil(() => GameLogic.Get().m_mainGameUI.m_bConfirmModeEnd == true);
 
-		GameLogic.Get().SpawnAtLocation(m_lita, m_lstOtherLocations[3]);
+		GameLogic.Get().SpawnAtLocation(m_lita, m_lstOtherLocations[3], true);
 		yield return new WaitUntil(() => GameLogic.Get().m_mainGameUI.m_bConfirmModeEnd == true);
 
-		GameLogic.Get().SpawnAtLocation(m_ghoulPriest, m_lstOtherLocations[0]);
+		GameLogic.Get().SpawnAtLocation(m_ghoulPriest, m_lstOtherLocations[0], true);
 		m_parleyBtn.gameObject.SetActive(true);
 	}
 

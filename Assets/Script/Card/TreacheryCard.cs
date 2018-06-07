@@ -10,9 +10,10 @@ public class SkillTestEvent : UnityEvent<int> { }
 
 public class TreacheryCard : Card
 {
-	public bool				 m_discardAfterReveal = true;
+	public bool				m_discardAfterReveal = true;
 	public SkillTestEvent	m_skillTestEvent;
 	public SkillTestEvent	m_skillTestResultEvent;
+	public UnityEvent		m_onRevealEvent = new UnityEvent();
 
 	public override void Discard()
 	{
