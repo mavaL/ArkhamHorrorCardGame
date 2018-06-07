@@ -5,12 +5,16 @@ using UnityEngine.Events;
 
 public class ActionDoneEvent : UnityEvent<PlayerAction> { }
 
+// Value should correspond with ActionDropdown control
 public enum PlayerAction
 {
-	Move,
+	Move = 1,
 	Investigate,
 	Fight,
 	Evade,
+	DrawOneCard,
+	GainOneResource,
+	PlayCard,
 	OtherAction
 }
 
@@ -155,6 +159,10 @@ public class Player
 		if (ActionLeft() == 0)
 		{
 			GameLogic.Get().m_mainGameUI.EnterEnemyPhase();
+		}
+		else
+		{
+			GameLogic.Get().m_mainGameUI.ResetActionDropdown();
 		}
 	}
 

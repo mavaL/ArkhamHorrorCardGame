@@ -150,7 +150,7 @@ public class core_gathering : scenario_base
 				// Act 2
 				GameLogic.Get().OutputGameLog("章节2开始\n");
 
-				m_startLocation.SetActive(false);
+				m_startLocation.GetComponent<Card>().Discard();
 				m_revealedLocations.Remove(m_startLocation.GetComponent<LocationCard>());
 
 				m_lstOtherLocations.ForEach(location => { location.gameObject.SetActive(true); });

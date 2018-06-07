@@ -51,22 +51,22 @@ public class core_frozen_in_fear : Treachery
 			{
 				if(!Player.Get().m_actionRecord.Contains(PlayerAction.Move))
 				{
-					ui.m_movementDropdown.interactable = false;
+					ui.m_isActionEnable[PlayerAction.Move] = false;
 				}
 				if (!Player.Get().m_actionRecord.Contains(PlayerAction.Fight))
 				{
-					ui.m_fightDropdown.interactable = Player.Get().m_actionRecord.Contains(PlayerAction.Fight);
+					ui.m_isActionEnable[PlayerAction.Fight] = false;
 				}
 				if (!Player.Get().m_actionRecord.Contains(PlayerAction.Evade))
 				{
-					ui.m_evadeBtn.interactable = Player.Get().m_actionRecord.Contains(PlayerAction.Evade);
+					ui.m_isActionEnable[PlayerAction.Evade] = false;
 				}
 			}
 			else
 			{
-				ui.m_movementDropdown.interactable = true;
-				ui.m_fightDropdown.interactable = true;
-				ui.m_evadeBtn.interactable = true;
+				ui.m_isActionEnable[PlayerAction.Move] = true;
+				ui.m_isActionEnable[PlayerAction.Fight] = true;
+				ui.m_isActionEnable[PlayerAction.Evade] = true;
 			}
 		}
 	}

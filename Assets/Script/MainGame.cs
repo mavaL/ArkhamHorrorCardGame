@@ -7,16 +7,17 @@ using UnityEngine.Events;
 public class MainGame : MonoBehaviour
 {
 	#region game UI
-	public GameObject m_actArea;
-	public GameObject m_agendaArea;
-	public GameObject m_gameArea;
-	public List<GameObject> m_playerCardArea;
-	public List<GameObject> m_threatArea;
-	public Text m_gameLog;
-	public Text m_confirmSkillTestText;
-	public Button m_InvestigateBtn;
-	public Button m_drawPlayerCardBtn;
-	public Button m_gainResourceBtn;
+	public GameObject			m_actArea;
+	public GameObject			m_agendaArea;
+	public GameObject			m_gameArea;
+	public List<GameObject>		m_playerCardArea;
+	public List<GameObject>		m_threatArea;
+	public Text					m_gameLog;
+	public Text					m_confirmSkillTestText;
+
+	public ActionDropdownGUI	m_actionGUI;
+	public Dictionary<PlayerAction, bool> m_isActionEnable { get; set; } = new Dictionary<PlayerAction, bool>();
+
 	public Button m_enemyPhaseBtn;
 	public Button m_UpkeepPhaseBtn;
 	public Button m_MythosPhaseBtn;
@@ -27,10 +28,11 @@ public class MainGame : MonoBehaviour
 	public Button m_confirmEnterLocationBtn;
 	public Button m_confirmChoiceBtn;
 	public Button m_useLocationAbilityBtn;
-	public Button m_evadeBtn;
+
 	public Dropdown m_movementDropdown;
 	public Dropdown m_choiceDropdown;
 	public Dropdown m_fightDropdown;
+	public Dropdown m_actionDropdown;
 	#endregion
 
 	// A single button functions many way
@@ -102,6 +104,14 @@ public class MainGame : MonoBehaviour
 	{
 		GameLogic.Get().m_logText = m_gameLog;
 		GameLogic.Get().m_mainGameUI = this;
+
+		m_isActionEnable.Add(PlayerAction.Move, true);
+		m_isActionEnable.Add(PlayerAction.Investigate, true);
+		m_isActionEnable.Add(PlayerAction.Evade, true);
+		m_isActionEnable.Add(PlayerAction.Fight, true);
+		m_isActionEnable.Add(PlayerAction.DrawOneCard, true);
+		m_isActionEnable.Add(PlayerAction.GainOneResource, true);
+		m_isActionEnable.Add(PlayerAction.PlayCard, true);
 	}
 
 	// Use this for initialization
@@ -145,7 +155,7 @@ public class MainGame : MonoBehaviour
 		GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
 	}
 
-	public void OnButtonDrawPlayerCard()
+	public void DrawPlayerCard()
 	{
 		m_tempHighlightCard = GameLogic.Get().DrawPlayerCard();
 
@@ -155,7 +165,39 @@ public class MainGame : MonoBehaviour
 		m_choiceMode = MainGame.ConfirmButtonMode.RevealCard;
 	}
 
-	public void OnButtonInvestigateCurrentLocation()
+	public void OnActionDropdownChange(Dropdown d)
+	{
+		if(d.value == 0)
+		{
+			return;
+		}
+
+		m_actionDropdown.gameObject.SetActive(false);
+
+		switch ((PlayerAction)d.value)
+		{
+			case PlayerAction.Move:
+				m_movementDropdown.gameObject.SetActive(true);
+				break;
+			case PlayerAction.Investigate:
+				InvestigateCurrentLocation();
+				break;
+			case PlayerAction.Evade:
+				break;
+			case PlayerAction.Fight:
+				break;
+			case PlayerAction.DrawOneCard:
+				DrawPlayerCard();
+				break;
+			case PlayerAction.GainOneResource:
+				GainOneResource();
+				break;
+			case PlayerAction.PlayCard:
+				break;
+		}
+	}
+
+	public void InvestigateCurrentLocation()
 	{
 		m_tempHighlightCard = Player.Get().m_currentLocation.gameObject;
 		m_confirmChoiceBtn.gameObject.SetActive(true);
@@ -165,7 +207,7 @@ public class MainGame : MonoBehaviour
 		Player.Get().ActionDone(PlayerAction.Investigate);
 	}
 
-	public void OnButtonGainOneResource()
+	public void GainOneResource()
 	{
 		Player.Get().m_resources += 1;
 		GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了1资源\n", Player.Get().m_investigatorCard.m_cardName));
@@ -201,21 +243,14 @@ public class MainGame : MonoBehaviour
 		}
 
 		m_advanceActBtn.interactable = GameLogic.Get().IsClueEnoughToAdvanceAct();
-		m_InvestigateBtn.interactable = Player.Get().m_currentLocation.m_clues > 0;
-		m_evadeBtn.interactable = Player.Get().GetEnemyCards().Count > 0;
 
 		GameLogic.Get().Update();
 	}
 
 	public void EnterEnemyPhase()
 	{
-		m_InvestigateBtn.gameObject.SetActive(false);
-		m_evadeBtn.gameObject.SetActive(false);
-		m_drawPlayerCardBtn.gameObject.SetActive(false);
-		m_gainResourceBtn.gameObject.SetActive(false);
+		m_actionDropdown.gameObject.SetActive(false);
 		m_useLocationAbilityBtn.gameObject.SetActive(false);
-		m_movementDropdown.gameObject.SetActive(false);
-		m_fightDropdown.gameObject.SetActive(false);
 		m_enemyPhaseBtn.gameObject.SetActive(true);
 
 		GameLogic.Get().m_currentPhase = TurnPhase.EnemyPhase;
@@ -326,18 +361,12 @@ public class MainGame : MonoBehaviour
 		m_investigatePhaseBeginEvent.Invoke();
 
 		m_InvestigationPhaseBtn.gameObject.SetActive(false);
-		m_InvestigateBtn.interactable = Player.Get().m_currentLocation.m_clues > 0;
 		m_enemyPhaseBtn.gameObject.SetActive(false);
 		m_advanceActBtn.gameObject.SetActive(true);
-
-		m_InvestigateBtn.gameObject.SetActive(true);
-		m_evadeBtn.gameObject.SetActive(true);
-		m_drawPlayerCardBtn.gameObject.SetActive(true);
-		m_gainResourceBtn.gameObject.SetActive(true);
 		m_advanceActBtn.gameObject.SetActive(true);
-		m_movementDropdown.gameObject.SetActive(true);
-		m_fightDropdown.gameObject.SetActive(true);
 		m_useLocationAbilityBtn.gameObject.SetActive(Player.Get().m_currentLocation.m_locationAbilityCallback.GetPersistentEventCount() > 0);
+
+		ResetActionDropdown();
 	}
 
 	public void OnButtonAdvanceAct()
@@ -395,6 +424,8 @@ public class MainGame : MonoBehaviour
 			// No movement
 			return;
 		}
+
+		m_movementDropdown.gameObject.SetActive(false);
 
 		string locName = d.options[d.value].text;
 		var locList = GameLogic.Get().m_currentScenario.m_lstOtherLocations;
@@ -520,17 +551,13 @@ public class MainGame : MonoBehaviour
 				if (treachery != null)
 				{
 					treachery.OnReveal(treacheryCard);
-				}
-				
-				if(treacheryCard.m_skillTestEvent.GetPersistentEventCount() > 0)
+					card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+					m_tempHighlightCard = null;
+				}	
+				else if(treacheryCard.m_skillTestEvent.GetPersistentEventCount() > 0)
 				{
 					GameLogic.Get().m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 					GameLogic.Get().m_mainGameUI.BeginSelectCardToSpend();
-				}
-				else
-				{
-					card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
-					m_tempHighlightCard = null;
 				}
 			}
 		}
@@ -543,7 +570,20 @@ public class MainGame : MonoBehaviour
 			m_tempHighlightCard = null;
 			EndSelectCardToSpend();
 		}
+
 		m_bConfirmModeEnd = true;
+	}
+
+	public void ResetActionDropdown()
+	{
+		m_actionDropdown.gameObject.SetActive(true);
+		m_actionDropdown.value = 0;
+		// ...................Seems like Unity's BUG.......................
+		ScrollRect dropDownList = m_actionDropdown.GetComponentInChildren<ScrollRect>();
+		if (dropDownList != null)
+		{
+			Destroy(dropDownList.gameObject);
+		}
 	}
 
 	public void BeginSelectCardToSpend()

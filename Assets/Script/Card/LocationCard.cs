@@ -72,7 +72,8 @@ public class LocationCard : Card
 
 	public override void OnSkillTestResult(int result)
 	{
-		if (/*result >= 0*/true)
+		result = 99;
+		if (result >= 0)
 		{
 			// Succeed!
 			Player.Get().m_clues += 1;
@@ -86,5 +87,15 @@ public class LocationCard : Card
 		}
 
 		m_onLocationInvestigate.Invoke(result);
+	}
+
+	public override void Discard()
+	{
+		gameObject.SetActive(false);
+
+		foreach(var card in m_lstCardsAtHere)
+		{
+			card.Discard();
+		}
 	}
 }
