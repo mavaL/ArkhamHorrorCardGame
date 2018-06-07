@@ -31,7 +31,8 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		Hunter,
 		Hazard,
 		Elite,
-		Retaliate
+		Retaliate,
+		Prey,	// TODO: multi-players need this
 	}
 
 	public List<Keyword> m_lstKeywords = new List<Keyword>();
@@ -74,7 +75,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
     public bool     m_canFocus = false;
 	public bool		m_canFlip = true;
 
-    private bool    m_bIsFront = true;
+	private bool    m_bIsFront = true;
     private bool    m_bIsFocus = false;
 	private bool	m_bSelected = false;
     private GameObject			m_focusImage;

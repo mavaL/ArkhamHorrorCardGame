@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1457564313268142}
+  m_IsPrefabParent: 1
+--- !u!1 &1457564313268142
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 224451638286418138}
+  - component: {fileID: 114580521835458946}
+  m_Layer: 0
+  m_Name: core_enemy_flesh_eater
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &114580521835458946
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457564313268142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 489799640ea4be745993ff4907bf4902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lstKeywords: 00000000
+  m_frontImage: {fileID: 21300002, guid: 325ad79ddf3a26f40a582affc2d7931b, type: 3}
+  m_backImage: {fileID: 21300046, guid: 325ad79ddf3a26f40a582affc2d7931b, type: 3}
+  m_image: {fileID: 0}
+  m_cardName: "\u8840\u8089\u541E\u566C\u8005"
+  m_canFocus: 1
+  m_canFlip: 1
+  m_fight: 4
+  m_health: 4
+  m_evade: 1
+  m_damage: 1
+  m_horror: 2
+  m_spawnLocation: {fileID: 114033836682342334, guid: 742643da971a7354eab270540b762e7a,
+    type: 2}
+--- !u!224 &224451638286418138
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457564313268142}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 583, y: 833}
+  m_Pivot: {x: 0.5, y: 0.5}

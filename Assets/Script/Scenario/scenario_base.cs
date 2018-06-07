@@ -36,6 +36,7 @@ public abstract class scenario_base : MonoBehaviour
 		for(int i=0; i< m_lstEncounterCards.Count; ++i)
 		{
 			m_lstEncounterCards[i] = Instantiate(m_lstEncounterCards[i]);
+			m_lstEncounterCards[i].SetActive(false);
 		}
 	}
 }

@@ -38,9 +38,21 @@ public class SkillTestEvents : MonoBehaviour
 		GameLogic.Get().AfterSkillTest(bSucceed, chaosToken);
 	}
 
-	public void SkillTestFailedWithDamage(int value)
+	public void SkillTestFailedWithDamage(int result)
 	{
-		Player.Get().DecreaseHealth(value);
-		GameLogic.Get().OutputGameLog(string.Format("{0}因为技能检定失败受到了{1}点伤害！\n", Player.Get().m_investigatorCard.m_cardName, value));
+		if(result < 0)
+		{
+			Player.Get().DecreaseHealth(-result);
+			GameLogic.Get().OutputGameLog(string.Format("{0}因为技能检定失败受到了{1}点伤害！\n", Player.Get().m_investigatorCard.m_cardName, -result));
+		}
+	}
+
+	public void SkillTestFailedWithHorror(int result)
+	{
+		if (result < 0)
+		{
+			Player.Get().DecreaseSanity(-result);
+			GameLogic.Get().OutputGameLog(string.Format("{0}因为技能检定失败受到了{1}点恐怖！\n", Player.Get().m_investigatorCard.m_cardName, -result));
+		}
 	}
 }

@@ -284,12 +284,11 @@ public class core_gathering : scenario_base
 		ui.m_confirmChoiceBtn.onClick.AddListener(m_parleyAction);
 
 		ui.BeginSelectCardToSpend();
-		Player.Get().ActionDone();
+		Player.Get().ActionDone(PlayerAction.OtherAction);
 	}
 
 	public void OnButtonParleyConfirm()
 	{
-		Player.Get().ActionDone();
 		GameLogic.Get().OutputGameLog(string.Format("{0}执行行动与丽塔谈判\n", Player.Get().m_investigatorCard.m_cardName));
 
 		var ui = GameLogic.Get().m_mainGameUI;

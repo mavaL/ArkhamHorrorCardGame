@@ -115,7 +115,7 @@ public class GameLogic
 
 		if (bUseAction)
 		{
-			Player.Get().ActionDone();
+			Player.Get().ActionDone(PlayerAction.Move);
 		}
 	}
 
@@ -126,7 +126,7 @@ public class GameLogic
 		m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 		m_mainGameUI.BeginSelectCardToSpend();
 
-		Player.Get().ActionDone();
+		Player.Get().ActionDone(PlayerAction.Fight);
 	}
 
 	public void ShowHighlightCardExclusive(Card card, bool bFlip)
@@ -303,7 +303,5 @@ public class GameLogic
 		GameLogic.DockCard(card.gameObject, destination.gameObject, 300, true, true);
 
 		card.OnSpawnAtLocation(destination);
-
-		GameLogic.Get().OutputGameLog(string.Format("<{0}>出现在了<{1}>\n", card.m_cardName, destination.m_cardName));
 	}
 }

@@ -19,7 +19,7 @@ public class LocationEvent : MonoBehaviour
 
 	public void OnLocationAction_Miskatonic_University(LocationCard loc)
 	{
-		Player.Get().ActionDone();
+		Player.Get().ActionDone(PlayerAction.OtherAction);
 
 		var lstCards = GameLogic.Get().m_mainGameUI.m_lstCardChoice;
 		int num = Mathf.Min(6, GameLogic.Get().m_lstPlayerCards.Count);

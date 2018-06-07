@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class EnemyCard : Card
 {
-	public int	m_fight;
-	public int	m_health;
-	public int	m_evade;
-	public int	m_damage;
-	public int	m_horror;
+	public int				m_fight;
+	public int				m_health;
+	public int				m_evade;
+	public int				m_damage;
+	public int				m_horror;
+	public LocationCard		m_spawnLocation;
 
 	public bool				m_engaged { set; get; } = false;
 	public PlayerCard		m_target { set; get; }
-	public LocationCard		m_currentLocation { set; get; }
 
 	public void HunterMoveToNearestInvestigator()
 	{
@@ -69,9 +69,15 @@ public class EnemyCard : Card
 
 	public override void OnSpawnAtLocation(LocationCard loc)
 	{
-		if(loc.m_cardName == Player.Get().m_currentLocation.m_cardName)
+		GameLogic.Get().OutputGameLog(string.Format("<{0}>出现在了<{1}>\n", m_cardName, loc.m_cardName));
+
+		if (loc.m_cardName == Player.Get().m_currentLocation.m_cardName)
 		{
 			Player.Get().AddEngagedEnemy(this);
+		}
+		else
+		{
+			GameLogic.m_lstUnengagedEnemyCards.Add(this);
 		}
 	}
 }

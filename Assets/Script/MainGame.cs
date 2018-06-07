@@ -27,6 +27,7 @@ public class MainGame : MonoBehaviour
 	public Button m_confirmEnterLocationBtn;
 	public Button m_confirmChoiceBtn;
 	public Button m_useLocationAbilityBtn;
+	public Button m_evadeBtn;
 	public Dropdown m_movementDropdown;
 	public Dropdown m_choiceDropdown;
 	public Dropdown m_fightDropdown;
@@ -46,13 +47,18 @@ public class MainGame : MonoBehaviour
 	[System.NonSerialized]
 	public ConfirmButtonMode m_choiceMode = ConfirmButtonMode.None;
 	[System.NonSerialized]
-	public List<UnityEvent> m_lstChoiceEvent = new List<UnityEvent>();
+	public List<UnityEvent>	m_lstChoiceEvent = new List<UnityEvent>();
 	// Used by LocationEvent
 	[System.NonSerialized]
 	public List<PlayerCard> m_lstCardChoice = new List<PlayerCard>(0);
 	[System.NonSerialized]
-	public GameObject m_tempHighlightCard;
-	public bool m_bConfirmModeEnd { get; set; }
+	public GameObject		m_tempHighlightCard;
+	public bool				m_bConfirmModeEnd { get; set; }
+	public UnityEvent		m_investigatePhaseBeginEvent { get; set; } = new UnityEvent();
+	public UnityEvent		m_enemyPhaseBeginEvent { get; set; } = new UnityEvent();
+	public UnityEvent		m_upkeepPhaseBeginEvent { get; set; } = new UnityEvent();
+	public UnityEvent		m_mythosPhaseBeginEvent { get; set; } = new UnityEvent();
+	public UnityEvent		m_roundEndEvent { get; set; } = new UnityEvent();
 
 	string[] m_roland_def_cards =
 	{
@@ -156,14 +162,14 @@ public class MainGame : MonoBehaviour
 		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 
 		BeginSelectCardToSpend();
-		Player.Get().ActionDone();
+		Player.Get().ActionDone(PlayerAction.Investigate);
 	}
 
 	public void OnButtonGainOneResource()
 	{
 		Player.Get().m_resources += 1;
 		GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了1资源\n", Player.Get().m_investigatorCard.m_cardName));
-		Player.Get().ActionDone();
+		Player.Get().ActionDone(PlayerAction.OtherAction);
 	}
 
 	// Update is called once per frame
@@ -177,16 +183,26 @@ public class MainGame : MonoBehaviour
 			GameLogic.DockCard(cards[i].gameObject, m_playerCardArea[i]);
 		}
 
-		// Display player threat area
+		/// TODO: Threaten area and player hand-cards area should use scroll-bar control
+		// Display player engaged treachery
+		var treachery = Player.Get().GetTreacheryCards();
+
+		for (int i = 0; i < treachery.Count; ++i)
+		{
+			GameLogic.DockCard(treachery[i].gameObject, m_threatArea[i]);
+		}
+
+		// Display player engaged enemy
 		var enemies = Player.Get().GetEnemyCards();
 
 		for (int i = 0; i < enemies.Count; ++i)
 		{
-			GameLogic.DockCard(enemies[i].gameObject, m_threatArea[i]);
+			GameLogic.DockCard(enemies[i].gameObject, m_threatArea[i + treachery.Count]);
 		}
 
 		m_advanceActBtn.interactable = GameLogic.Get().IsClueEnoughToAdvanceAct();
 		m_InvestigateBtn.interactable = Player.Get().m_currentLocation.m_clues > 0;
+		m_evadeBtn.interactable = Player.Get().GetEnemyCards().Count > 0;
 
 		GameLogic.Get().Update();
 	}
@@ -194,6 +210,7 @@ public class MainGame : MonoBehaviour
 	public void EnterEnemyPhase()
 	{
 		m_InvestigateBtn.gameObject.SetActive(false);
+		m_evadeBtn.gameObject.SetActive(false);
 		m_drawPlayerCardBtn.gameObject.SetActive(false);
 		m_gainResourceBtn.gameObject.SetActive(false);
 		m_useLocationAbilityBtn.gameObject.SetActive(false);
@@ -208,6 +225,8 @@ public class MainGame : MonoBehaviour
 	{
 		GameLogic.Get().OutputGameLog("游戏进入敌人阶段\n");
 		m_advanceActBtn.gameObject.SetActive(false);
+
+		m_enemyPhaseBeginEvent.Invoke();
 
 		var enemies = GameLogic.m_lstUnengagedEnemyCards;
 
@@ -235,6 +254,8 @@ public class MainGame : MonoBehaviour
 		GameLogic.Get().OutputGameLog("游戏进入维持阶段\n");
 		GameLogic.Get().m_currentPhase = TurnPhase.UpkeepPhase;
 
+		m_upkeepPhaseBeginEvent.Invoke();
+
 		// 1. Reset actions
 		Player.Get().ResetAction();
 
@@ -256,6 +277,8 @@ public class MainGame : MonoBehaviour
 
 		m_UpkeepPhaseBtn.gameObject.SetActive(false);
 		m_MythosPhaseBtn.gameObject.SetActive(true);
+
+		m_roundEndEvent.Invoke();
 	}
 
 	public void OnButtonEnterMythosPhase()
@@ -267,6 +290,8 @@ public class MainGame : MonoBehaviour
 	{
 		GameLogic.Get().OutputGameLog("游戏进入神话阶段\n");
 		GameLogic.Get().m_currentPhase = TurnPhase.MythosPhase;
+
+		m_mythosPhaseBeginEvent.Invoke();
 
 		// Add 1 doom token
 		var agenda = GameLogic.Get().m_currentScenario.m_currentAgenda;
@@ -298,12 +323,15 @@ public class MainGame : MonoBehaviour
 		GameLogic.Get().OutputGameLog("游戏进入调查阶段\n");
 		GameLogic.Get().m_currentPhase = TurnPhase.InvestigationPhase;
 
+		m_investigatePhaseBeginEvent.Invoke();
+
 		m_InvestigationPhaseBtn.gameObject.SetActive(false);
 		m_InvestigateBtn.interactable = Player.Get().m_currentLocation.m_clues > 0;
 		m_enemyPhaseBtn.gameObject.SetActive(false);
 		m_advanceActBtn.gameObject.SetActive(true);
 
 		m_InvestigateBtn.gameObject.SetActive(true);
+		m_evadeBtn.gameObject.SetActive(true);
 		m_drawPlayerCardBtn.gameObject.SetActive(true);
 		m_gainResourceBtn.gameObject.SetActive(true);
 		m_advanceActBtn.gameObject.SetActive(true);
@@ -440,7 +468,7 @@ public class MainGame : MonoBehaviour
 					Player.Get().AddHandCard(m_tempHighlightCard);
 
 					GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了<{1}>\n", Player.Get().m_investigatorCard.m_cardName, card.m_cardName));
-					Player.Get().ActionDone();
+					Player.Get().ActionDone(PlayerAction.OtherAction);
 				}
 			}
 			else if(card is LocationCard)
@@ -460,15 +488,43 @@ public class MainGame : MonoBehaviour
 			if(card is EnemyCard)
 			{
 				EnemyCard enemy = card as EnemyCard;
-				Player.Get().AddEngagedEnemy(enemy);
+				if(enemy.m_spawnLocation != null)
+				{
+					// Prefab has no instance transform info, so we need to find it
+					var foundObjects = FindObjectsOfType<LocationCard>();
+					foreach(var location in foundObjects)
+					{
+						if(location.m_cardName == enemy.m_spawnLocation.m_cardName)
+						{
+							GameLogic.DockCard(card.gameObject, location.gameObject, 300, true, true);
+							card.OnSpawnAtLocation(location);
+							break;
+						}
+					}
+				}
+				else
+				{
+					Player.Get().AddEngagedEnemy(enemy);
+				}
 
 				card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 				m_tempHighlightCard = null;
 			}
 			else if(card is TreacheryCard)
 			{
-				GameLogic.Get().m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
-				GameLogic.Get().m_mainGameUI.BeginSelectCardToSpend();		
+				Treachery treachery = card.GetComponent<Treachery>();
+
+				if (treachery != null)
+				{
+					treachery.OnReveal(card as TreacheryCard);
+					card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+					m_tempHighlightCard = null;
+				}
+				else
+				{
+					GameLogic.Get().m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
+					GameLogic.Get().m_mainGameUI.BeginSelectCardToSpend();
+				}
 			}
 		}
 		else if(m_choiceMode == ConfirmButtonMode.SkillTest)
@@ -581,5 +637,10 @@ public class MainGame : MonoBehaviour
 		{
 			m_movementDropdown.interactable = false;
 		}
+	}
+
+	public void OnButtonEvade()
+	{
+
 	}
 }

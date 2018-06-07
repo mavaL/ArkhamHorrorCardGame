@@ -61,10 +61,13 @@
     <Compile Include="Assets\Script\Card\AllyCard.cs" />
     <Compile Include="Assets\Script\Card\Card.cs" />
     <Compile Include="Assets\Script\Card\EnemyCard.cs" />
-    <Compile Include="Assets\Script\Card\InvestigatorAbility.cs" />
     <Compile Include="Assets\Script\Card\InvestigatorCard.cs" />
     <Compile Include="Assets\Script\Card\LocationCard.cs" />
-    <Compile Include="Assets\Script\Card\LocationEvent.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_frozen_in_fear.cs" />
+    <Compile Include="Assets\Script\Card\Logic\InvestigatorAbility.cs" />
+    <Compile Include="Assets\Script\Card\Logic\LocationEvent.cs" />
+    <Compile Include="Assets\Script\Card\Logic\SkillTestEvents.cs" />
+    <Compile Include="Assets\Script\Card\Logic\Treachery.cs" />
     <Compile Include="Assets\Script\Card\PlayerCard.cs" />
     <Compile Include="Assets\Script\Card\QuestCard.cs" />
     <Compile Include="Assets\Script\Card\TreacheryCard.cs" />
@@ -79,7 +82,6 @@
     <Compile Include="Assets\Script\Scenario\core_mask_of_midnight.cs" />
     <Compile Include="Assets\Script\Scenario\scenario_base.cs" />
     <Compile Include="Assets\Script\SelectMenu.cs" />
-    <Compile Include="Assets\Script\SkillTestEvents.cs" />
     <Compile Include="Assets\ThirdParty\SerializableCallback-master\InvokableCallback.cs" />
     <Compile Include="Assets\ThirdParty\SerializableCallback-master\InvokableCallbackBase.cs" />
     <Compile Include="Assets\ThirdParty\SerializableCallback-master\InvokableEvent.cs" />

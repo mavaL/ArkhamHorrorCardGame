@@ -46,8 +46,20 @@ public class LocationCard : Card
 		rt.anchoredPosition = new Vector2(rt.sizeDelta.x / 2, rt.sizeDelta.y / 2);
 		rt.localScale = new Vector3(1, 1, 1);
 
+		// Is this location has any ability
 		bool bLocationHasAbility = m_locationAbilityCallback.GetPersistentEventCount() > 0;
 		GameLogic.Get().m_mainGameUI.m_useLocationAbilityBtn.gameObject.SetActive(bLocationHasAbility);
+
+		// Are there any enemies at this location
+		for(int i=0; i<m_lstCardsAtHere.Count; ++i)
+		{
+			Card card = m_lstCardsAtHere[i];
+			if(card is EnemyCard)
+			{
+				Player.Get().AddEngagedEnemy(card as EnemyCard);
+				m_lstCardsAtHere.Remove(card);
+			}
+		}
 	}
 
 	public override void OnSkillTest()

@@ -1,6 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+public class ActionDoneEvent : UnityEvent<PlayerAction> { }
+
+public enum PlayerAction
+{
+	Move,
+	Investigate,
+	Fight,
+	Evade,
+	OtherAction
+}
 
 public class Player
 {
@@ -16,15 +28,19 @@ public class Player
 	public int					m_resources = -1;
 	public Faction				m_faction;
 	public int					m_clues;
-	private int					m_actionUsed = 0;
+	public int					m_actionUsed = 0;
 	public int					m_totalActions = 3;
+	public ActionDoneEvent		m_actionDoneEvent = new ActionDoneEvent();
+	public List<PlayerAction>	m_actionRecord = new List<PlayerAction>();
 
-    // Hand cards
+	// Hand cards
 	private List<PlayerCard>	m_lstPlayerCards = new List<PlayerCard>();
     // Asset cards played
     private List<PlayerCard>    m_lstAssetCards = new List<PlayerCard>();
 	// Engaged enemies
 	private List<EnemyCard>		m_lstEnemyCards = new List<EnemyCard>();
+	// Engaged treachery
+	private List<TreacheryCard> m_lstTreacheryCards = new List<TreacheryCard>();
 
 	public Player()
 	{
@@ -82,6 +98,11 @@ public class Player
 		return m_lstEnemyCards;
 	}
 
+	public List<TreacheryCard> GetTreacheryCards()
+	{
+		return m_lstTreacheryCards;
+	}
+
 	public bool IsAssetCardInPlay(string cardName)
     {
         for(int i=0; i<m_lstAssetCards.Count; ++i)
@@ -119,11 +140,13 @@ public class Player
         return m_investigatorCard.m_sanity - m_sanity;
     }
 
-	public void ActionDone()
+	public void ActionDone(PlayerAction action)
 	{
 		m_actionUsed += 1;
+		m_actionDoneEvent.Invoke(action);
+		m_actionRecord.Add(action);
 
-		if(ActionLeft() == 0)
+		if (ActionLeft() == 0)
 		{
 			GameLogic.Get().m_mainGameUI.EnterEnemyPhase();
 		}
@@ -132,6 +155,7 @@ public class Player
 	public void ResetAction()
 	{
 		m_actionUsed = 0;
+		m_actionRecord.Clear();
 	}
 
 	public int ActionLeft()
@@ -148,6 +172,14 @@ public class Player
 
 		GameLogic.Get().m_mainGameUI.OnPlayerThreatAreaChnaged();
 		GameLogic.Get().OutputGameLog(string.Format("{0}与<{1}>发生了交战！\n", m_investigatorCard.m_cardName, enemy.m_cardName));
+	}
+
+	public void AddTreachery(TreacheryCard treachery)
+	{
+		m_lstTreacheryCards.Add(treachery);
+		treachery.gameObject.SetActive(true);
+
+		GameLogic.Get().m_mainGameUI.OnPlayerThreatAreaChnaged();
 	}
 
 	public void RemoveEngagedEnemy(EnemyCard enemy)
