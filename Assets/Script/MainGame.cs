@@ -183,8 +183,10 @@ public class MainGame : MonoBehaviour
 				InvestigateCurrentLocation();
 				break;
 			case PlayerAction.Evade:
+				m_fightDropdown.gameObject.SetActive(true);
 				break;
 			case PlayerAction.Fight:
+				m_fightDropdown.gameObject.SetActive(true);
 				break;
 			case PlayerAction.DrawOneCard:
 				DrawPlayerCard();
@@ -634,7 +636,7 @@ public class MainGame : MonoBehaviour
 		m_fightDropdown.ClearOptions();
 
 		List<string> cardNames = new List<string>();
-		cardNames.Add("请选择攻击目标...");
+		cardNames.Add("请选择目标...");
 		var enemies = Player.Get().GetEnemyCards();
 
 		enemies.ForEach(enemy => { cardNames.Add(enemy.m_cardName); });

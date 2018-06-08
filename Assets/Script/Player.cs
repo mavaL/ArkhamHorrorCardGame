@@ -119,6 +119,19 @@ public class Player
         return false;
     }
 
+	public bool CanPlayHandCard()
+	{
+		foreach(var card in m_lstPlayerCards)
+		{
+			if(card.m_lstKeywords.Contains(Card.Keyword.Asset) ||
+				card.m_lstKeywords.Contains(Card.Keyword.Event))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public bool ChooseAndDiscardAssetCard()
 	{
 		// TODO: Asset card impl

@@ -33,6 +33,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		Elite,
 		Retaliate,
 		Prey,	// TODO: multi-players need this
+		Asset,
+		Event,
+		Skill
 	}
 
 	public List<Keyword> m_lstKeywords = new List<Keyword>();

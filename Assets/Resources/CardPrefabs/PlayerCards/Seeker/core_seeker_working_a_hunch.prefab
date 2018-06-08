@@ -39,15 +39,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9af3d81cf6f68a4a890baa050bbc57d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lstKeywords: 
+  m_lstKeywords: 0a000000
   m_frontImage: {fileID: 21300014, guid: 8580542278ebbab41ac830fbc6415ba2, type: 3}
   m_backImage: {fileID: 21300028, guid: 8580542278ebbab41ac830fbc6415ba2, type: 3}
   m_image: {fileID: 0}
   m_cardName: "\u9884\u611F\u6307\u5F15"
   m_canFocus: 1
+  m_canFlip: 1
   m_skillIcons:
     _keys: 01000000
     _values: 02000000
+  m_isPlayerDeck: 1
 --- !u!222 &222024136829289684
 CanvasRenderer:
   m_ObjectHideFlags: 1
