@@ -15,7 +15,8 @@ public enum PlayerAction
 	DrawOneCard,
 	GainOneResource,
 	PlayCard,
-	OtherAction
+	OtherAction,
+	None
 }
 
 public class Player
@@ -34,6 +35,7 @@ public class Player
 	public int					m_clues;
 	public int					m_actionUsed = 0;
 	public int					m_totalActions = 3;
+	public PlayerAction			m_currentAction { get; set; } = PlayerAction.None;
 	public ActionDoneEvent		m_actionDoneEvent = new ActionDoneEvent();
 	public List<PlayerAction>	m_actionRecord = new List<PlayerAction>();
 
@@ -211,7 +213,7 @@ public class Player
 
 	public void RemoveEngagedEnemy(EnemyCard enemy)
 	{
-		enemy.gameObject.SetActive(false);
+		enemy.m_engaged = false;
 		m_lstEnemyCards.Remove(enemy);
 		GameLogic.Get().m_mainGameUI.OnPlayerThreatAreaChnaged();
 	}
@@ -242,6 +244,7 @@ public class Player
 
 				enemy.m_exhausted = true;
 				GameLogic.m_lstExhaustedCards.Add(enemy);
+				enemy.gameObject.transform.Rotate(0, 0, 90);
 			}
 		}
 	}

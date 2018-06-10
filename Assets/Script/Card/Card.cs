@@ -187,4 +187,5 @@ public class Card : MonoBehaviour, IPointerClickHandler
 	public virtual void OnSkillTest() {}
 	public virtual void OnSkillTestResult(int result) {}
 	public virtual void OnSpawnAtLocation(LocationCard loc) { }
+	public virtual void OnRecoverFromExhaust() { }
 }

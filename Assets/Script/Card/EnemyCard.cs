@@ -35,19 +35,48 @@ public class EnemyCard : Card
 
 	public override void OnSkillTest()
 	{
-		GameLogic.Get().OutputGameLog(string.Format("{0}攻击了{1}！\n", Player.Get().m_investigatorCard.m_cardName, m_cardName));
-		GameLogic.Get().m_currentScenario.m_skillTest.CombatTest(m_fight);
+		if(Player.Get().m_currentAction == PlayerAction.Fight)
+		{
+			GameLogic.Get().OutputGameLog(string.Format("{0}攻击了{1}\n", Player.Get().m_investigatorCard.m_cardName, m_cardName));
+			GameLogic.Get().m_currentScenario.m_skillTest.CombatTest(m_fight);
+		}
+		else
+		{
+			GameLogic.Get().OutputGameLog(string.Format("{0}试图闪避{1}\n", Player.Get().m_investigatorCard.m_cardName, m_cardName));
+			GameLogic.Get().m_currentScenario.m_skillTest.AgilityTest(m_evade);
+		}
 	}
 
 	public override void OnSkillTestResult(int result)
 	{
 		if(result >= 0)
 		{
-			DecreaseHealth(1);
+			if (Player.Get().m_currentAction == PlayerAction.Fight)
+			{
+				DecreaseHealth(1);
+			}
+			else
+			{
+				m_exhausted = true;
+				Player.Get().RemoveEngagedEnemy(this);
+				GameLogic.m_lstExhaustedCards.Add(this);
+				GameLogic.m_lstUnengagedEnemyCards.Add(this);
+				GameLogic.DockCard(gameObject, Player.Get().m_currentLocation.gameObject, 300, true, true);
+
+				gameObject.transform.Rotate(0, 0, 90);
+				GameLogic.Get().OutputGameLog("闪避结果成功\n");
+			}
 		}
 		else
 		{
-			GameLogic.Get().OutputGameLog(string.Format("{0}未对{1}造成伤害...\n", Player.Get().m_investigatorCard.m_cardName, m_cardName));
+			if(Player.Get().m_currentAction == PlayerAction.Fight)
+			{
+				GameLogic.Get().OutputGameLog("结果未造成伤害\n");
+			}
+			else
+			{
+				GameLogic.Get().OutputGameLog("闪避结果失败\n");
+			}
 		}
 	}
 
@@ -58,10 +87,10 @@ public class EnemyCard : Card
 
 		if(m_health <= 0)
 		{
-			m_engaged = false;
 			GameLogic.m_lstUnengagedEnemyCards.Remove(this);
 			Player.Get().RemoveEngagedEnemy(this);
 			GameLogic.Get().m_lstDiscardEncounterCards.Add(gameObject);
+			gameObject.SetActive(false);
 
 			GameLogic.Get().OutputGameLog(string.Format("{0}被消灭了！\n", m_cardName));
 		}
@@ -78,6 +107,17 @@ public class EnemyCard : Card
 		else
 		{
 			GameLogic.m_lstUnengagedEnemyCards.Add(this);
+		}
+	}
+
+	public override void OnRecoverFromExhaust()
+	{
+		m_exhausted = false;
+		gameObject.transform.Rotate(0, 0, -90);
+
+		if(m_currentLocation == Player.Get().m_currentLocation)
+		{
+			Player.Get().AddEngagedEnemy(this);
 		}
 	}
 }

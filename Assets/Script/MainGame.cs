@@ -173,8 +173,9 @@ public class MainGame : MonoBehaviour
 		}
 
 		m_actionDropdown.gameObject.SetActive(false);
+		Player.Get().m_currentAction = (PlayerAction)d.value;
 
-		switch ((PlayerAction)d.value)
+		switch (Player.Get().m_currentAction)
 		{
 			case PlayerAction.Move:
 				m_movementDropdown.gameObject.SetActive(true);
@@ -183,8 +184,6 @@ public class MainGame : MonoBehaviour
 				InvestigateCurrentLocation();
 				break;
 			case PlayerAction.Evade:
-				m_fightDropdown.gameObject.SetActive(true);
-				break;
 			case PlayerAction.Fight:
 				m_fightDropdown.gameObject.SetActive(true);
 				break;
@@ -299,7 +298,7 @@ public class MainGame : MonoBehaviour
 		// 2. Ready exhausted cards
 		foreach (var exhausted in GameLogic.m_lstExhaustedCards)
 		{
-			exhausted.m_exhausted = false;
+			exhausted.OnRecoverFromExhaust();
 		}
 		GameLogic.m_lstExhaustedCards.Clear();
 
@@ -576,10 +575,36 @@ public class MainGame : MonoBehaviour
 		m_bConfirmModeEnd = true;
 	}
 
+	public IEnumerator OnPlayerFightEnemy(EnemyCard enemy)
+	{
+		m_confirmChoiceBtn.gameObject.SetActive(true);
+		m_tempHighlightCard = enemy.gameObject;
+		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
+		BeginSelectCardToSpend();
+
+		yield return new WaitUntil(()=> m_bConfirmModeEnd == true);
+
+		Player.Get().ActionDone(PlayerAction.Fight);
+	}
+
+	public IEnumerator OnPlayerEvadeEnemy(EnemyCard enemy)
+	{
+		m_confirmChoiceBtn.gameObject.SetActive(true);
+		m_tempHighlightCard = enemy.gameObject;
+		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
+		BeginSelectCardToSpend();
+
+		yield return new WaitUntil(() => m_bConfirmModeEnd == true);
+
+		Player.Get().ActionDone(PlayerAction.Evade);
+	}
+
 	public void ResetActionDropdown()
 	{
 		m_actionDropdown.gameObject.SetActive(true);
 		m_actionDropdown.value = 0;
+		Player.Get().m_currentAction = PlayerAction.None;
+
 		// ...................Seems like Unity's BUG.......................
 		ScrollRect dropDownList = m_actionDropdown.GetComponentInChildren<ScrollRect>();
 		if (dropDownList != null)
@@ -628,7 +653,18 @@ public class MainGame : MonoBehaviour
 			return;
 		}
 
-		GameLogic.Get().PlayerFightEnemy(Player.Get().GetEnemyCards()[d.value-1]);
+		m_fightDropdown.gameObject.SetActive(false);
+
+		if (Player.Get().m_currentAction == PlayerAction.Fight)
+		{
+			StartCoroutine(OnPlayerFightEnemy(Player.Get().GetEnemyCards()[d.value - 1]));
+		}
+		else
+		{
+			StartCoroutine(OnPlayerEvadeEnemy(Player.Get().GetEnemyCards()[d.value - 1]));
+		}
+
+		m_fightDropdown.value = 0;
 	}
 
 	public void OnPlayerThreatAreaChnaged()
@@ -686,10 +722,5 @@ public class MainGame : MonoBehaviour
 		{
 			m_movementDropdown.interactable = false;
 		}
-	}
-
-	public void OnButtonEvade()
-	{
-
 	}
 }

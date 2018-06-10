@@ -119,16 +119,6 @@ public class GameLogic
 		}
 	}
 
-	public void PlayerFightEnemy(EnemyCard enemy)
-	{
-		m_mainGameUI.m_confirmChoiceBtn.gameObject.SetActive(true);
-		m_mainGameUI.m_tempHighlightCard = enemy.gameObject;
-		m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
-		m_mainGameUI.BeginSelectCardToSpend();
-
-		Player.Get().ActionDone(PlayerAction.Fight);
-	}
-
 	public void ShowHighlightCardExclusive(Card card, bool bFlip)
 	{
 		m_mainGameUI.ShowHighlightCardExclusive(card, bFlip);
