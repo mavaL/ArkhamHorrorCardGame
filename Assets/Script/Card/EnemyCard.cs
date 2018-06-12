@@ -82,17 +82,25 @@ public class EnemyCard : Card
 
 	public void DecreaseHealth(int amount = 1)
 	{
+		StartCoroutine(_DecreaseHealth(amount));
+	}
+
+	private IEnumerator _DecreaseHealth(int amount)
+	{
 		m_health -= amount;
 		GameLogic.Get().OutputGameLog(string.Format("{0}对{1}造成了{2}点伤害！\n", Player.Get().m_investigatorCard.m_cardName, m_cardName, amount));
 
 		if(m_health <= 0)
-		{
-			GameLogic.m_lstUnengagedEnemyCards.Remove(this);
-			Player.Get().RemoveEngagedEnemy(this);
-			GameLogic.Get().m_lstDiscardEncounterCards.Add(gameObject);
-			gameObject.SetActive(false);
-
+		{		
 			GameLogic.Get().OutputGameLog(string.Format("{0}被消灭了！\n", m_cardName));
+
+			if (GameLogic.Get().m_mainGameUI.OnEventTiming(EventTiming.DefeatEnemy))
+			{
+				GameLogic.Get().ShowHighlightCardExclusive(this, false, false);
+				yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
+			}
+	
+			Discard();
 		}
 	}
 
@@ -126,5 +134,13 @@ public class EnemyCard : Card
 		m_exhausted = true;
 		GameLogic.m_lstExhaustedCards.Add(this);
 		gameObject.transform.Rotate(0, 0, 90);
+	}
+
+	public override void Discard()
+	{
+		GameLogic.m_lstUnengagedEnemyCards.Remove(this);
+		Player.Get().RemoveEngagedEnemy(this);
+		GameLogic.Get().m_lstDiscardEncounterCards.Add(gameObject);
+		gameObject.SetActive(false);
 	}
 }

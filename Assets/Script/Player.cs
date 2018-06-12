@@ -131,12 +131,11 @@ public class Player
         return false;
     }
 
-	public bool CanPlayHandCard()
+	public bool CanPlayAnyHandCard()
 	{
-		foreach(var card in m_lstPlayerCards)
+		foreach (var card in m_lstPlayerCards)
 		{
-			if(card.m_lstKeywords.Contains(Card.Keyword.Asset) ||
-				card.m_lstKeywords.Contains(Card.Keyword.Event))
+			if(CanPlayHandCard(card))
 			{
 				return true;
 			}
@@ -144,11 +143,31 @@ public class Player
 		return false;
 	}
 
+	public bool CanPlayHandCard(PlayerCard card)
+	{
+		bool bAsset = card.m_lstKeywords.Contains(Card.Keyword.Asset) && m_resources >= card.m_cost;
+		bool bEvent = card.m_lstKeywords.Contains(Card.Keyword.Event) && card.m_eventTiming == EventTiming.InvestigatePhase && m_resources >= card.m_cost;
+
+		if(bAsset || bEvent)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 	public bool CanPlayEvent(EventTiming timing)
 	{
+		if(!GameLogic.Get().m_mainGameUI.m_isActionEnable[PlayerAction.PlayCard])
+		{
+			return false;
+		}
+
 		foreach (var card in m_lstPlayerCards)
 		{
-			if (card.m_eventTiming == timing)
+			if (card.m_eventTiming == timing && 
+				m_resources >= card.m_cost && 
+				card.GetComponent<PlayerCardLogic>().CanPlayEvent())
 			{
 				return true;
 			}

@@ -33,7 +33,7 @@ public class ActionDropdownGUI : MonoBehaviour
 				item.interactable = ui.m_isActionEnable[PlayerAction.GainOneResource];
 				break;
 			case PlayerAction.PlayCard:
-				item.interactable = Player.Get().CanPlayHandCard() && ui.m_isActionEnable[PlayerAction.PlayCard];
+				item.interactable = Player.Get().CanPlayAnyHandCard() && ui.m_isActionEnable[PlayerAction.PlayCard];
 				break;
 			case PlayerAction.NonStandardAction1:
 			case PlayerAction.NonStandardAction2:

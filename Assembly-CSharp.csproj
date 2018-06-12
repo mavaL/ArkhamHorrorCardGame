@@ -66,6 +66,8 @@
     <Compile Include="Assets\Script\Card\LocationCard.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_dissonant_voices.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_dodge.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_dynamite_blast.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_evidence.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_frozen_in_fear.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_obscuring_fog.cs" />
     <Compile Include="Assets\Script\Card\Logic\InvestigatorAbility.cs" />

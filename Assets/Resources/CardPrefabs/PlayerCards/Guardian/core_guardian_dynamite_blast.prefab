@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224692389831527880}
   - component: {fileID: 222211652984895508}
   - component: {fileID: 114774331429472844}
+  - component: {fileID: 114989798500840606}
   m_Layer: 0
   m_Name: core_guardian_dynamite_blast
   m_TagString: Untagged
@@ -49,7 +50,20 @@ MonoBehaviour:
   m_skillIcons:
     _keys: 00000000
     _values: 01000000
+  m_cost: 5
   m_isPlayerDeck: 1
+  m_eventTiming: 3
+--- !u!114 &114989798500840606
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1514863389807490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03b3f40d9a0e2824abe80e59691f01b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222211652984895508
 CanvasRenderer:
   m_ObjectHideFlags: 1

@@ -18,7 +18,9 @@ public enum SkillType
 public enum EventTiming
 {
 	None,
-	EnemyAttack
+	EnemyAttack,
+	DefeatEnemy,
+	InvestigatePhase
 }
 
 [System.Serializable]
@@ -28,6 +30,7 @@ public enum EventTiming
 public class PlayerCard : Card
 {
 	public SkillIconDictionary	m_skillIcons;
+	public int					m_cost;
 	public bool					m_isPlayerDeck = true;
 	public EventTiming			m_eventTiming = EventTiming.None;
 
@@ -39,7 +42,7 @@ public class PlayerCard : Card
 		GameLogic.Get().m_lstDiscardPlayerCards.Add(gameObject);
 	}
 
-	public void PlayIt()
+	public IEnumerator PlayIt()
 	{
 		if(m_lstKeywords.Contains(Keyword.Asset))
 		{
@@ -51,6 +54,12 @@ public class PlayerCard : Card
 
 			GetComponent<PlayerCardLogic>().OnReveal(this);
 		}
+
+		Player.Get().m_resources -= m_cost;
+
+		yield return new WaitUntil(()=> Player.Get().m_currentAction == PlayerAction.None);
+
+		Discard();
 
 		Player.Get().ActionDone(PlayerAction.PlayCard, !m_lstKeywords.Contains(Keyword.Fast));
 	}

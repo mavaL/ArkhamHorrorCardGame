@@ -64,17 +64,16 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Guardian/core_guardian_evidence",
+		"Guardian/core_guardian_dynamite_blast",
 		"Guardian/core_guardian_dodge",
 		"Neutral/core_roland_dot38_special",
-		"Neutral/core_cover_up",
 		"Guardian/core_guardian_dot45_automatic",
 		"Guardian/core_guardian_physical_training",
 		"Guardian/core_guardian_beat_cop",
 		"Guardian/core_guardian_first_aid",
 		"Guardian/core_guardian_machete",
 		"Guardian/core_guardian_dog",
-		"Guardian/core_guardian_evidence",
-		"Guardian/core_guardian_dynamite_blast",
 		"Guardian/core_guardian_vicious_blow",
 		"Seeker/core_seeker_magnifying_glass",
 		"Seeker/core_seeker_old_book_of_lore",
@@ -98,6 +97,7 @@ public class MainGame : MonoBehaviour
 		"Neutral/core_manual_dexterity",
 		"Neutral/core_manual_dexterity",
 		"Neutral/core_paranoia",
+		"Neutral/core_cover_up",
 	};
 
 	private void Awake()
@@ -259,6 +259,13 @@ public class MainGame : MonoBehaviour
 
 	public void EnterEnemyPhase()
 	{
+		StartCoroutine(_EnterEnemyPhase());
+	}
+
+	private IEnumerator _EnterEnemyPhase()
+	{
+		yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
+
 		m_actionDropdown.gameObject.SetActive(false);
 		m_useLocationAbilityBtn.gameObject.SetActive(false);
 		m_enemyPhaseBtn.gameObject.SetActive(true);
@@ -298,20 +305,10 @@ public class MainGame : MonoBehaviour
 
 		foreach (var enemy in enemies)
 		{
-			if (Player.Get().CanPlayEvent(EventTiming.EnemyAttack))
+			if(OnEventTiming(EventTiming.EnemyAttack))
 			{
-				GameLogic.Get().m_currentTiming = EventTiming.EnemyAttack;
-				Player.Get().m_currentAction = PlayerAction.ReactiveEvent;
-				m_targetDropdown.gameObject.SetActive(true);
-				UpdateTargetDropdown();
-
 				GameLogic.Get().ShowHighlightCardExclusive(enemy, false, false);
-
-				m_targetDropdown.onValueChanged.AddListener(m_onPlayReactiveEvent);
-
-				yield return new WaitUntil(()=> GameLogic.Get().m_currentTiming == EventTiming.None);
-
-				Player.Get().m_currentAction = PlayerAction.None;
+				yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
 			}
 
 			Player.Get().ResolveEngagedEnemyAttack(enemy);
@@ -322,25 +319,49 @@ public class MainGame : MonoBehaviour
 
 	public void OnPlayReactiveEvent(int index)
 	{
-		if(index > 1)
+		if(index < 1)
 		{
-			var cards = Player.Get().GetHandCards();
-
-			for (int i = 0; i < cards.Count; ++i)
-			{
-				if (cards[i].m_cardName == m_targetDropdown.options[index].text)
-				{
-					cards[i].GetComponent<PlayerCardLogic>().OnReveal(m_tempHighlightCard.GetComponent<Card>());
-					break;
-				}
-			}		
+			return;
 		}
 
+		var cards = Player.Get().GetHandCards();
+
+		for (int i = 0; i < cards.Count; ++i)
+		{
+			if (cards[i].m_cardName == m_targetDropdown.options[index].text)
+			{
+				cards[i].GetComponent<PlayerCardLogic>().OnReveal(m_tempHighlightCard.GetComponent<Card>());
+				Player.Get().m_resources -= cards[i].m_cost;
+				cards[i].Discard();
+				break;
+			}
+		}		
+
 		GameLogic.Get().m_currentTiming = EventTiming.None;
+		Player.Get().m_currentAction = PlayerAction.None;
+
 		m_targetDropdown.onValueChanged.RemoveListener(m_onPlayReactiveEvent);
 		m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 		m_tempHighlightCard = null;
 		m_targetDropdown.gameObject.SetActive(false);
+		m_actionDropdown.gameObject.SetActive(GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase);
+	}
+
+	public bool OnEventTiming(EventTiming timing)
+	{
+		if (Player.Get().CanPlayEvent(timing))
+		{
+			GameLogic.Get().m_currentTiming = timing;
+			Player.Get().m_currentAction = PlayerAction.ReactiveEvent;
+
+			m_actionDropdown.gameObject.SetActive(false);
+			m_targetDropdown.gameObject.SetActive(true);
+			UpdateTargetDropdown();
+			m_targetDropdown.onValueChanged.AddListener(m_onPlayReactiveEvent);
+
+			return true;
+		}
+		return false;
 	}
 
 	public void OnButtonEnterUpkeepPhase()
@@ -599,15 +620,22 @@ public class MainGame : MonoBehaviour
 		}
 		else if(m_choiceMode == ConfirmButtonMode.SkillTest)
 		{
-			Card card = m_tempHighlightCard.GetComponent<Card>();
-			card.OnSkillTest();
-
-			card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
-			m_tempHighlightCard = null;
-			EndSelectCardToSpend();
+			StartCoroutine(OnConfirmSkillTest());
 		}
 
 		m_bConfirmModeEnd = true;
+	}
+
+	private IEnumerator OnConfirmSkillTest()
+	{
+		Card card = m_tempHighlightCard.GetComponent<Card>();
+		card.OnSkillTest();
+		EndSelectCardToSpend();
+
+		yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
+
+		card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+		m_tempHighlightCard = null;
 	}
 
 	public void OnPlayerFightEnemy(EnemyCard enemy)
@@ -706,7 +734,7 @@ public class MainGame : MonoBehaviour
 			{
 				if (cards[i].m_cardName == cardName)
 				{
-					cards[i].PlayIt();
+					StartCoroutine(cards[i].PlayIt());
 					break;
 				}
 			}
@@ -760,7 +788,7 @@ public class MainGame : MonoBehaviour
 
 			handCards.ForEach(dest => 
 			{
-				if (dest.m_lstKeywords.Contains(Card.Keyword.Asset) || dest.m_lstKeywords.Contains(Card.Keyword.Event))
+				if (Player.Get().CanPlayHandCard(dest))
 				{
 					optionNames.Add(dest.m_cardName);
 				}

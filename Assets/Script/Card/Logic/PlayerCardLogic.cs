@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class PlayerCardLogic : MonoBehaviour
 {
+	public virtual bool CanPlayEvent() { return true; }
 	public virtual void	OnReveal(Card card) { }
-
 }
