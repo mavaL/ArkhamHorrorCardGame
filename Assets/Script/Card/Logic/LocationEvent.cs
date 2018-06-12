@@ -19,9 +19,11 @@ public class LocationEvent : MonoBehaviour
 
 	public void OnLocationAction_Miskatonic_University(LocationCard loc)
 	{
-		Player.Get().ActionDone(PlayerAction.OtherAction);
+		// TODO: Merge into ActionDropdown
+		//Player.Get().ActionDone(PlayerAction.OtherAction);
 
-		var lstCards = GameLogic.Get().m_mainGameUI.m_lstCardChoice;
+		var ui = GameLogic.Get().m_mainGameUI;
+		var lstCards = ui.m_lstCardChoice;
 		int num = Mathf.Min(6, GameLogic.Get().m_lstPlayerCards.Count);
 		lstCards.Clear();
 
@@ -39,16 +41,15 @@ public class LocationEvent : MonoBehaviour
 		{
 			List<string> cardNames = new List<string>();
 			lstCards.ForEach(card => { cardNames.Add(card.m_cardName); });
-			GameLogic.Get().m_mainGameUI.m_choiceDropdown.ClearOptions();
-			GameLogic.Get().m_mainGameUI.m_choiceDropdown.AddOptions(cardNames);
-			GameLogic.Get().m_mainGameUI.m_movementDropdown.RefreshShownValue();
+			ui.m_choiceDropdown.ClearOptions();
+			ui.m_choiceDropdown.AddOptions(cardNames);
 
-			GameLogic.Get().m_mainGameUI.m_choiceDropdown.gameObject.SetActive(true);
+			ui.m_choiceDropdown.gameObject.SetActive(true);
 
 			GameLogic.Get().ShowHighlightCardExclusive(lstCards[0], false);
-			GameLogic.Get().m_mainGameUI.m_confirmChoiceBtn.gameObject.SetActive(true);
+			ui.m_confirmChoiceBtn.gameObject.SetActive(true);
 
-			GameLogic.Get().m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.GainCard;
+			ui.m_choiceMode = MainGame.ConfirmButtonMode.GainCard;
 		}
 		else
 		{

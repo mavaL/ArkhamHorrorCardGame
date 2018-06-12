@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
-
+using UnityEngine.Events;
 
 public enum GameDifficulty
 {
@@ -54,6 +54,7 @@ public class GameLogic
 	public Card.CardClickMode	m_cardClickMode = Card.CardClickMode.Flip;
 	public Text				m_logText;
 	public TurnPhase		m_currentPhase;
+	public EventTiming		m_currentTiming = EventTiming.None;
 	public ChaosBag			m_chaosBag = new ChaosBag();
 	public MainGame			m_mainGameUI;
 
@@ -62,6 +63,7 @@ public class GameLogic
 	public List<GameObject>			m_lstDiscardPlayerCards = new List<GameObject>();
 	static public List<Card>		m_lstExhaustedCards = new List<Card>();
 	static public List<EnemyCard>	m_lstUnengagedEnemyCards = new List<EnemyCard>();
+	public UnityEvent				m_enemyAttackEvent { get; set; } = new UnityEvent();
 
 	public static void Swap<T>(ref T a, ref T b)
 	{
@@ -110,18 +112,15 @@ public class GameLogic
 			Player.Get().m_currentLocation.EnterLocation();
 		}
 
-		// Update movement destination list
-		m_mainGameUI.UpdateMovementDropdown();
-
 		if (bUseAction)
 		{
 			Player.Get().ActionDone(PlayerAction.Move);
 		}
 	}
 
-	public void ShowHighlightCardExclusive(Card card, bool bFlip)
+	public void ShowHighlightCardExclusive(Card card, bool bFlip, bool bDisableUI = true)
 	{
-		m_mainGameUI.ShowHighlightCardExclusive(card, bFlip);
+		m_mainGameUI.ShowHighlightCardExclusive(card, bFlip, bDisableUI);
 	}
 
 	public static void Shuffle(List<GameObject> cards)

@@ -35,6 +35,18 @@ public class ActionDropdownGUI : MonoBehaviour
 			case PlayerAction.PlayCard:
 				item.interactable = Player.Get().CanPlayHandCard() && ui.m_isActionEnable[PlayerAction.PlayCard];
 				break;
+			case PlayerAction.NonStandardAction1:
+			case PlayerAction.NonStandardAction2:
+			case PlayerAction.NonStandardAction3:
+			case PlayerAction.NonStandardAction4:
+			case PlayerAction.NonStandardAction5:
+			case PlayerAction.NonStandardAction6:
+			case PlayerAction.NonStandardAction7:
+			case PlayerAction.NonStandardAction8:
+			case PlayerAction.NonStandardAction9:
+			case PlayerAction.NonStandardAction10:
+				item.interactable = ui.m_isActionEnable[action];
+				break;
 		}
 	}
 }

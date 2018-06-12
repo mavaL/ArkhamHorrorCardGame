@@ -9,8 +9,9 @@ public class core_gathering : scenario_base
 {
 	public AllyCard		m_lita;
 	public EnemyCard	m_ghoulPriest;
-	public Button		m_parleyBtn;
-	private UnityAction	m_parleyAction;
+	private UnityAction	m_onParleyConfirm;
+	private UnityAction<int>	m_onActionDropdownChanged;
+	private PlayerAction		m_parleyAction;
 
 	void Awake()
 	{
@@ -40,8 +41,8 @@ public class core_gathering : scenario_base
 
 		GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "进入了场景\n章节1开始\n");
 
-		m_parleyBtn.gameObject.SetActive(false);
-		m_parleyAction = new UnityAction(OnButtonParleyConfirm);
+		m_onParleyConfirm = new UnityAction(OnButtonParleyConfirm);
+		m_onActionDropdownChanged = new UnityAction<int>(OnActionDropdownChange);
 
 		GameLogic.Get().m_mainGameUI.OnButtonEnterInvestigationPhase();
 	}
@@ -172,15 +173,35 @@ public class core_gathering : scenario_base
 		GameLogic.Get().RevealLocation(m_lstOtherLocations[3]);
 
 		m_lstOtherLocations[0].m_lstDestinations.Add(m_lstOtherLocations[3]);
-		GameLogic.Get().m_mainGameUI.UpdateMovementDropdown();
 
-		yield return new WaitUntil(() => GameLogic.Get().m_mainGameUI.m_bConfirmModeEnd == true);
+		var ui = GameLogic.Get().m_mainGameUI;
+
+		yield return new WaitUntil(() => ui.m_bConfirmModeEnd == true);
 
 		GameLogic.Get().SpawnAtLocation(m_lita, m_lstOtherLocations[3], true);
-		yield return new WaitUntil(() => GameLogic.Get().m_mainGameUI.m_bConfirmModeEnd == true);
+		yield return new WaitUntil(() => ui.m_bConfirmModeEnd == true);
 
 		GameLogic.Get().SpawnAtLocation(m_ghoulPriest, m_lstOtherLocations[0], true);
-		m_parleyBtn.gameObject.SetActive(true);
+
+		ui.m_actionDropdown.options.Add(new Dropdown.OptionData("与丽塔谈判"));
+		m_parleyAction = (PlayerAction)ui.m_actionDropdown.options.Count - 1;
+		ui.m_actionDropdown.onValueChanged.AddListener(m_onActionDropdownChanged);
+	}
+
+	public void OnActionDropdownChange(int index)
+	{
+		if(index == (int)m_parleyAction)
+		{
+			Player.Get().m_currentAction = m_parleyAction;
+
+			var ui = GameLogic.Get().m_mainGameUI;
+			ui.m_confirmChoiceBtn.gameObject.SetActive(true);
+			ui.m_choiceMode = MainGame.ConfirmButtonMode.ParleyWithLita;
+			ui.m_confirmChoiceBtn.onClick.AddListener(m_onParleyConfirm);
+
+			ui.BeginSelectCardToSpend();
+			Player.Get().ActionDone(m_parleyAction);
+		}
 	}
 
 	public override void AdvanceAgenda()
@@ -206,7 +227,7 @@ public class core_gathering : scenario_base
 				var mainUI = GameLogic.Get().m_mainGameUI;
 				mainUI.m_choiceDropdown.ClearOptions();
 				mainUI.m_choiceDropdown.AddOptions(options);
-				mainUI.m_movementDropdown.RefreshShownValue();
+				mainUI.m_choiceDropdown.RefreshShownValue();
 
 				mainUI.m_choiceDropdown.gameObject.SetActive(true);
 				mainUI.m_confirmChoiceBtn.gameObject.SetActive(true);
@@ -267,24 +288,13 @@ public class core_gathering : scenario_base
 				m_lita.m_currentLocation &&
 				Player.Get().m_currentLocation.m_cardName == m_lita.m_currentLocation.m_cardName)
 			{
-				m_parleyBtn.interactable = true;
+				GameLogic.Get().m_mainGameUI.m_isActionEnable[m_parleyAction] = true;
 			}
 			else
 			{
-				m_parleyBtn.interactable = false;
+				GameLogic.Get().m_mainGameUI.m_isActionEnable[m_parleyAction] = false;
 			}
 		}
-	}
-
-	public void OnButtonParley()
-	{
-		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_confirmChoiceBtn.gameObject.SetActive(true);
-		ui.m_choiceMode = MainGame.ConfirmButtonMode.ParleyWithLita;
-		ui.m_confirmChoiceBtn.onClick.AddListener(m_parleyAction);
-
-		ui.BeginSelectCardToSpend();
-		Player.Get().ActionDone(PlayerAction.OtherAction);
 	}
 
 	public void OnButtonParleyConfirm()
@@ -298,7 +308,7 @@ public class core_gathering : scenario_base
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = true;
 
 		ui.m_confirmChoiceBtn.gameObject.SetActive(false);
-		ui.m_confirmChoiceBtn.onClick.RemoveListener(m_parleyAction);
+		ui.m_confirmChoiceBtn.onClick.RemoveListener(m_onParleyConfirm);
 
 		ChaosBag.ChaosTokenType chaosToken;
 		int result = GameLogic.Get().SkillTest(SkillType.Intellect, 4, out chaosToken);

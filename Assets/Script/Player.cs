@@ -8,6 +8,7 @@ public class ActionDoneEvent : UnityEvent<PlayerAction> { }
 // Value should correspond with ActionDropdown control
 public enum PlayerAction
 {
+	None = 0,
 	Move = 1,
 	Investigate,
 	Fight,
@@ -15,8 +16,17 @@ public enum PlayerAction
 	DrawOneCard,
 	GainOneResource,
 	PlayCard,
-	OtherAction,
-	None
+	NonStandardAction1,
+	NonStandardAction2,
+	NonStandardAction3,
+	NonStandardAction4,
+	NonStandardAction5,
+	NonStandardAction6,
+	NonStandardAction7,
+	NonStandardAction8,
+	NonStandardAction9,
+	NonStandardAction10,
+	ReactiveEvent
 }
 
 public class Player
@@ -134,6 +144,18 @@ public class Player
 		return false;
 	}
 
+	public bool CanPlayEvent(EventTiming timing)
+	{
+		foreach (var card in m_lstPlayerCards)
+		{
+			if (card.m_eventTiming == timing)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public bool ChooseAndDiscardAssetCard()
 	{
 		// TODO: Asset card impl
@@ -165,9 +187,13 @@ public class Player
         return m_investigatorCard.m_sanity - m_sanity;
     }
 
-	public void ActionDone(PlayerAction action)
+	public void ActionDone(PlayerAction action, bool bCostAction = true)
 	{
-		m_actionUsed += 1;
+		if(bCostAction)
+		{
+			m_actionUsed += 1;
+		}
+
 		m_actionDoneEvent.Invoke(action);
 		m_actionRecord.Add(action);
 
@@ -199,7 +225,6 @@ public class Player
 		GameLogic.m_lstUnengagedEnemyCards.Remove(enemy);
 		enemy.gameObject.SetActive(true);
 
-		GameLogic.Get().m_mainGameUI.OnPlayerThreatAreaChnaged();
 		GameLogic.Get().OutputGameLog(string.Format("{0}与<{1}>发生了交战！\n", m_investigatorCard.m_cardName, enemy.m_cardName));
 	}
 
@@ -207,15 +232,12 @@ public class Player
 	{
 		m_lstTreacheryCards.Add(treachery);
 		treachery.gameObject.SetActive(true);
-
-		GameLogic.Get().m_mainGameUI.OnPlayerThreatAreaChnaged();
 	}
 
 	public void RemoveEngagedEnemy(EnemyCard enemy)
 	{
 		enemy.m_engaged = false;
 		m_lstEnemyCards.Remove(enemy);
-		GameLogic.Get().m_mainGameUI.OnPlayerThreatAreaChnaged();
 	}
 
 	public int GetSkillValueByType(SkillType skill)
@@ -231,21 +253,18 @@ public class Player
 		return -999;
 	}
 
-	public void ResolveEngagedEnemyAttack()
+	public void ResolveEngagedEnemyAttack(EnemyCard enemy)
 	{
-		foreach(var enemy in m_lstEnemyCards)
+		GameLogic.Get().m_enemyAttackEvent.Invoke();
+
+		if (!enemy.m_exhausted)
 		{
-			if(!enemy.m_exhausted)
-			{
-				m_health -= enemy.m_damage;
-				m_sanity -= enemy.m_horror;
+			m_health -= enemy.m_damage;
+			m_sanity -= enemy.m_horror;
 
-				GameLogic.Get().OutputGameLog(string.Format("{0}被<{1}>攻击，受到：{2}点伤害，{3}点恐怖！\n", m_investigatorCard.m_cardName, enemy.m_cardName, enemy.m_damage, enemy.m_horror));
+			GameLogic.Get().OutputGameLog(string.Format("{0}被<{1}>攻击，受到：{2}点伤害，{3}点恐怖！\n", m_investigatorCard.m_cardName, enemy.m_cardName, enemy.m_damage, enemy.m_horror));
 
-				enemy.m_exhausted = true;
-				GameLogic.m_lstExhaustedCards.Add(enemy);
-				enemy.gameObject.transform.Rotate(0, 0, 90);
-			}
+			enemy.OnExhausted();
 		}
 	}
 }

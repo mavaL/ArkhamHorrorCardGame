@@ -35,7 +35,8 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		Prey,	// TODO: multi-players need this
 		Asset,
 		Event,
-		Skill
+		Skill,
+		Fast
 	}
 
 	public List<Keyword> m_lstKeywords = new List<Keyword>();
@@ -178,8 +179,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
     {
         if(m_bIsFocus)
         {
-            GameObject.Destroy(m_focusImage);
-            m_bIsFocus = false;
+			m_image.raycastTarget = true;
+			GameObject.Destroy(m_focusImage);
+			m_bIsFocus = false;
         }
     }
 
@@ -188,4 +190,5 @@ public class Card : MonoBehaviour, IPointerClickHandler
 	public virtual void OnSkillTestResult(int result) {}
 	public virtual void OnSpawnAtLocation(LocationCard loc) { }
 	public virtual void OnRecoverFromExhaust() { }
+	public virtual void OnExhausted() { }
 }

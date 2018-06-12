@@ -29,9 +29,8 @@ public class MainGame : MonoBehaviour
 	public Button m_confirmChoiceBtn;
 	public Button m_useLocationAbilityBtn;
 
-	public Dropdown m_movementDropdown;
+	public Dropdown m_targetDropdown;
 	public Dropdown m_choiceDropdown;
-	public Dropdown m_fightDropdown;
 	public Dropdown m_actionDropdown;
 	#endregion
 
@@ -61,9 +60,11 @@ public class MainGame : MonoBehaviour
 	public UnityEvent		m_upkeepPhaseBeginEvent { get; set; } = new UnityEvent();
 	public UnityEvent		m_mythosPhaseBeginEvent { get; set; } = new UnityEvent();
 	public UnityEvent		m_roundEndEvent { get; set; } = new UnityEvent();
+	private UnityAction<int> m_onPlayReactiveEvent;
 
 	string[] m_roland_def_cards =
 	{
+		"Guardian/core_guardian_dodge",
 		"Neutral/core_roland_dot38_special",
 		"Neutral/core_cover_up",
 		"Guardian/core_guardian_dot45_automatic",
@@ -73,7 +74,6 @@ public class MainGame : MonoBehaviour
 		"Guardian/core_guardian_machete",
 		"Guardian/core_guardian_dog",
 		"Guardian/core_guardian_evidence",
-		"Guardian/core_guardian_dodge",
 		"Guardian/core_guardian_dynamite_blast",
 		"Guardian/core_guardian_vicious_blow",
 		"Seeker/core_seeker_magnifying_glass",
@@ -112,6 +112,18 @@ public class MainGame : MonoBehaviour
 		m_isActionEnable.Add(PlayerAction.DrawOneCard, true);
 		m_isActionEnable.Add(PlayerAction.GainOneResource, true);
 		m_isActionEnable.Add(PlayerAction.PlayCard, true);
+		m_isActionEnable.Add(PlayerAction.NonStandardAction1, true);
+		m_isActionEnable.Add(PlayerAction.NonStandardAction2, true);
+		m_isActionEnable.Add(PlayerAction.NonStandardAction3, true);
+		m_isActionEnable.Add(PlayerAction.NonStandardAction4, true);
+		m_isActionEnable.Add(PlayerAction.NonStandardAction5, true);
+		m_isActionEnable.Add(PlayerAction.NonStandardAction6, true);
+		m_isActionEnable.Add(PlayerAction.NonStandardAction7, true);
+		m_isActionEnable.Add(PlayerAction.NonStandardAction8, true);
+		m_isActionEnable.Add(PlayerAction.NonStandardAction9, true);
+		m_isActionEnable.Add(PlayerAction.NonStandardAction10, true);
+
+		m_onPlayReactiveEvent = new UnityAction<int>(OnPlayReactiveEvent);
 	}
 
 	// Use this for initialization
@@ -121,8 +133,6 @@ public class MainGame : MonoBehaviour
 
 		_LoadPlayerCards(Player.Get().m_faction);
 		_DrawFiveOpenHands();
-
-		OnPlayerThreatAreaChnaged();
 	}
 
 	private void _DrawFiveOpenHands()
@@ -152,7 +162,7 @@ public class MainGame : MonoBehaviour
 			Debug.LogError("Error!!Not implement...");
 		}
 
-		GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
+		//GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
 	}
 
 	public void DrawPlayerCard()
@@ -167,7 +177,8 @@ public class MainGame : MonoBehaviour
 
 	public void OnActionDropdownChange(Dropdown d)
 	{
-		if(d.value == 0)
+		// Only process standard actions
+		if (d.value == 0 || d.value >= (int)PlayerAction.NonStandardAction1)
 		{
 			return;
 		}
@@ -177,23 +188,21 @@ public class MainGame : MonoBehaviour
 
 		switch (Player.Get().m_currentAction)
 		{
-			case PlayerAction.Move:
-				m_movementDropdown.gameObject.SetActive(true);
-				break;
 			case PlayerAction.Investigate:
 				InvestigateCurrentLocation();
 				break;
+			case PlayerAction.Move:
 			case PlayerAction.Evade:
 			case PlayerAction.Fight:
-				m_fightDropdown.gameObject.SetActive(true);
+			case PlayerAction.PlayCard:
+				UpdateTargetDropdown();
+				m_targetDropdown.gameObject.SetActive(true);
 				break;
 			case PlayerAction.DrawOneCard:
 				DrawPlayerCard();
 				break;
 			case PlayerAction.GainOneResource:
 				GainOneResource();
-				break;
-			case PlayerAction.PlayCard:
 				break;
 		}
 	}
@@ -212,7 +221,7 @@ public class MainGame : MonoBehaviour
 	{
 		Player.Get().m_resources += 1;
 		GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了1资源\n", Player.Get().m_investigatorCard.m_cardName));
-		Player.Get().ActionDone(PlayerAction.OtherAction);
+		Player.Get().ActionDone(PlayerAction.GainOneResource);
 	}
 
 	// Update is called once per frame
@@ -261,6 +270,7 @@ public class MainGame : MonoBehaviour
 	{
 		GameLogic.Get().OutputGameLog("游戏进入敌人阶段\n");
 		m_advanceActBtn.gameObject.SetActive(false);
+		m_enemyPhaseBtn.gameObject.SetActive(false);
 
 		m_enemyPhaseBeginEvent.Invoke();
 
@@ -279,10 +289,58 @@ public class MainGame : MonoBehaviour
 		}
 
 		// 2. Resolve engaged enemy attacks
-		Player.Get().ResolveEngagedEnemyAttack();
+		StartCoroutine(OnAllEnemyAttack());
+	}
 
-		m_enemyPhaseBtn.gameObject.SetActive(false);
+	IEnumerator OnAllEnemyAttack()
+	{
+		var enemies = Player.Get().GetEnemyCards();
+
+		foreach (var enemy in enemies)
+		{
+			if (Player.Get().CanPlayEvent(EventTiming.EnemyAttack))
+			{
+				GameLogic.Get().m_currentTiming = EventTiming.EnemyAttack;
+				Player.Get().m_currentAction = PlayerAction.ReactiveEvent;
+				m_targetDropdown.gameObject.SetActive(true);
+				UpdateTargetDropdown();
+
+				GameLogic.Get().ShowHighlightCardExclusive(enemy, false, false);
+
+				m_targetDropdown.onValueChanged.AddListener(m_onPlayReactiveEvent);
+
+				yield return new WaitUntil(()=> GameLogic.Get().m_currentTiming == EventTiming.None);
+
+				Player.Get().m_currentAction = PlayerAction.None;
+			}
+
+			Player.Get().ResolveEngagedEnemyAttack(enemy);
+		}
+
 		m_UpkeepPhaseBtn.gameObject.SetActive(true);
+	}
+
+	public void OnPlayReactiveEvent(int index)
+	{
+		if(index > 1)
+		{
+			var cards = Player.Get().GetHandCards();
+
+			for (int i = 0; i < cards.Count; ++i)
+			{
+				if (cards[i].m_cardName == m_targetDropdown.options[index].text)
+				{
+					cards[i].GetComponent<PlayerCardLogic>().OnReveal(m_tempHighlightCard.GetComponent<Card>());
+					break;
+				}
+			}		
+		}
+
+		GameLogic.Get().m_currentTiming = EventTiming.None;
+		m_targetDropdown.onValueChanged.RemoveListener(m_onPlayReactiveEvent);
+		m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+		m_tempHighlightCard = null;
+		m_targetDropdown.gameObject.SetActive(false);
 	}
 
 	public void OnButtonEnterUpkeepPhase()
@@ -418,29 +476,6 @@ public class MainGame : MonoBehaviour
 		}
 	}
 
-	public void OnMovementDestinationChanged(Dropdown d)
-	{
-		if(d.value == 0)
-		{
-			// No movement
-			return;
-		}
-
-		m_movementDropdown.gameObject.SetActive(false);
-
-		string locName = d.options[d.value].text;
-		var locList = GameLogic.Get().m_currentScenario.m_lstOtherLocations;
-
-		for(int i=0; i<locList.Count; ++i)
-		{
-			if(locList[i].m_cardName == locName)
-			{
-				GameLogic.Get().PlayerEnterLocation(locList[i].gameObject);
-				break;
-			}
-		}
-	}
-
 	public void OnButtonUseLocationAbility()
 	{
 		Player.Get().m_currentLocation.m_locationAbilityCallback.Invoke(null);
@@ -500,7 +535,7 @@ public class MainGame : MonoBehaviour
 					Player.Get().AddHandCard(m_tempHighlightCard);
 
 					GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了<{1}>\n", Player.Get().m_investigatorCard.m_cardName, card.m_cardName));
-					Player.Get().ActionDone(PlayerAction.OtherAction);
+					Player.Get().ActionDone(PlayerAction.DrawOneCard);
 				}
 			}
 			else if(card is LocationCard)
@@ -575,28 +610,20 @@ public class MainGame : MonoBehaviour
 		m_bConfirmModeEnd = true;
 	}
 
-	public IEnumerator OnPlayerFightEnemy(EnemyCard enemy)
+	public void OnPlayerFightEnemy(EnemyCard enemy)
 	{
 		m_confirmChoiceBtn.gameObject.SetActive(true);
 		m_tempHighlightCard = enemy.gameObject;
 		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 		BeginSelectCardToSpend();
-
-		yield return new WaitUntil(()=> m_bConfirmModeEnd == true);
-
-		Player.Get().ActionDone(PlayerAction.Fight);
 	}
 
-	public IEnumerator OnPlayerEvadeEnemy(EnemyCard enemy)
+	public void OnPlayerEvadeEnemy(EnemyCard enemy)
 	{
 		m_confirmChoiceBtn.gameObject.SetActive(true);
 		m_tempHighlightCard = enemy.gameObject;
 		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 		BeginSelectCardToSpend();
-
-		yield return new WaitUntil(() => m_bConfirmModeEnd == true);
-
-		Player.Get().ActionDone(PlayerAction.Evade);
 	}
 
 	public void ResetActionDropdown()
@@ -619,13 +646,6 @@ public class MainGame : MonoBehaviour
 		m_confirmSkillTestText.gameObject.SetActive(true);
 		m_gameArea.SetActive(false);
 		GameLogic.Get().m_cardClickMode = Card.CardClickMode.MultiSelect;
-
-		// ...................Seems like Unity's BUG.......................
-		ScrollRect dropDownList = m_fightDropdown.GetComponentInChildren<ScrollRect>();
-		if (dropDownList != null)
-		{
-			Destroy(dropDownList.gameObject);
-		}
 	}
 
 	public void EndSelectCardToSpend()
@@ -645,42 +665,57 @@ public class MainGame : MonoBehaviour
 		m_confirmSkillTestText.gameObject.SetActive(false);
 	}
 
-	public void OnFightTargetChanged(Dropdown d)
+	public void OnTargetDropdownChanged(Dropdown d)
 	{
 		// Option 0 is reserved
-		if(d.value == 0)
+		if(d.value == 0 || Player.Get().m_currentAction >= PlayerAction.NonStandardAction1)
 		{
 			return;
 		}
 
-		m_fightDropdown.gameObject.SetActive(false);
+		m_targetDropdown.gameObject.SetActive(false);
 
 		if (Player.Get().m_currentAction == PlayerAction.Fight)
 		{
-			StartCoroutine(OnPlayerFightEnemy(Player.Get().GetEnemyCards()[d.value - 1]));
+			OnPlayerFightEnemy(Player.Get().GetEnemyCards()[d.value - 1]);
 		}
-		else
+		else if(Player.Get().m_currentAction == PlayerAction.Evade)
 		{
-			StartCoroutine(OnPlayerEvadeEnemy(Player.Get().GetEnemyCards()[d.value - 1]));
+			OnPlayerEvadeEnemy(Player.Get().GetEnemyCards()[d.value - 1]);
+		}
+		else if(Player.Get().m_currentAction == PlayerAction.Move)
+		{
+			string locName = d.options[d.value].text;
+			var locList = GameLogic.Get().m_currentScenario.m_lstOtherLocations;
+
+			for (int i = 0; i < locList.Count; ++i)
+			{
+				if (locList[i].m_cardName == locName)
+				{
+					GameLogic.Get().PlayerEnterLocation(locList[i].gameObject);
+					break;
+				}
+			}
+		}
+		else if(Player.Get().m_currentAction == PlayerAction.PlayCard)
+		{
+			string cardName = d.options[d.value].text;
+			var cards = Player.Get().GetHandCards();
+
+			for (int i = 0; i < cards.Count; ++i)
+			{
+				if (cards[i].m_cardName == cardName)
+				{
+					cards[i].PlayIt();
+					break;
+				}
+			}
 		}
 
-		m_fightDropdown.value = 0;
+		m_targetDropdown.value = 0;
 	}
 
-	public void OnPlayerThreatAreaChnaged()
-	{
-		m_fightDropdown.ClearOptions();
-
-		List<string> cardNames = new List<string>();
-		cardNames.Add("请选择目标...");
-		var enemies = Player.Get().GetEnemyCards();
-
-		enemies.ForEach(enemy => { cardNames.Add(enemy.m_cardName); });
-		m_fightDropdown.AddOptions(cardNames);
-		m_fightDropdown.RefreshShownValue();
-	}
-
-	public void ShowHighlightCardExclusive(Card card, bool bFlip)
+	public void ShowHighlightCardExclusive(Card card, bool bFlip, bool bDisableUI = true)
 	{
 		m_bConfirmModeEnd = false;
 
@@ -691,36 +726,71 @@ public class MainGame : MonoBehaviour
 
 		m_tempHighlightCard = card.gameObject;
 		card.OnPointerEnter(new UnityEngine.EventSystems.BaseEventData(null));
-		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
-		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
+		card.m_image.raycastTarget = false;
+
+		if (bDisableUI)
+		{
+			GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
+			GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
+		}
 	}
 
-	public void UpdateMovementDropdown()
+	public void UpdateTargetDropdown()
 	{
-		var destList = Player.Get().m_currentLocation.m_lstDestinations;
-		if (destList.Count > 0)
+		// ...................Seems like Unity's BUG.......................
+		ScrollRect dropDownList = m_targetDropdown.GetComponentInChildren<ScrollRect>();
+		if (dropDownList != null)
 		{
-			// ...................Seems like Unity's BUG.......................
-			ScrollRect dropDownList = m_movementDropdown.GetComponentInChildren<ScrollRect>();
-			if (dropDownList != null)
+			GameObject.Destroy(dropDownList.gameObject);
+		}
+		m_targetDropdown.ClearOptions();
+		List<string> optionNames = new List<string>();
+
+		if (Player.Get().m_currentAction == PlayerAction.Move)
+		{
+			var destList = Player.Get().m_currentLocation.m_lstDestinations;
+
+			optionNames.Add("请选择目的地...");
+			destList.ForEach(dest => { optionNames.Add(dest.m_cardName); });
+		}
+		else if(Player.Get().m_currentAction == PlayerAction.PlayCard)
+		{
+			optionNames.Add("请选择手牌...");
+			var handCards = Player.Get().GetHandCards();
+
+			handCards.ForEach(dest => 
 			{
-				GameObject.Destroy(dropDownList.gameObject);
-			}
-
-			m_movementDropdown.ClearOptions();
-
-			List<string> destNames = new List<string>();
-			destNames.Add("移动到...");
-			destList.ForEach(dest => { destNames.Add(dest.m_cardName); });
-			m_movementDropdown.AddOptions(destNames);
-			m_movementDropdown.RefreshShownValue();
-
-			m_movementDropdown.value = 0;
-			m_movementDropdown.interactable = true;
+				if (dest.m_lstKeywords.Contains(Card.Keyword.Asset) || dest.m_lstKeywords.Contains(Card.Keyword.Event))
+				{
+					optionNames.Add(dest.m_cardName);
+				}
+			});
 		}
-		else
+		else if(Player.Get().m_currentAction == PlayerAction.Fight ||
+			Player.Get().m_currentAction == PlayerAction.Evade)
 		{
-			m_movementDropdown.interactable = false;
+			optionNames.Add("请选择目标...");
+			var enemies = Player.Get().GetEnemyCards();
+
+			enemies.ForEach(enemy => { optionNames.Add(enemy.m_cardName); });
 		}
+		else if(Player.Get().m_currentAction == PlayerAction.ReactiveEvent)
+		{
+			var cards = Player.Get().GetHandCards();
+
+			optionNames.Add("是否要打出事件牌...");
+			optionNames.Add("不打出");
+			cards.ForEach(dest =>
+			{
+				if (dest.m_eventTiming == GameLogic.Get().m_currentTiming)
+				{
+					optionNames.Add(dest.m_cardName);
+				}
+			});
+		}
+
+		m_targetDropdown.AddOptions(optionNames);
+		m_targetDropdown.RefreshShownValue();
+		m_targetDropdown.value = 0;
 	}
 }

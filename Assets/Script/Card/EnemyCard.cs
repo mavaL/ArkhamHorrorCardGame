@@ -57,13 +57,12 @@ public class EnemyCard : Card
 			}
 			else
 			{
-				m_exhausted = true;
 				Player.Get().RemoveEngagedEnemy(this);
-				GameLogic.m_lstExhaustedCards.Add(this);
 				GameLogic.m_lstUnengagedEnemyCards.Add(this);
 				GameLogic.DockCard(gameObject, Player.Get().m_currentLocation.gameObject, 300, true, true);
 
-				gameObject.transform.Rotate(0, 0, 90);
+				OnExhausted();
+
 				GameLogic.Get().OutputGameLog("闪避结果成功\n");
 			}
 		}
@@ -78,6 +77,7 @@ public class EnemyCard : Card
 				GameLogic.Get().OutputGameLog("闪避结果失败\n");
 			}
 		}
+		Player.Get().ActionDone(Player.Get().m_currentAction);
 	}
 
 	public void DecreaseHealth(int amount = 1)
@@ -119,5 +119,12 @@ public class EnemyCard : Card
 		{
 			Player.Get().AddEngagedEnemy(this);
 		}
+	}
+
+	public override void OnExhausted()
+	{
+		m_exhausted = true;
+		GameLogic.m_lstExhaustedCards.Add(this);
+		gameObject.transform.Rotate(0, 0, 90);
 	}
 }

@@ -65,10 +65,12 @@
     <Compile Include="Assets\Script\Card\InvestigatorCard.cs" />
     <Compile Include="Assets\Script\Card\LocationCard.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_dissonant_voices.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_dodge.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_frozen_in_fear.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_obscuring_fog.cs" />
     <Compile Include="Assets\Script\Card\Logic\InvestigatorAbility.cs" />
     <Compile Include="Assets\Script\Card\Logic\LocationEvent.cs" />
+    <Compile Include="Assets\Script\Card\Logic\PlayerCardLogic.cs" />
     <Compile Include="Assets\Script\Card\Logic\SkillTestEvents.cs" />
     <Compile Include="Assets\Script\Card\Logic\Treachery.cs" />
     <Compile Include="Assets\Script\Card\PlayerCard.cs" />
