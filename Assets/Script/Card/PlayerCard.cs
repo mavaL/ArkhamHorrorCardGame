@@ -24,8 +24,9 @@ public enum EventTiming
 }
 
 [System.Serializable]
- public class SkillIconDictionary : SerializableDictionary<SkillType, int> {}
-
+public class SkillIconDictionary : SerializableDictionary<SkillType, int> {}
+[System.Serializable]
+public class SkillCardEffect : UnityEvent<int, GameObject> { }
 
 public class PlayerCard : Card
 {
@@ -33,6 +34,7 @@ public class PlayerCard : Card
 	public int					m_cost;
 	public bool					m_isPlayerDeck = true;
 	public EventTiming			m_eventTiming = EventTiming.None;
+	public SkillCardEffect		m_skillCardEffect;
 
 	public override void Discard()
 	{

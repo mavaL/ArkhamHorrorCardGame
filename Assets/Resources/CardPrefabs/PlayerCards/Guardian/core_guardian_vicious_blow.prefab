@@ -49,7 +49,26 @@ MonoBehaviour:
   m_skillIcons:
     _keys: 02000000
     _values: 01000000
+  m_cost: 0
   m_isPlayerDeck: 1
+  m_eventTiming: 0
+  m_skillCardEffect:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114902594422151592, guid: 86141fb62e04b1b41bbe3ef4f25d8201,
+          type: 2}
+        m_MethodName: OnSkillTestResult_Vicious_Blow
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: SkillCardEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!222 &222907497635183392
 CanvasRenderer:
   m_ObjectHideFlags: 1

@@ -36,7 +36,8 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		Asset,
 		Event,
 		Skill,
-		Fast
+		Fast,
+		Ally
 	}
 
 	public List<Keyword> m_lstKeywords = new List<Keyword>();

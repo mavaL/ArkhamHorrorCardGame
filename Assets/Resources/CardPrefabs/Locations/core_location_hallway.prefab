@@ -49,8 +49,8 @@ MonoBehaviour:
   m_clues: 0
   m_shroud: 1
   m_lstDestinations:
-  - {fileID: 114033836682342334, guid: 742643da971a7354eab270540b762e7a, type: 2}
-  - {fileID: 114982510114424366, guid: 28494b40bf1f46c45b53b86ad6c9cd6b, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   m_enterLocationCallback:
     m_PersistentCalls:
       m_Calls: []

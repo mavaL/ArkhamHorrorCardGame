@@ -30,6 +30,7 @@ public class EnemyCard : Card
 			return;
 		}
 
+		// TODO: hunter enemy pathfinding..
 		throw new System.NotImplementedException();
 	}
 
@@ -49,7 +50,8 @@ public class EnemyCard : Card
 
 	public override void OnSkillTestResult(int result)
 	{
-		if(result >= 0)
+		result = 99;
+		if (result >= 0)
 		{
 			if (Player.Get().m_currentAction == PlayerAction.Fight)
 			{
@@ -90,7 +92,7 @@ public class EnemyCard : Card
 		m_health -= amount;
 		GameLogic.Get().OutputGameLog(string.Format("{0}对{1}造成了{2}点伤害！\n", Player.Get().m_investigatorCard.m_cardName, m_cardName, amount));
 
-		if(m_health <= 0)
+		if (m_health <= 0)
 		{		
 			GameLogic.Get().OutputGameLog(string.Format("{0}被消灭了！\n", m_cardName));
 
@@ -101,6 +103,14 @@ public class EnemyCard : Card
 			}
 	
 			Discard();
+		}
+		else
+		{
+			Card.m_lstSelectCards.ForEach(card =>
+			{
+				PlayerCard pc = card as PlayerCard;
+				pc.m_skillCardEffect.Invoke(99, gameObject);
+			});
 		}
 	}
 

@@ -32,6 +32,8 @@ public class MainGame : MonoBehaviour
 	public Dropdown m_targetDropdown;
 	public Dropdown m_choiceDropdown;
 	public Dropdown m_actionDropdown;
+	
+	public CardListView	m_handCardListView;
 	#endregion
 
 	// A single button functions many way
@@ -64,6 +66,7 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Guardian/core_guardian_vicious_blow",
 		"Guardian/core_guardian_evidence",
 		"Guardian/core_guardian_dynamite_blast",
 		"Guardian/core_guardian_dodge",
@@ -74,7 +77,6 @@ public class MainGame : MonoBehaviour
 		"Guardian/core_guardian_first_aid",
 		"Guardian/core_guardian_machete",
 		"Guardian/core_guardian_dog",
-		"Guardian/core_guardian_vicious_blow",
 		"Seeker/core_seeker_magnifying_glass",
 		"Seeker/core_seeker_old_book_of_lore",
 		"Seeker/core_seeker_research_librarian",
@@ -133,6 +135,14 @@ public class MainGame : MonoBehaviour
 
 		_LoadPlayerCards(Player.Get().m_faction);
 		_DrawFiveOpenHands();
+
+		m_handCardListView.Init();
+		for(int i=0; i< GameLogic.Get().m_lstPlayerCards.Count; ++i)
+		{
+			MyListItemModel item = new MyListItemModel();
+			item.card = GameLogic.Get().m_lstPlayerCards[i].GetComponent<Card>();
+			m_handCardListView.AddItemsAt(m_handCardListView.GetItemsCount(), item);
+		}	
 	}
 
 	private void _DrawFiveOpenHands()
@@ -656,6 +666,13 @@ public class MainGame : MonoBehaviour
 
 	public void ResetActionDropdown()
 	{
+		StartCoroutine(_ResetActionDropdown());
+	}
+
+	private IEnumerator _ResetActionDropdown()
+	{
+		yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
+
 		m_actionDropdown.gameObject.SetActive(true);
 		m_actionDropdown.value = 0;
 		Player.Get().m_currentAction = PlayerAction.None;

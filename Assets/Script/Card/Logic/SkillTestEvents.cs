@@ -79,4 +79,14 @@ public class SkillTestEvents : MonoBehaviour
 			}
 		}
 	}
+
+	public void OnSkillTestResult_Vicious_Blow(int result, GameObject go)
+	{
+		if(result >= 0)
+		{
+			var enemy = go.GetComponent<EnemyCard>();
+			enemy.DecreaseHealth(1);
+			GameLogic.Get().OutputGameLog(string.Format("<{0}>因为<残忍打击>而多受了1点伤害！\n", enemy.m_cardName));
+		}
+	}
 }

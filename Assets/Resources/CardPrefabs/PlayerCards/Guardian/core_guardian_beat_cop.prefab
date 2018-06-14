@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224081541164117376}
   - component: {fileID: 222508729759299802}
-  - component: {fileID: 114066741696158314}
+  - component: {fileID: 114740932551707880}
   m_Layer: 0
   m_Name: core_guardian_beat_cop
   m_TagString: Untagged
@@ -28,7 +28,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114066741696158314
+--- !u!114 &114740932551707880
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -36,10 +36,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1216428525605268}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9af3d81cf6f68a4a890baa050bbc57d, type: 3}
+  m_Script: {fileID: 11500000, guid: c77b7653fe2ac3b4e8471030d672ce19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lstKeywords: 09000000
+  m_lstKeywords: 090000000d000000
   m_frontImage: {fileID: 21300002, guid: 2bbb8465d5d336345964bb4927144046, type: 3}
   m_backImage: {fileID: 21300028, guid: 2bbb8465d5d336345964bb4927144046, type: 3}
   m_image: {fileID: 0}
@@ -49,7 +49,16 @@ MonoBehaviour:
   m_skillIcons:
     _keys: 02000000
     _values: 01000000
+  m_cost: 4
   m_isPlayerDeck: 1
+  m_eventTiming: 0
+  m_skillCardEffect:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SkillCardEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_health: 2
+  m_sanity: 2
 --- !u!222 &222508729759299802
 CanvasRenderer:
   m_ObjectHideFlags: 1

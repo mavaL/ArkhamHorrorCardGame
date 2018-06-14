@@ -49,7 +49,7 @@ MonoBehaviour:
   m_clues: 2
   m_shroud: 1
   m_lstDestinations:
-  - {fileID: 114831296439093564, guid: 18948378c0d871244874e9b65a4f1ed5, type: 2}
+  - {fileID: 0}
   m_enterLocationCallback:
     m_PersistentCalls:
       m_Calls:
