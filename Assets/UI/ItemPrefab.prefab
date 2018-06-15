@@ -60,7 +60,7 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_cardName: 
   m_canFocus: 1
-  m_canFlip: 0
+  m_canFlip: 1
 --- !u!222 &222685728674609074
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -75,7 +75,7 @@ RectTransform:
   m_GameObject: {fileID: 1255634029934764}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 1}
+  m_LocalScale: {x: 0.18, y: 0.18, z: 1}
   m_Children: []
   m_Father: {fileID: 224106330458036182}
   m_RootOrder: 0

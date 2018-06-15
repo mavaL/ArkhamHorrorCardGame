@@ -93,6 +93,11 @@ public class Player
 
 			m_lstPlayerCards.Add(pc);
 			go.SetActive(true);
+
+			var ui = GameLogic.Get().m_mainGameUI;
+			ListViewItem item = new ListViewItem();
+			item.card = pc;
+			ui.m_handCardListView.AddItemsAt(ui.m_handCardListView.GetItemsCount(), item);
 		}
 	}
 
@@ -244,6 +249,11 @@ public class Player
 		GameLogic.m_lstUnengagedEnemyCards.Remove(enemy);
 		enemy.gameObject.SetActive(true);
 
+		var ui = GameLogic.Get().m_mainGameUI;
+		ListViewItem item = new ListViewItem();
+		item.card = enemy;
+		ui.m_threatListView.AddItemsAt(ui.m_threatListView.GetItemsCount(), item);
+
 		GameLogic.Get().OutputGameLog(string.Format("{0}与<{1}>发生了交战！\n", m_investigatorCard.m_cardName, enemy.m_cardName));
 	}
 
@@ -256,6 +266,7 @@ public class Player
 	public void RemoveEngagedEnemy(EnemyCard enemy)
 	{
 		enemy.m_engaged = false;
+		GameLogic.Get().m_mainGameUI.m_threatListView.RemoveItemFrom(m_lstEnemyCards.IndexOf(enemy), 1);
 		m_lstEnemyCards.Remove(enemy);
 	}
 

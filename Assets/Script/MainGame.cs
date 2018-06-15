@@ -10,8 +10,6 @@ public class MainGame : MonoBehaviour
 	public GameObject			m_actArea;
 	public GameObject			m_agendaArea;
 	public GameObject			m_gameArea;
-	public List<GameObject>		m_playerCardArea;
-	public List<GameObject>		m_threatArea;
 	public Text					m_gameLog;
 	public Text					m_confirmSkillTestText;
 
@@ -34,6 +32,7 @@ public class MainGame : MonoBehaviour
 	public Dropdown m_actionDropdown;
 	
 	public CardListView	m_handCardListView;
+	public CardListView	m_threatListView;
 	#endregion
 
 	// A single button functions many way
@@ -131,18 +130,13 @@ public class MainGame : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
+		m_handCardListView.Init();
+		m_threatListView.Init();
+
 		GameLogic.DockCard(Player.Get().m_investigatorCard.gameObject, GameObject.Find("InvestigatorCard"));
 
 		_LoadPlayerCards(Player.Get().m_faction);
 		_DrawFiveOpenHands();
-
-		m_handCardListView.Init();
-		for(int i=0; i< GameLogic.Get().m_lstPlayerCards.Count; ++i)
-		{
-			MyListItemModel item = new MyListItemModel();
-			item.card = GameLogic.Get().m_lstPlayerCards[i].GetComponent<Card>();
-			m_handCardListView.AddItemsAt(m_handCardListView.GetItemsCount(), item);
-		}	
 	}
 
 	private void _DrawFiveOpenHands()
@@ -237,31 +231,6 @@ public class MainGame : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		// Display player hand cards
-		var cards = Player.Get().GetHandCards();
-
-		for (int i = 0; i < cards.Count; ++i)
-		{
-			GameLogic.DockCard(cards[i].gameObject, m_playerCardArea[i]);
-		}
-
-		/// TODO: Threaten area and player hand-cards area should use scroll-bar control
-		// Display player engaged treachery
-		var treachery = Player.Get().GetTreacheryCards();
-
-		for (int i = 0; i < treachery.Count; ++i)
-		{
-			GameLogic.DockCard(treachery[i].gameObject, m_threatArea[i]);
-		}
-
-		// Display player engaged enemy
-		var enemies = Player.Get().GetEnemyCards();
-
-		for (int i = 0; i < enemies.Count; ++i)
-		{
-			GameLogic.DockCard(enemies[i].gameObject, m_threatArea[i + treachery.Count]);
-		}
-
 		m_advanceActBtn.interactable = GameLogic.Get().IsClueEnoughToAdvanceAct();
 
 		GameLogic.Get().Update();

@@ -86,7 +86,7 @@ using frame8.ScrollRectItemsAdapter.Util.GridView;
 		*/
 
 		// Initialize the views from the associated model
-		MyListItemModel model = _Params.Data[newOrRecycled.ItemIndex];
+		ListViewItem model = _Params.Data[newOrRecycled.ItemIndex];
 
 		newOrRecycled.UpdateFromModel(model, _Params);
 	}
@@ -109,7 +109,7 @@ using frame8.ScrollRectItemsAdapter.Util.GridView;
 		// The adapter needs to be notified of any change that occurs in the data list. Methods for each
 		// case are provided: Refresh, ResetItems, InsertItems, RemoveItems
 		#region data manipulation
-		public void AddItemsAt(int index, params MyListItemModel[] models)
+		public void AddItemsAt(int index, params ListViewItem[] models)
 		{
 			_Params.Data.InsertRange(index, models);
 			InsertItems(index, models.Length);
@@ -121,7 +121,7 @@ using frame8.ScrollRectItemsAdapter.Util.GridView;
 			RemoveItems(index, count);
 		}
 
-		public void SetItems(IEnumerable<MyListItemModel> items)
+		public void SetItems(IEnumerable<ListViewItem> items)
 		{
 			_Params.Data.Clear();
 			_Params.Data.AddRange(items);
@@ -166,7 +166,7 @@ using frame8.ScrollRectItemsAdapter.Util.GridView;
 	}
 
 	// Class containing the data associated with an item
-	public class MyListItemModel
+	public class ListViewItem
 	{
 		/*
 		public string title;
@@ -185,7 +185,7 @@ using frame8.ScrollRectItemsAdapter.Util.GridView;
 	// - GridParams (used for grids. It exposes the cell prefab and some grid-specific parameters)
 	// Should be marked as Serializable, so it can be shown in inspector
 	[Serializable] 
-	public class MyListParams : BaseParamsWithPrefabAndData<MyListItemModel>
+	public class MyListParams : BaseParamsWithPrefabAndData<ListViewItem>
 	{ }
 
 
@@ -197,7 +197,7 @@ using frame8.ScrollRectItemsAdapter.Util.GridView;
 		public Text titleText;
 		public Image backgroundImage;
 		*/
-		Image img;
+		Card card;
 
 
 		// Retrieving the views from the item's root GameObject
@@ -212,12 +212,17 @@ using frame8.ScrollRectItemsAdapter.Util.GridView;
 		root.GetComponentAtPath("BackgroundImage", out backgroundImage);
 		*/
 
-		root.GetComponentAtPath("Image", out img);
+		root.GetComponentAtPath("Image", out card);
 	}
 
-	public void UpdateFromModel(MyListItemModel model, MyListParams parameters)
+	public void UpdateFromModel(ListViewItem model, MyListParams parameters)
 	{
-		img.sprite = model.card.m_image.sprite;
+		card.m_image.sprite = model.card.m_image.sprite;
+		card.m_frontImage = model.card.m_frontImage;
+		card.m_backImage = model.card.m_backImage;
+		card.m_canFlip = model.card.m_canFlip;
+		card.m_canFocus = model.card.m_canFocus;
+		card.m_lstKeywords = model.card.m_lstKeywords;
 	}
 
 	// Override this if you have children layout groups. They need to be marked for rebuild when this callback is fired
