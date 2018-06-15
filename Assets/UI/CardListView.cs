@@ -31,13 +31,15 @@ using frame8.Logic.Misc.Visual.UI.ScrollRectItemsAdapter;
 using frame8.Logic.Misc.Other.Extensions;
 using frame8.ScrollRectItemsAdapter.Util;
 using frame8.ScrollRectItemsAdapter.Util.GridView;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 // The date was temporarily included in the namespace to prevent duplicate class names
 // You should modify the namespace to your own or - if you're sure there will be no conflicts - remove it altogether
 
-	// There are 2 important callbacks you need to implement: CreateViewsHolder() and UpdateViewsHolder()
-	// See explanations below
-	public class CardListView : SRIA<MyListParams, MyListItemViewsHolder>
+// There are 2 important callbacks you need to implement: CreateViewsHolder() and UpdateViewsHolder()
+// See explanations below
+public class CardListView : SRIA<MyListParams, MyListItemViewsHolder>
 	{
 		#region SRIA implementation
 		protected override void Start()
@@ -218,11 +220,8 @@ using frame8.ScrollRectItemsAdapter.Util.GridView;
 	public void UpdateFromModel(ListViewItem model, MyListParams parameters)
 	{
 		card.m_image.sprite = model.card.m_image.sprite;
-		card.m_frontImage = model.card.m_frontImage;
-		card.m_backImage = model.card.m_backImage;
-		card.m_canFlip = model.card.m_canFlip;
-		card.m_canFocus = model.card.m_canFocus;
-		card.m_lstKeywords = model.card.m_lstKeywords;
+		card.BindEventTrigger(EventTriggerType.PointerEnter, new UnityAction<BaseEventData>(model.card.OnPointerEnter));
+		card.BindEventTrigger(EventTriggerType.PointerExit, new UnityAction<BaseEventData>(model.card.OnPointerExit));
 	}
 
 	// Override this if you have children layout groups. They need to be marked for rebuild when this callback is fired

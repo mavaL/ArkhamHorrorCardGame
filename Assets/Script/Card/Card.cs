@@ -79,11 +79,13 @@ public class Card : MonoBehaviour, IPointerClickHandler
     public string   m_cardName;
     public bool     m_canFocus = false;
 	public bool		m_canFlip = true;
+	public bool		m_autoEventTrigger = true;
 
 	private bool    m_bIsFront = true;
     private bool    m_bIsFocus = false;
 	private bool	m_bSelected = false;
-    private GameObject			m_focusImage;
+	private EventTrigger		m_eventTrigger;
+	private GameObject			m_focusImage;
 	public static List<Card>	m_lstSelectCards = new List<Card>();
 	public bool					m_exhausted { set; get; } = false;
 	public LocationCard			m_currentLocation { set; get; }
@@ -92,28 +94,36 @@ public class Card : MonoBehaviour, IPointerClickHandler
 	// Use this for initialization
 	void Start ()
     {
-		if(m_canFocus)
+		if(m_canFocus && m_autoEventTrigger)
 		{
-			var trigger = gameObject.AddComponent<EventTrigger>();
-			{
+			BindEventTrigger(EventTriggerType.PointerEnter, new UnityAction<BaseEventData>(OnPointerEnter));
+			BindEventTrigger(EventTriggerType.PointerExit, new UnityAction<BaseEventData>(OnPointerExit));
+		}
+	}
 
-				EventTrigger.Entry entry = new EventTrigger.Entry();
-				entry.eventID = EventTriggerType.PointerEnter;
-				entry.callback = new EventTrigger.TriggerEvent();
-				UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(OnPointerEnter);
-				entry.callback.AddListener(callback);
-				trigger.triggers.Add(entry);
-			}
-
+	public void BindEventTrigger(EventTriggerType type, UnityAction<BaseEventData> func)
+	{
+		if(m_eventTrigger == null)
+		{
+			m_eventTrigger = gameObject.AddComponent<EventTrigger>();
+		}
+		else
+		{
+			for(int i=0; i< m_eventTrigger.triggers.Count; ++i)
 			{
-				EventTrigger.Entry entry = new EventTrigger.Entry();
-				entry.eventID = EventTriggerType.PointerExit;
-				entry.callback = new EventTrigger.TriggerEvent();
-				UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(OnPointerExit);
-				entry.callback.AddListener(callback);
-				trigger.triggers.Add(entry);
+				if(m_eventTrigger.triggers[i].eventID == type)
+				{
+					// Already binded
+					return;
+				}
 			}
 		}
+
+		EventTrigger.Entry entry = new EventTrigger.Entry();
+		entry.eventID = type;
+		entry.callback = new EventTrigger.TriggerEvent();
+		entry.callback.AddListener(func);
+		m_eventTrigger.triggers.Add(entry);
 	}
 
 	public void FlipCard()
@@ -164,7 +174,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerEnter(BaseEventData arg0)
     {
-        if(m_canFocus)
+        if(m_canFocus && !m_focusImage)
         {
 			gameObject.SetActive(true);
             m_focusImage = GameObject.Instantiate(gameObject);
@@ -178,10 +188,11 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerExit(BaseEventData arg0)
     {
-        if(m_bIsFocus)
+        if(m_bIsFocus && m_focusImage)
         {
 			m_image.raycastTarget = true;
 			GameObject.Destroy(m_focusImage);
+			m_focusImage = null;
 			m_bIsFocus = false;
         }
     }
