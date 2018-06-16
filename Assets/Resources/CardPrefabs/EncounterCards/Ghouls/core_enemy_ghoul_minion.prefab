@@ -45,6 +45,7 @@ MonoBehaviour:
   m_cardName: "\u98DF\u5C38\u9B3C\u4EC6\u4ECE"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_fight: 2
   m_health: 2
   m_evade: 2

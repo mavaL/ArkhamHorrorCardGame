@@ -7,7 +7,6 @@ public abstract class scenario_base : MonoBehaviour
 {
 	public List<LocationCard>	m_lstOtherLocations;
 	public GameObject			m_startLocation;
-	public Text					m_playerInfoText;
 	public SkillTestEvents		m_skillTest;
 	[System.NonSerialized]
 	public List<LocationCard>	m_revealedLocations = new List<LocationCard>();

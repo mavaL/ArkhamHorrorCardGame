@@ -131,7 +131,7 @@ public class EnemyCard : Card
 	public override void OnRecoverFromExhaust()
 	{
 		m_exhausted = false;
-		gameObject.transform.Rotate(0, 0, -90);
+		m_thisInListView.gameObject.transform.Rotate(0, 0, -90);
 
 		if(m_currentLocation == Player.Get().m_currentLocation)
 		{
@@ -143,7 +143,7 @@ public class EnemyCard : Card
 	{
 		m_exhausted = true;
 		GameLogic.m_lstExhaustedCards.Add(this);
-		gameObject.transform.Rotate(0, 0, 90);
+		m_thisInListView.gameObject.transform.Rotate(0, 0, 90);
 	}
 
 	public override void Discard()

@@ -49,17 +49,22 @@ public class core_gathering : scenario_base
 
 	public override void ShowPlayInfo()
 	{
-		m_playerInfoText.text  = string.Format(
-			"血量：<color=green>{0}</color>\n" +
-			"神智：<color=green>{1}</color>\n" +
-			"剩余行动：<color=green>{2}</color>\n" +
-			"持有资源：<color=green>{3}</color>\n" +
-			"持有线索：<color=green>{4}</color>\n" +
-			"章节已推进标记数：<color=green>{5}</color>\n" +
-			"恶兆已逼近标记数：<color=red>{6}</color>\n" +
+		var ui = GameLogic.Get().m_mainGameUI;
+
+		ui.m_statsInfoText.text  = string.Format(
+			"血量：<color=green>{0}</color> 神智：<color=green>{1}</color> 意志：<color=green>{2}</color> 知识：<color=green>{3}</color> 力量：<color=green>{4}</color> 敏捷：<color=green>{5}</color>\n" +
+			"剩余行动：<color=green>{6}</color>\n" +
+			"持有资源：<color=green>{7}</color>\n" +
+			"持有线索：<color=green>{8}</color>\n" +
+			"章节已推进标记数：<color=green>{9}</color>\n" +
+			"恶兆已逼近标记数：<color=red>{10}</color>\n" +
 			"各地点的线索：\n",
 			Player.Get().GetHp(),
 			Player.Get().GetSan(),
+			Player.Get().m_investigatorCard.m_willPower,
+			Player.Get().m_investigatorCard.m_intellect,
+			Player.Get().m_investigatorCard.m_combat,
+			Player.Get().m_investigatorCard.m_agility,
 			Player.Get().ActionLeft(),
 			Player.Get().m_resources,
 			Player.Get().m_clues,
@@ -68,15 +73,23 @@ public class core_gathering : scenario_base
 
 		m_revealedLocations.ForEach(loc => 
 		{
-			m_playerInfoText.text += string.Format("{0}： <color=orange>{1}</color>\n", loc.m_cardName, loc.m_clues);
+			ui.m_statsInfoText.text += string.Format("{0}：<color=orange>{1}</color>\n", loc.m_cardName, loc.m_clues);
 		});
 
-		m_playerInfoText.text += "威胁区敌人血量：\n";
+		ui.m_statsInfoText.text += "资产区统计：\n";
+
+		var ally = Player.Get().GetAssetCardInSlot(AssetSlot.Ally) as AllyCard;
+		if(ally != null)
+		{
+			ui.m_statsInfoText.text += string.Format("{0}\n血量：<color=green>{1}</color> 神智：<color=green>{2}</color>\n", ally.m_cardName, ally.m_health, ally.m_sanity);
+		}
+
+		ui.m_statsInfoText.text += "威胁区统计：\n";
 
 		var enemies = Player.Get().GetEnemyCards();
 		enemies.ForEach(enemy =>
 		{
-			m_playerInfoText.text += string.Format("{0}： <color=red>{1}</color>\n", enemy.m_cardName, enemy.m_health);
+			ui.m_statsInfoText.text += string.Format("{0}血量：<color=red>{1}</color>\n", enemy.m_cardName, enemy.m_health);
 		});
 	}
 

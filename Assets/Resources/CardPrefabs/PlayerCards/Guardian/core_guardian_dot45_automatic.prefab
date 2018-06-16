@@ -46,10 +46,18 @@ MonoBehaviour:
   m_cardName: ".45\u81EA\u52A8\u624B\u67AA"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 03000000
     _values: 01000000
+  m_cost: 4
   m_isPlayerDeck: 1
+  m_eventTiming: 0
+  m_skillCardEffect:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SkillCardEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!222 &222658044981260768
 CanvasRenderer:
   m_ObjectHideFlags: 1

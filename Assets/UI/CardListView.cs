@@ -219,9 +219,14 @@ public class CardListView : SRIA<MyListParams, MyListItemViewsHolder>
 
 	public void UpdateFromModel(ListViewItem model, MyListParams parameters)
 	{
+		UnityEngine.Assertions.Assert.IsFalse(card.m_autoEventTrigger, "Assert failed in MyListItemViewsHolder.UpdateFromModel()!!!");
+
 		card.m_image.sprite = model.card.m_image.sprite;
+		model.card.m_thisInListView = card;
+
 		card.BindEventTrigger(EventTriggerType.PointerEnter, new UnityAction<BaseEventData>(model.card.OnPointerEnter));
 		card.BindEventTrigger(EventTriggerType.PointerExit, new UnityAction<BaseEventData>(model.card.OnPointerExit));
+		card.BindEventTrigger(EventTriggerType.PointerClick, new UnityAction<BaseEventData>(model.card.OnPointerClick));
 	}
 
 	// Override this if you have children layout groups. They need to be marked for rebuild when this callback is fired

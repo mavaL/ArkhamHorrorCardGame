@@ -12,6 +12,7 @@ public class MainGame : MonoBehaviour
 	public GameObject			m_gameArea;
 	public Text					m_gameLog;
 	public Text					m_confirmSkillTestText;
+	public Text					m_statsInfoText;
 
 	public ActionDropdownGUI	m_actionGUI;
 	public Dictionary<PlayerAction, bool> m_isActionEnable { get; set; } = new Dictionary<PlayerAction, bool>();
@@ -33,6 +34,7 @@ public class MainGame : MonoBehaviour
 	
 	public CardListView	m_handCardListView;
 	public CardListView	m_threatListView;
+	public CardListView	m_assetListView;
 	#endregion
 
 	// A single button functions many way
@@ -44,7 +46,8 @@ public class MainGame : MonoBehaviour
 		RevealCard,
 		DrawEncounterCard,
 		SkillTest,
-		ParleyWithLita
+		ParleyWithLita,
+		DiscardExcessHandCards
 	}
 	[System.NonSerialized]
 	public ConfirmButtonMode m_choiceMode = ConfirmButtonMode.None;
@@ -132,6 +135,7 @@ public class MainGame : MonoBehaviour
 	{
 		m_handCardListView.Init();
 		m_threatListView.Init();
+		m_assetListView.Init();
 
 		GameLogic.DockCard(Player.Get().m_investigatorCard.gameObject, GameObject.Find("InvestigatorCard"));
 
@@ -207,6 +211,9 @@ public class MainGame : MonoBehaviour
 				break;
 			case PlayerAction.GainOneResource:
 				GainOneResource();
+				break;
+			case PlayerAction.Skip:
+				EnterEnemyPhase();
 				break;
 		}
 	}
@@ -290,10 +297,30 @@ public class MainGame : MonoBehaviour
 				yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
 			}
 
-			Player.Get().ResolveEngagedEnemyAttack(enemy);
+			StartCoroutine(ResolveEngagedEnemyAttack(enemy));
+
+			yield return new WaitUntil(() => Player.Get().m_currentAction == PlayerAction.None);
 		}
 
 		m_UpkeepPhaseBtn.gameObject.SetActive(true);
+	}
+
+	private IEnumerator ResolveEngagedEnemyAttack(EnemyCard enemy)
+	{
+		GameLogic.Get().m_enemyAttackEvent.Invoke();
+
+		if (!enemy.m_exhausted)
+		{
+			GameLogic.Get().OutputGameLog(string.Format("{0}被<{1}>攻击，受到：{2}点伤害，{3}点恐怖！\n", Player.Get().m_investigatorCard.m_cardName, enemy.m_cardName, enemy.m_damage, enemy.m_horror));
+
+			Player.Get().DecreaseHealth(enemy.m_damage);
+
+			yield return new WaitUntil(() => Player.Get().m_currentAction == PlayerAction.None);
+
+			Player.Get().DecreaseSanity(enemy.m_horror);
+
+			enemy.OnExhausted();
+		}
 	}
 
 	public void OnPlayReactiveEvent(int index)
@@ -368,11 +395,25 @@ public class MainGame : MonoBehaviour
 		GameLogic.Get().OutputGameLog(string.Format("{0}在维持阶段获得了1资源，1手牌<{1}>\n", Player.Get().m_investigatorCard.m_cardName, card.GetComponent<Card>().m_cardName));
 
 		// 4. Each investigator checks hand size
+		StartCoroutine(_CheckHandCardLimit());
 
 		m_UpkeepPhaseBtn.gameObject.SetActive(false);
 		m_MythosPhaseBtn.gameObject.SetActive(true);
 
 		m_roundEndEvent.Invoke();
+	}
+
+	private IEnumerator _CheckHandCardLimit()
+	{
+		while(Player.Get().GetHandCards().Count > 8)
+		{
+			m_confirmChoiceBtn.gameObject.SetActive(true);
+			m_choiceMode = MainGame.ConfirmButtonMode.DiscardExcessHandCards;
+
+			BeginSelectCardToSpend();
+
+			yield return new WaitUntil(() => m_bConfirmModeEnd == true);
+		}
 	}
 
 	public void OnButtonEnterMythosPhase()
@@ -601,6 +642,10 @@ public class MainGame : MonoBehaviour
 		{
 			StartCoroutine(OnConfirmSkillTest());
 		}
+		else if(m_choiceMode == ConfirmButtonMode.DiscardExcessHandCards)
+		{
+			EndSelectCardToSpend();
+		}
 
 		m_bConfirmModeEnd = true;
 	}
@@ -660,6 +705,15 @@ public class MainGame : MonoBehaviour
 		m_confirmSkillTestText.gameObject.SetActive(true);
 		m_gameArea.SetActive(false);
 		GameLogic.Get().m_cardClickMode = Card.CardClickMode.MultiSelect;
+
+		if(m_choiceMode == ConfirmButtonMode.SkillTest)
+		{
+			m_confirmSkillTestText.text = "请选择参与检定的手牌：";
+		}
+		else if (m_choiceMode == ConfirmButtonMode.DiscardExcessHandCards)
+		{
+			m_confirmSkillTestText.text = "手牌数量超过8，请选择要丢弃的手牌：";
+		}
 	}
 
 	public void EndSelectCardToSpend()
@@ -667,11 +721,23 @@ public class MainGame : MonoBehaviour
 		Card.m_lstSelectCards.ForEach(card =>
 		{
 			// Restore position
-			RectTransform rt = (RectTransform)card.gameObject.GetComponent<RectTransform>().parent;
+			RectTransform rt = (RectTransform)card.m_thisInListView.gameObject.GetComponent<RectTransform>().parent;
 			rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y - 30);
 
 			card.Discard();
 		});
+
+		if(m_choiceMode == ConfirmButtonMode.DiscardExcessHandCards)
+		{
+			string log = "{0}因为手牌限制丢弃了如下手牌：";
+
+			Card.m_lstSelectCards.ForEach(card =>
+			{
+				log += "<" + card.m_cardName + "> ";
+			});
+
+			GameLogic.Get().OutputGameLog(string.Format(log, Player.Get().m_investigatorCard.m_cardName));
+		}
 
 		Card.m_lstSelectCards.Clear();
 		m_gameArea.SetActive(true);
@@ -749,7 +815,7 @@ public class MainGame : MonoBehaviour
 		}
 	}
 
-	public void UpdateTargetDropdown()
+	public void UpdateTargetDropdown(params object[] objects)
 	{
 		// ...................Seems like Unity's BUG.......................
 		ScrollRect dropDownList = m_targetDropdown.GetComponentInChildren<ScrollRect>();
@@ -801,6 +867,28 @@ public class MainGame : MonoBehaviour
 					optionNames.Add(dest.m_cardName);
 				}
 			});
+		}
+		else if (Player.Get().m_currentAction == PlayerAction.AssignDamage)
+		{
+			optionNames.Add("请分配伤害...");
+			AllyCard ally = (AllyCard)objects[1];
+			int totalDamage = (int)objects[0];
+
+			for (int i=0; i<= ally.m_health && i<= totalDamage; ++i)
+			{
+				optionNames.Add(string.Format("你{0}点伤害，盟友{1}点伤害", totalDamage - i, i));
+			}
+		}
+		else if (Player.Get().m_currentAction == PlayerAction.AssignHorror)
+		{
+			optionNames.Add("请分配恐怖...");
+			AllyCard ally = (AllyCard)objects[1];
+			int totalDamage = (int)objects[0];
+
+			for (int i = 0; i <= ally.m_sanity && i <= totalDamage; ++i)
+			{
+				optionNames.Add(string.Format("你{0}点恐怖，盟友{1}点恐怖", totalDamage - i, i));
+			}
 		}
 
 		m_targetDropdown.AddOptions(optionNames);

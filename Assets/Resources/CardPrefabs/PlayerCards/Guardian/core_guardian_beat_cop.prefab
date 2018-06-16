@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224081541164117376}
   - component: {fileID: 222508729759299802}
   - component: {fileID: 114740932551707880}
+  - component: {fileID: 114900278979673664}
   m_Layer: 0
   m_Name: core_guardian_beat_cop
   m_TagString: Untagged
@@ -46,10 +47,12 @@ MonoBehaviour:
   m_cardName: "\u75B2\u60EB\u7684\u5DE1\u8B66"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 02000000
     _values: 01000000
   m_cost: 4
+  m_slot: 2
   m_isPlayerDeck: 1
   m_eventTiming: 0
   m_skillCardEffect:
@@ -59,6 +62,17 @@ MonoBehaviour:
       PublicKeyToken=null
   m_health: 2
   m_sanity: 2
+--- !u!114 &114900278979673664
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1216428525605268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3c0ba0c685e8f4f9576236dec81e2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222508729759299802
 CanvasRenderer:
   m_ObjectHideFlags: 1

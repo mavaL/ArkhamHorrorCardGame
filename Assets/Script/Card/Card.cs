@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Card : MonoBehaviour, IPointerClickHandler
+public class Card : MonoBehaviour
 {
 	void Awake()
 	{
@@ -14,6 +14,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 			m_image = gameObject.AddComponent<Image>();
 			m_image.sprite = m_frontImage;
 		}
+		m_thisInListView = this;
 	}
 
 	public enum CardClickMode
@@ -88,6 +89,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 	private GameObject			m_focusImage;
 	public static List<Card>	m_lstSelectCards = new List<Card>();
 	public bool					m_exhausted { set; get; } = false;
+	public Card					m_thisInListView { set; get; }
 	public LocationCard			m_currentLocation { set; get; }
 
 
@@ -98,6 +100,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		{
 			BindEventTrigger(EventTriggerType.PointerEnter, new UnityAction<BaseEventData>(OnPointerEnter));
 			BindEventTrigger(EventTriggerType.PointerExit, new UnityAction<BaseEventData>(OnPointerExit));
+			BindEventTrigger(EventTriggerType.PointerClick, new UnityAction<BaseEventData>(OnPointerClick));
 		}
 	}
 
@@ -113,8 +116,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
 			{
 				if(m_eventTrigger.triggers[i].eventID == type)
 				{
-					// Already binded
-					return;
+					// Already binded, replace it
+					m_eventTrigger.triggers.RemoveAt(i);
+					break;
 				}
 			}
 		}
@@ -130,17 +134,27 @@ public class Card : MonoBehaviour, IPointerClickHandler
 	{
 		if (m_bIsFront)
 		{
+			m_thisInListView.m_image.sprite = m_backImage;
 			m_image.sprite = m_backImage;
+			if(m_focusImage)
+			{
+				m_focusImage.GetComponent<Image>().sprite = m_backImage;
+			}
 			m_bIsFront = false;
 		}
 		else
 		{
+			m_thisInListView.m_image.sprite = m_frontImage;
 			m_image.sprite = m_frontImage;
+			if (m_focusImage)
+			{
+				m_focusImage.GetComponent<Image>().sprite = m_frontImage;
+			}
 			m_bIsFront = true;
 		}
 	}
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerClick(BaseEventData eventData)
     {
 		if(m_canFlip && GameLogic.Get().m_cardClickMode == CardClickMode.Flip)
 		{
@@ -154,7 +168,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 			{
 				if (m_bSelected)
 				{
-					RectTransform rt = (RectTransform)gameObject.GetComponent<RectTransform>().parent;
+					RectTransform rt = (RectTransform)m_thisInListView.gameObject.GetComponent<RectTransform>().parent;
 					rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y - 30);
 
 					m_lstSelectCards.Remove(this);
@@ -162,7 +176,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 				}
 				else
 				{
-					RectTransform rt = (RectTransform)gameObject.GetComponent<RectTransform>().parent;
+					RectTransform rt = (RectTransform)m_thisInListView.gameObject.GetComponent<RectTransform>().parent;
 					rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y + 30);
 
 					m_lstSelectCards.Add(this);

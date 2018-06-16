@@ -16,6 +16,7 @@ public enum PlayerAction
 	DrawOneCard,
 	GainOneResource,
 	PlayCard,
+	Skip,
 	NonStandardAction1,
 	NonStandardAction2,
 	NonStandardAction3,
@@ -26,7 +27,20 @@ public enum PlayerAction
 	NonStandardAction8,
 	NonStandardAction9,
 	NonStandardAction10,
-	ReactiveEvent
+	ReactiveEvent,
+	AssignDamage,
+	AssignHorror
+}
+
+public enum AssetSlot
+{
+	Accessory = 0,
+	Body,
+	Ally,
+	LeftHand,
+	RightHand,
+	SlotCount,
+	None
 }
 
 public class Player
@@ -45,14 +59,20 @@ public class Player
 	public int					m_clues;
 	public int					m_actionUsed = 0;
 	public int					m_totalActions = 3;
+
 	public PlayerAction			m_currentAction { get; set; } = PlayerAction.None;
 	public ActionDoneEvent		m_actionDoneEvent = new ActionDoneEvent();
 	public List<PlayerAction>	m_actionRecord = new List<PlayerAction>();
+
+	private UnityAction<int>	m_onAssignDamage;
+	private int					m_assignDamage;
 
 	// Hand cards
 	private List<PlayerCard>	m_lstPlayerCards = new List<PlayerCard>();
     // Asset cards played
     private List<PlayerCard>    m_lstAssetCards = new List<PlayerCard>();
+	// Asset slots
+	private List<PlayerCard>	m_lstAssetSlots = new List<PlayerCard>();
 	// Engaged enemies
 	private List<EnemyCard>		m_lstEnemyCards = new List<EnemyCard>();
 	// Engaged treachery
@@ -60,7 +80,13 @@ public class Player
 
 	public Player()
 	{
+		for(int i=0; i<(int)AssetSlot.SlotCount; ++i)
+		{
+			m_lstAssetSlots.Add(null);
+		}
+
 		m_resources = 5;
+		m_onAssignDamage = new UnityAction<int>(OnConfirmAssignDamage);
 	}
 
 	static public Player Get()
@@ -101,11 +127,25 @@ public class Player
 		}
 	}
 
-	public void DiscardHandCard(PlayerCard card)
+	public void RemoveHandCard(PlayerCard card)
 	{
 		if(card != null)
 		{
-			m_lstPlayerCards.Remove(card);
+			if(m_lstAssetCards.Contains(card))
+			{
+				GameLogic.Get().m_mainGameUI.m_assetListView.RemoveItemFrom(m_lstAssetCards.IndexOf(card), 1);
+				m_lstAssetCards.Remove(card);
+
+				if (card.m_slot != AssetSlot.None)
+				{
+					m_lstAssetSlots[(int)card.m_slot] = null;
+				}
+			}
+			else
+			{
+				GameLogic.Get().m_mainGameUI.m_handCardListView.RemoveItemFrom(m_lstPlayerCards.IndexOf(card), 1);
+				m_lstPlayerCards.Remove(card);
+			}
 		}
 	}
 
@@ -122,6 +162,11 @@ public class Player
 	public List<TreacheryCard> GetTreacheryCards()
 	{
 		return m_lstTreacheryCards;
+	}
+
+	public PlayerCard GetAssetCardInSlot(AssetSlot slot)
+	{
+		return m_lstAssetSlots[(int)slot];
 	}
 
 	public bool IsAssetCardInPlay(string cardName)
@@ -196,14 +241,42 @@ public class Player
 		return m_sanity;
 	}
 
-	public void DecreaseHealth(int mount = 1)
+	public void DecreaseHealth(int amount = 1)
 	{
-		m_health -= mount;
+		if(m_lstAssetSlots[(int)AssetSlot.Ally] != null)
+		{
+			m_currentAction = PlayerAction.AssignDamage;
+			m_assignDamage = amount;
+
+			var ui = GameLogic.Get().m_mainGameUI;
+			ui.m_actionDropdown.gameObject.SetActive(false);
+			ui.m_targetDropdown.gameObject.SetActive(true);
+			ui.UpdateTargetDropdown(amount, m_lstAssetSlots[(int)AssetSlot.Ally]);
+			ui.m_targetDropdown.onValueChanged.AddListener(m_onAssignDamage);
+		}
+		else
+		{
+			m_health -= amount;
+		}
 	}
 
-	public void DecreaseSanity(int mount = 1)
+	public void DecreaseSanity(int amount = 1)
 	{
-		m_sanity -= mount;
+		if (m_lstAssetSlots[(int)AssetSlot.Ally] != null)
+		{
+			m_currentAction = PlayerAction.AssignHorror;
+			m_assignDamage = amount;
+
+			var ui = GameLogic.Get().m_mainGameUI;
+			ui.m_actionDropdown.gameObject.SetActive(false);
+			ui.m_targetDropdown.gameObject.SetActive(true);
+			ui.UpdateTargetDropdown(amount, m_lstAssetSlots[(int)AssetSlot.Ally]);
+			ui.m_targetDropdown.onValueChanged.AddListener(m_onAssignDamage);
+		}
+		else
+		{
+			m_sanity -= amount;
+		}
 	}
 
     public int HowManySanityIsLost()
@@ -283,18 +356,75 @@ public class Player
 		return -999;
 	}
 
-	public void ResolveEngagedEnemyAttack(EnemyCard enemy)
+	private void OnConfirmAssignDamage(int index)
 	{
-		GameLogic.Get().m_enemyAttackEvent.Invoke();
+		UnityEngine.Assertions.Assert.IsNotNull(m_lstAssetSlots[(int)AssetSlot.Ally], "Assert failed in Player.OnConfirmAssignDamage()!!!");
 
-		if (!enemy.m_exhausted)
+		if(index < 1)
 		{
-			m_health -= enemy.m_damage;
-			m_sanity -= enemy.m_horror;
-
-			GameLogic.Get().OutputGameLog(string.Format("{0}被<{1}>攻击，受到：{2}点伤害，{3}点恐怖！\n", m_investigatorCard.m_cardName, enemy.m_cardName, enemy.m_damage, enemy.m_horror));
-
-			enemy.OnExhausted();
+			return;
 		}
+
+		AllyCard ally = m_lstAssetSlots[(int)AssetSlot.Ally] as AllyCard;
+		int allyDamage = index - 1;
+
+		if(m_currentAction == PlayerAction.AssignDamage)
+		{
+			ally.m_health -= allyDamage;
+			m_health -= m_assignDamage - allyDamage;
+		}
+		else
+		{
+			ally.m_sanity -= allyDamage;
+			m_sanity -= m_assignDamage - allyDamage;
+		}
+
+		if (ally.m_health <= 0 || ally.m_sanity <= 0)
+		{
+			ally.Discard();
+
+			GameLogic.Get().OutputGameLog(string.Format("{0}的盟友<{1}>被打死了！\n", m_investigatorCard.m_cardName, ally.m_cardName));
+		}
+
+		var ui = GameLogic.Get().m_mainGameUI;
+		m_currentAction = PlayerAction.None;
+		ui.m_targetDropdown.onValueChanged.RemoveListener(m_onAssignDamage);
+		ui.m_targetDropdown.gameObject.SetActive(false);
+		ui.m_actionDropdown.gameObject.SetActive(GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase);
+	}
+
+	public void AddAssetCard(PlayerCard card, bool bFromHandCard = true)
+	{
+		if(bFromHandCard)
+		{
+			RemoveHandCard(card);
+		}
+		m_lstAssetCards.Add(card);
+
+		GameLogic.Get().OutputGameLog(string.Format("{0}打出了资产牌<{1}>\n", m_investigatorCard.m_cardName, card.m_cardName));
+
+		// Which slot is this asset in?
+		if (card.m_slot != AssetSlot.None)
+		{
+			PlayerCard oldSlot = m_lstAssetSlots[(int)card.m_slot];
+			if(oldSlot != null)
+			{
+				// Replace this slot asset
+				m_lstAssetCards.Remove(oldSlot);
+				oldSlot.Discard();
+
+				GameLogic.Get().OutputGameLog(string.Format("{0}被替换下场\n", card.m_cardName));
+			}
+			m_lstAssetSlots[(int)card.m_slot] = card;
+		}
+
+		card.GetComponent<PlayerCardLogic>().OnReveal(card);
+
+		card.gameObject.SetActive(true);
+
+		var ui = GameLogic.Get().m_mainGameUI;
+		ListViewItem item = new ListViewItem();
+		item.card = card;
+		ui.m_assetListView.AddItemsAt(ui.m_assetListView.GetItemsCount(), item);
 	}
 }
