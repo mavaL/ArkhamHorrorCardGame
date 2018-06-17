@@ -59,7 +59,6 @@ public class LocationCard : Card
 			if(card is EnemyCard)
 			{
 				Player.Get().AddEngagedEnemy(card as EnemyCard);
-				m_lstCardsAtHere.Remove(card);
 			}
 		}
 	}
@@ -89,7 +88,7 @@ public class LocationCard : Card
 		m_onLocationInvestigate.Invoke(result);
 	}
 
-	public override void Discard()
+	public override void Discard(bool bFromAssetArea = false)
 	{
 		gameObject.SetActive(false);
 

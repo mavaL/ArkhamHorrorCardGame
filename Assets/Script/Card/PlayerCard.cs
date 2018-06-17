@@ -45,8 +45,13 @@ public class PlayerCard : Card
 	public EventTiming			m_eventTiming = EventTiming.None;
 	public SkillCardEffect		m_skillCardEffect;
 
-	public override void Discard()
+	public override void Discard(bool bFromAssetArea = false)
 	{
+		if (GetComponent<PlayerCardLogic>() && bFromAssetArea)
+		{
+			GetComponent<PlayerCardLogic>().OnDiscard(this);
+		}
+
 		gameObject.transform.SetParent(GameObject.Find("Canvas").transform);
 		gameObject.SetActive(false);
 		Player.Get().RemoveHandCard(this);

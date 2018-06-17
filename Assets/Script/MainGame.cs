@@ -13,6 +13,8 @@ public class MainGame : MonoBehaviour
 	public Text					m_gameLog;
 	public Text					m_confirmSkillTestText;
 	public Text					m_statsInfoText;
+	public Scrollbar			m_logScrollBar;
+	public Scrollbar			m_statsScrollBar;
 
 	public ActionDropdownGUI	m_actionGUI;
 	public Dictionary<PlayerAction, bool> m_isActionEnable { get; set; } = new Dictionary<PlayerAction, bool>();
@@ -68,6 +70,7 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Guardian/core_guardian_dog",
 		"Guardian/core_guardian_vicious_blow",
 		"Guardian/core_guardian_evidence",
 		"Guardian/core_guardian_dynamite_blast",
@@ -78,7 +81,6 @@ public class MainGame : MonoBehaviour
 		"Guardian/core_guardian_beat_cop",
 		"Guardian/core_guardian_first_aid",
 		"Guardian/core_guardian_machete",
-		"Guardian/core_guardian_dog",
 		"Seeker/core_seeker_magnifying_glass",
 		"Seeker/core_seeker_old_book_of_lore",
 		"Seeker/core_seeker_research_librarian",
@@ -106,7 +108,6 @@ public class MainGame : MonoBehaviour
 
 	private void Awake()
 	{
-		GameLogic.Get().m_logText = m_gameLog;
 		GameLogic.Get().m_mainGameUI = this;
 
 		m_isActionEnable.Add(PlayerAction.Move, true);
@@ -288,16 +289,18 @@ public class MainGame : MonoBehaviour
 	IEnumerator OnAllEnemyAttack()
 	{
 		var enemies = Player.Get().GetEnemyCards();
+		// Workaround for discarding in the middle of looping
+		var tmpList = new List<EnemyCard>(enemies);
 
-		foreach (var enemy in enemies)
+		for(int i=0; i< tmpList.Count; ++i)
 		{
 			if(OnEventTiming(EventTiming.EnemyAttack))
 			{
-				GameLogic.Get().ShowHighlightCardExclusive(enemy, false, false);
+				GameLogic.Get().ShowHighlightCardExclusive(tmpList[i], false, false);
 				yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
 			}
 
-			StartCoroutine(ResolveEngagedEnemyAttack(enemy));
+			StartCoroutine(ResolveEngagedEnemyAttack(tmpList[i]));
 
 			yield return new WaitUntil(() => Player.Get().m_currentAction == PlayerAction.None);
 		}
@@ -313,11 +316,17 @@ public class MainGame : MonoBehaviour
 		{
 			GameLogic.Get().OutputGameLog(string.Format("{0}被<{1}>攻击，受到：{2}点伤害，{3}点恐怖！\n", Player.Get().m_investigatorCard.m_cardName, enemy.m_cardName, enemy.m_damage, enemy.m_horror));
 
-			Player.Get().DecreaseHealth(enemy.m_damage);
+			if(enemy.m_damage > 0)
+			{
+				Player.Get().DecreaseHealth(enemy, enemy.m_damage);
+			}
 
 			yield return new WaitUntil(() => Player.Get().m_currentAction == PlayerAction.None);
 
-			Player.Get().DecreaseSanity(enemy.m_horror);
+			if (enemy.m_horror > 0)
+			{
+				Player.Get().DecreaseSanity(enemy.m_horror);
+			}
 
 			enemy.OnExhausted();
 		}
@@ -712,7 +721,7 @@ public class MainGame : MonoBehaviour
 		}
 		else if (m_choiceMode == ConfirmButtonMode.DiscardExcessHandCards)
 		{
-			m_confirmSkillTestText.text = "手牌数量超过8，请选择要丢弃的手牌：";
+			m_confirmSkillTestText.text = string.Format("手牌数量为{0}超过8，请选择要丢弃的手牌：", Player.Get().GetHandCards().Count);
 		}
 	}
 
@@ -773,6 +782,7 @@ public class MainGame : MonoBehaviour
 				if (locList[i].m_cardName == locName)
 				{
 					GameLogic.Get().PlayerEnterLocation(locList[i].gameObject);
+					Player.Get().m_currentAction = PlayerAction.None;
 					break;
 				}
 			}
@@ -826,73 +836,153 @@ public class MainGame : MonoBehaviour
 		m_targetDropdown.ClearOptions();
 		List<string> optionNames = new List<string>();
 
-		if (Player.Get().m_currentAction == PlayerAction.Move)
+		switch(Player.Get().m_currentAction)
 		{
-			var destList = Player.Get().m_currentLocation.m_lstDestinations;
-
-			optionNames.Add("请选择目的地...");
-			destList.ForEach(dest => { optionNames.Add(dest.m_cardName); });
-		}
-		else if(Player.Get().m_currentAction == PlayerAction.PlayCard)
-		{
-			optionNames.Add("请选择手牌...");
-			var handCards = Player.Get().GetHandCards();
-
-			handCards.ForEach(dest => 
-			{
-				if (Player.Get().CanPlayHandCard(dest))
+			case PlayerAction.Move:
 				{
-					optionNames.Add(dest.m_cardName);
+					var destList = Player.Get().m_currentLocation.m_lstDestinations;
+
+					optionNames.Add("请选择目的地...");
+					destList.ForEach(dest => { optionNames.Add(dest.m_cardName); });
 				}
-			});
-		}
-		else if(Player.Get().m_currentAction == PlayerAction.Fight ||
-			Player.Get().m_currentAction == PlayerAction.Evade)
-		{
-			optionNames.Add("请选择目标...");
-			var enemies = Player.Get().GetEnemyCards();
+				break;
 
-			enemies.ForEach(enemy => { optionNames.Add(enemy.m_cardName); });
-		}
-		else if(Player.Get().m_currentAction == PlayerAction.ReactiveEvent)
-		{
-			var cards = Player.Get().GetHandCards();
-
-			optionNames.Add("是否要打出事件牌...");
-			optionNames.Add("不打出");
-			cards.ForEach(dest =>
-			{
-				if (dest.m_eventTiming == GameLogic.Get().m_currentTiming)
+			case PlayerAction.PlayCard:
 				{
-					optionNames.Add(dest.m_cardName);
+					optionNames.Add("请选择手牌...");
+					var handCards = Player.Get().GetHandCards();
+
+					handCards.ForEach(dest =>
+					{
+						if (Player.Get().CanPlayHandCard(dest))
+						{
+							optionNames.Add(dest.m_cardName);
+						}
+					});
 				}
-			});
-		}
-		else if (Player.Get().m_currentAction == PlayerAction.AssignDamage)
-		{
-			optionNames.Add("请分配伤害...");
-			AllyCard ally = (AllyCard)objects[1];
-			int totalDamage = (int)objects[0];
+				break;
 
-			for (int i=0; i<= ally.m_health && i<= totalDamage; ++i)
-			{
-				optionNames.Add(string.Format("你{0}点伤害，盟友{1}点伤害", totalDamage - i, i));
-			}
-		}
-		else if (Player.Get().m_currentAction == PlayerAction.AssignHorror)
-		{
-			optionNames.Add("请分配恐怖...");
-			AllyCard ally = (AllyCard)objects[1];
-			int totalDamage = (int)objects[0];
+			case PlayerAction.Fight:
+			case PlayerAction.Evade:
+			case PlayerAction.BeatcopCardAction:
+				{
+					optionNames.Add("请选择目标...");
+					var enemies = Player.Get().GetEnemyCards();
 
-			for (int i = 0; i <= ally.m_sanity && i <= totalDamage; ++i)
-			{
-				optionNames.Add(string.Format("你{0}点恐怖，盟友{1}点恐怖", totalDamage - i, i));
-			}
+					enemies.ForEach(enemy => { optionNames.Add(enemy.m_cardName); });
+				}
+				break;
+
+			case PlayerAction.ReactiveEvent:
+				{
+					var cards = Player.Get().GetHandCards();
+
+					optionNames.Add("是否要打出事件牌...");
+					optionNames.Add("不打出");
+					cards.ForEach(dest =>
+					{
+						if (dest.m_eventTiming == GameLogic.Get().m_currentTiming)
+						{
+							optionNames.Add(dest.m_cardName);
+						}
+					});
+				}
+				break;
+
+			case PlayerAction.AssignDamage:
+				{
+					optionNames.Add("请分配伤害...");
+					AllyCard ally = (AllyCard)objects[1];
+					int totalDamage = (int)objects[0];
+
+					for (int i = 0; i <= ally.m_health && i <= totalDamage; ++i)
+					{
+						optionNames.Add(string.Format("你{0}点伤害，盟友{1}点伤害", totalDamage - i, i));
+					}
+				}
+				break;
+
+			case PlayerAction.AssignHorror:
+				{
+					optionNames.Add("请分配恐怖...");
+					AllyCard ally = (AllyCard)objects[1];
+					int totalDamage = (int)objects[0];
+
+					for (int i = 0; i <= ally.m_sanity && i <= totalDamage; ++i)
+					{
+						optionNames.Add(string.Format("你{0}点恐怖，盟友{1}点恐怖", totalDamage - i, i));
+					}
+				}
+				break;
+
+			default:
+				UnityEngine.Assertions.Assert.IsTrue(false, "Unknown player action in UpdateTargetDropdown()!!!");
+				break;
 		}
 
 		m_targetDropdown.AddOptions(optionNames);
 		m_targetDropdown.RefreshShownValue();
 		m_targetDropdown.value = 0;
+	}
+
+	public void _OutputLog(string log)
+	{
+		StartCoroutine(_OutputLogCoroutine(log));
+	}
+
+	private IEnumerator _OutputLogCoroutine(string log)
+	{
+		m_gameLog.text += log;
+
+		// Wait for one frame
+		yield return null;
+		m_logScrollBar.value = 0.001f;
+	}
+
+	public void _OnConfirmAssignDamage(int index)
+	{
+		StartCoroutine(_OnConfirmAssignDamageCoroutine(index));
+	}
+
+	private IEnumerator _OnConfirmAssignDamageCoroutine(int index)
+	{
+		var ui = GameLogic.Get().m_mainGameUI;
+		ui.m_targetDropdown.onValueChanged.RemoveListener(Player.Get().m_onAssignDamage);
+
+		AllyCard ally = Player.Get().GetAssetCardInSlot(AssetSlot.Ally) as AllyCard;
+
+		UnityEngine.Assertions.Assert.IsNotNull(ally, "Assert failed in Player.OnConfirmAssignDamage()!!!");
+
+		int allyDamage = index - 1;
+		int investigatorDamage = Player.Get().m_assignDamage - allyDamage;
+
+		if (Player.Get().m_currentAction == PlayerAction.AssignDamage)
+		{
+			ally.m_health -= allyDamage;
+			Player.Get().m_health -= investigatorDamage;
+
+			if (Player.Get().m_attacker)
+			{
+				GameLogic.Get().m_afterAssignDamageEvent.Invoke(Player.Get().m_attacker, investigatorDamage, allyDamage);
+
+				yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
+			}
+		}
+		else
+		{
+			ally.m_sanity -= allyDamage;
+			Player.Get().m_sanity -= investigatorDamage;
+		}
+
+		if (ally.m_health <= 0 || ally.m_sanity <= 0)
+		{
+			ally.Discard(true);
+
+			GameLogic.Get().OutputGameLog(string.Format("{0}的盟友<{1}>被打死了！\n", Player.Get().m_investigatorCard.m_cardName, ally.m_cardName));
+		}
+
+		ui.m_targetDropdown.gameObject.SetActive(false);
+		ui.m_actionDropdown.gameObject.SetActive(GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase);
+		Player.Get().m_currentAction = PlayerAction.None;
 	}
 }

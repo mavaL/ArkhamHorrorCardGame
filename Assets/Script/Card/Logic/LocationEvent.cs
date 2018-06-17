@@ -13,7 +13,7 @@ public class LocationEvent : MonoBehaviour
 
 	public void OnEnterLocation_Cellar(LocationCard loc)
 	{
-		Player.Get().DecreaseHealth(1);
+		Player.Get().DecreaseHealth(null, 1);
 		GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "进入地点后：生命减1\n");
 	}
 

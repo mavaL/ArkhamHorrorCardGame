@@ -30,6 +30,11 @@ public enum TurnPhase
 	UpkeepPhase
 }
 
+// Param 1: attacker causes this damage
+// Param 2: damage assign to investigator
+// Param 3: damage assign to ally
+public class AfterAssignDamageEvent : UnityEvent<EnemyCard, int, int> { }
+
 public class GameLogic
 {
     public static GameLogic s_gameLogic = null;
@@ -52,7 +57,6 @@ public class GameLogic
 	public GameDifficulty	m_difficulty = GameDifficulty.Normal;
 	public scenario_base	m_currentScenario;
 	public Card.CardClickMode	m_cardClickMode = Card.CardClickMode.Flip;
-	public Text				m_logText;
 	public TurnPhase		m_currentPhase;
 	public EventTiming		m_currentTiming = EventTiming.None;
 	public ChaosBag			m_chaosBag = new ChaosBag();
@@ -64,6 +68,7 @@ public class GameLogic
 	static public List<Card>		m_lstExhaustedCards = new List<Card>();
 	static public List<EnemyCard>	m_lstUnengagedEnemyCards = new List<EnemyCard>();
 	public UnityEvent				m_enemyAttackEvent { get; set; } = new UnityEvent();
+	public AfterAssignDamageEvent	m_afterAssignDamageEvent { get; set; } = new AfterAssignDamageEvent();
 
 	public static void Swap<T>(ref T a, ref T b)
 	{
@@ -262,7 +267,7 @@ public class GameLogic
 
 	public void OutputGameLog(string log)
 	{
-		m_logText.text += log;
+		m_mainGameUI._OutputLog(log);
 	}
 
 	public bool IsClueEnoughToAdvanceAct()

@@ -211,7 +211,7 @@ public class Card : MonoBehaviour
         }
     }
 
-	public virtual void Discard() {}
+	public virtual void Discard(bool bFromAssetArea = false) {}
 	public virtual void OnSkillTest() {}
 	public virtual void OnSkillTestResult(int result) {}
 	public virtual void OnSpawnAtLocation(LocationCard loc) { }

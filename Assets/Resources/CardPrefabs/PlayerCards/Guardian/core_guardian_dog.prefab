@@ -20,7 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 224153818857934980}
   - component: {fileID: 222050337207865042}
-  - component: {fileID: 114302710317179818}
+  - component: {fileID: 114778558107181662}
+  - component: {fileID: 114162747337612180}
   m_Layer: 0
   m_Name: core_guardian_dog
   m_TagString: Untagged
@@ -28,7 +29,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114302710317179818
+--- !u!114 &114162747337612180
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -36,20 +37,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 1240444934301582}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9af3d81cf6f68a4a890baa050bbc57d, type: 3}
+  m_Script: {fileID: 11500000, guid: 3f031df72de94174d82f40dc9aae7a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lstKeywords: 09000000
+--- !u!114 &114778558107181662
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1240444934301582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77b7653fe2ac3b4e8471030d672ce19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lstKeywords: 090000000d000000
   m_frontImage: {fileID: 21300008, guid: 2bbb8465d5d336345964bb4927144046, type: 3}
   m_backImage: {fileID: 21300028, guid: 2bbb8465d5d336345964bb4927144046, type: 3}
   m_image: {fileID: 0}
   m_cardName: "\u770B\u95E8\u72D7"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 02000000
     _values: 01000000
+  m_cost: 3
+  m_slot: 2
   m_isPlayerDeck: 1
+  m_eventTiming: 0
+  m_skillCardEffect:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SkillCardEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_health: 3
+  m_sanity: 1
 --- !u!222 &222050337207865042
 CanvasRenderer:
   m_ObjectHideFlags: 1

@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224561744103363788}
   - component: {fileID: 114023195593983030}
+  - component: {fileID: 114089387213479508}
   m_Layer: 0
   m_Name: core_neutral_lita_chantler
   m_TagString: Untagged
@@ -38,19 +39,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c77b7653fe2ac3b4e8471030d672ce19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lstKeywords: 
+  m_lstKeywords: 0d000000
   m_frontImage: {fileID: 21300004, guid: befd2acf0b1c9fd458850969be3c1795, type: 3}
   m_backImage: {fileID: 21300004, guid: 0539b34f494283345b49dbefdb9058e0, type: 3}
   m_image: {fileID: 0}
   m_cardName: "\u4E3D\u5854\u94B1\u7279\u52D2"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 
     _values: 
+  m_cost: 0
+  m_slot: 2
   m_isPlayerDeck: 0
+  m_eventTiming: 0
+  m_skillCardEffect:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SkillCardEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   m_health: 3
   m_sanity: 3
+--- !u!114 &114089387213479508
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1648991103037208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 606f2c6881177f049867de2ab4fbf0f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &224561744103363788
 RectTransform:
   m_ObjectHideFlags: 1

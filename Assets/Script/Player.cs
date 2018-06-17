@@ -27,9 +27,20 @@ public enum PlayerAction
 	NonStandardAction8,
 	NonStandardAction9,
 	NonStandardAction10,
+	NonStandardAction11,
+	NonStandardAction12,
+	NonStandardAction13,
+	NonStandardAction14,
+	NonStandardAction15,
+	NonStandardAction16,
+	NonStandardAction17,
+	NonStandardAction18,
+	NonStandardAction19,
+	NonStandardAction20,
 	ReactiveEvent,
 	AssignDamage,
-	AssignHorror
+	AssignHorror,
+	BeatcopCardAction
 }
 
 public enum AssetSlot
@@ -52,8 +63,8 @@ public class Player
 	public GameObject			m_playerToken;
 	public LocationCard			m_currentLocation;
 
-	private int					m_health = -1;
-	private int					m_sanity = -1;
+	public int					m_health = -1;
+	public int					m_sanity = -1;
 	public int					m_resources = -1;
 	public Faction				m_faction;
 	public int					m_clues;
@@ -64,8 +75,9 @@ public class Player
 	public ActionDoneEvent		m_actionDoneEvent = new ActionDoneEvent();
 	public List<PlayerAction>	m_actionRecord = new List<PlayerAction>();
 
-	private UnityAction<int>	m_onAssignDamage;
-	private int					m_assignDamage;
+	public UnityAction<int>		m_onAssignDamage;
+	public int					m_assignDamage;
+	public EnemyCard			m_attacker;
 
 	// Hand cards
 	private List<PlayerCard>	m_lstPlayerCards = new List<PlayerCard>();
@@ -241,12 +253,13 @@ public class Player
 		return m_sanity;
 	}
 
-	public void DecreaseHealth(int amount = 1)
+	public void DecreaseHealth(EnemyCard attacker, int amount = 1)
 	{
 		if(m_lstAssetSlots[(int)AssetSlot.Ally] != null)
 		{
 			m_currentAction = PlayerAction.AssignDamage;
 			m_assignDamage = amount;
+			m_attacker = attacker;
 
 			var ui = GameLogic.Get().m_mainGameUI;
 			ui.m_actionDropdown.gameObject.SetActive(false);
@@ -257,6 +270,11 @@ public class Player
 		else
 		{
 			m_health -= amount;
+
+			if(attacker)
+			{
+				GameLogic.Get().m_afterAssignDamageEvent.Invoke(attacker, amount, 0);
+			}
 		}
 	}
 
@@ -320,7 +338,14 @@ public class Player
 		enemy.m_engaged = true;
 		m_lstEnemyCards.Add(enemy);
 		GameLogic.m_lstUnengagedEnemyCards.Remove(enemy);
-		enemy.gameObject.SetActive(true);
+		
+		if(enemy.m_currentLocation)
+		{
+			enemy.m_currentLocation.m_lstCardsAtHere.Remove(enemy);
+			enemy.m_currentLocation = null;
+			enemy.gameObject.transform.SetParent(GameLogic.Get().m_mainGameUI.transform.root.parent);
+			enemy.gameObject.SetActive(false);
+		}
 
 		var ui = GameLogic.Get().m_mainGameUI;
 		ListViewItem item = new ListViewItem();
@@ -358,39 +383,12 @@ public class Player
 
 	private void OnConfirmAssignDamage(int index)
 	{
-		UnityEngine.Assertions.Assert.IsNotNull(m_lstAssetSlots[(int)AssetSlot.Ally], "Assert failed in Player.OnConfirmAssignDamage()!!!");
-
-		if(index < 1)
+		if (index < 1)
 		{
 			return;
 		}
 
-		AllyCard ally = m_lstAssetSlots[(int)AssetSlot.Ally] as AllyCard;
-		int allyDamage = index - 1;
-
-		if(m_currentAction == PlayerAction.AssignDamage)
-		{
-			ally.m_health -= allyDamage;
-			m_health -= m_assignDamage - allyDamage;
-		}
-		else
-		{
-			ally.m_sanity -= allyDamage;
-			m_sanity -= m_assignDamage - allyDamage;
-		}
-
-		if (ally.m_health <= 0 || ally.m_sanity <= 0)
-		{
-			ally.Discard();
-
-			GameLogic.Get().OutputGameLog(string.Format("{0}的盟友<{1}>被打死了！\n", m_investigatorCard.m_cardName, ally.m_cardName));
-		}
-
-		var ui = GameLogic.Get().m_mainGameUI;
-		m_currentAction = PlayerAction.None;
-		ui.m_targetDropdown.onValueChanged.RemoveListener(m_onAssignDamage);
-		ui.m_targetDropdown.gameObject.SetActive(false);
-		ui.m_actionDropdown.gameObject.SetActive(GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase);
+		GameLogic.Get().m_mainGameUI._OnConfirmAssignDamage(index);
 	}
 
 	public void AddAssetCard(PlayerCard card, bool bFromHandCard = true)
@@ -398,10 +396,21 @@ public class Player
 		if(bFromHandCard)
 		{
 			RemoveHandCard(card);
+
+			GameLogic.Get().OutputGameLog(string.Format("{0}打出了资产牌<{1}>\n", m_investigatorCard.m_cardName, card.m_cardName));
+		}
+		else
+		{
+			// Remove it from location
+			if(card.m_currentLocation)
+			{
+				card.m_currentLocation.m_lstCardsAtHere.Remove(card);
+				card.m_currentLocation = null;
+				card.gameObject.transform.SetParent(GameLogic.Get().m_mainGameUI.transform.root.parent);
+				card.gameObject.SetActive(false);
+			}
 		}
 		m_lstAssetCards.Add(card);
-
-		GameLogic.Get().OutputGameLog(string.Format("{0}打出了资产牌<{1}>\n", m_investigatorCard.m_cardName, card.m_cardName));
 
 		// Which slot is this asset in?
 		if (card.m_slot != AssetSlot.None)
@@ -411,16 +420,19 @@ public class Player
 			{
 				// Replace this slot asset
 				m_lstAssetCards.Remove(oldSlot);
-				oldSlot.Discard();
+				oldSlot.Discard(true);
 
 				GameLogic.Get().OutputGameLog(string.Format("{0}被替换下场\n", card.m_cardName));
 			}
 			m_lstAssetSlots[(int)card.m_slot] = card;
 		}
 
-		card.GetComponent<PlayerCardLogic>().OnReveal(card);
+		if(card.GetComponent<PlayerCardLogic>())
+		{
+			card.GetComponent<PlayerCardLogic>().OnReveal(card);
+		}
 
-		card.gameObject.SetActive(true);
+		//card.gameObject.SetActive(true);
 
 		var ui = GameLogic.Get().m_mainGameUI;
 		ListViewItem item = new ListViewItem();

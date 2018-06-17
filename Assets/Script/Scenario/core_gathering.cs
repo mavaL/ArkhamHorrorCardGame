@@ -107,7 +107,7 @@ public class core_gathering : scenario_base
 				case ChaosBag.ChaosTokenType.Tablet:
 					if (Card.HowManyEnemyCardContainTheKeyword(Player.Get().m_currentLocation.m_lstCardsAtHere, Card.Keyword.Ghoul) > 0)
 					{
-						Player.Get().DecreaseHealth();
+						Player.Get().DecreaseHealth(null, 1);
 						GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "结算混沌标记：受到1点伤害\n");
 					}
 					return -2;
@@ -322,14 +322,17 @@ public class core_gathering : scenario_base
 
 		ui.m_confirmChoiceBtn.gameObject.SetActive(false);
 		ui.m_confirmChoiceBtn.onClick.RemoveListener(m_onParleyConfirm);
+		ui.m_actionDropdown.options.RemoveAt((int)m_parleyAction);
+		Player.Get().m_currentAction = PlayerAction.None;
 
 		ChaosBag.ChaosTokenType chaosToken;
 		int result = GameLogic.Get().SkillTest(SkillType.Intellect, 4, out chaosToken);
 		bool bSucceed = result >= 0;
+		bSucceed = true;
 
-		if(bSucceed)
+		if (bSucceed)
 		{
-			Player.Get().AddHandCard(m_lita.gameObject);
+			Player.Get().AddAssetCard(m_lita, false);
 			m_lita.m_hasOwner = true;
 			GameLogic.Get().OutputGameLog("谈判成功，丽塔成为了盟友！\n");
 		}

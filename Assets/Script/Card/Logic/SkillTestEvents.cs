@@ -42,7 +42,7 @@ public class SkillTestEvents : MonoBehaviour
 	{
 		if(result < 0)
 		{
-			Player.Get().DecreaseHealth(-result);
+			Player.Get().DecreaseHealth(null, -result);
 			GameLogic.Get().OutputGameLog(string.Format("{0}因为技能检定失败受到了{1}点伤害！\n", Player.Get().m_investigatorCard.m_cardName, -result));
 		}
 	}
@@ -74,7 +74,7 @@ public class SkillTestEvents : MonoBehaviour
 		{
 			if(!Player.Get().ChooseAndDiscardAssetCard())
 			{
-				Player.Get().DecreaseHealth(2);
+				Player.Get().DecreaseHealth(null, 2);
 				GameLogic.Get().OutputGameLog(string.Format("{0}结算<地穴恶寒>，因为没有在场资产牌，受到了2点伤害！\n", Player.Get().m_investigatorCard.m_cardName));
 			}
 		}

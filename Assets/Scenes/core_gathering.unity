@@ -969,8 +969,8 @@ MonoBehaviour:
   - {fileID: 1663982882883288, guid: fc421da96bfad6e4396f2e3966ae98db, type: 2}
   - {fileID: 1613507560164418, guid: 44d7eeee8aca3a3428fea3de9eb1b568, type: 2}
   m_lstEncounterCards:
-  - {fileID: 1165009897082102, guid: 78c1e93592f703844b31f4f500adf94d, type: 2}
   - {fileID: 1315489162840404, guid: 05a95b4749caa4c4491e9f7230223b4b, type: 2}
+  - {fileID: 1165009897082102, guid: 78c1e93592f703844b31f4f500adf94d, type: 2}
   - {fileID: 1804929542902170, guid: 1a27420f7f892ec4095a454fc877948f, type: 2}
   - {fileID: 1804929542902170, guid: 1a27420f7f892ec4095a454fc877948f, type: 2}
   m_lita: {fileID: 114023195593983030, guid: 9bd2a7ccc35ab094fbfe11d3aa6da3d8, type: 2}

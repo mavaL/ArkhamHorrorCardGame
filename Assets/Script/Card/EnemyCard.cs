@@ -141,12 +141,15 @@ public class EnemyCard : Card
 
 	public override void OnExhausted()
 	{
-		m_exhausted = true;
-		GameLogic.m_lstExhaustedCards.Add(this);
-		m_thisInListView.gameObject.transform.Rotate(0, 0, 90);
+		if(m_health > 0)
+		{
+			m_exhausted = true;
+			GameLogic.m_lstExhaustedCards.Add(this);
+			m_thisInListView.gameObject.transform.Rotate(0, 0, 90);
+		}	
 	}
 
-	public override void Discard()
+	public override void Discard(bool bFromAssetArea = false)
 	{
 		GameLogic.m_lstUnengagedEnemyCards.Remove(this);
 		Player.Get().RemoveEngagedEnemy(this);
