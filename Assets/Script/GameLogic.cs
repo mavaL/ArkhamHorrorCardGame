@@ -69,6 +69,7 @@ public class GameLogic
 	static public List<EnemyCard>	m_lstUnengagedEnemyCards = new List<EnemyCard>();
 	public UnityEvent				m_enemyAttackEvent { get; set; } = new UnityEvent();
 	public AfterAssignDamageEvent	m_afterAssignDamageEvent { get; set; } = new AfterAssignDamageEvent();
+	public UnityEvent				m_afterEnemyDamagedEvent { get; set; } = new UnityEvent();
 
 	public static void Swap<T>(ref T a, ref T b)
 	{
@@ -300,5 +301,21 @@ public class GameLogic
 		DockCard(card.gameObject, destination.gameObject, 300, true, true);
 
 		card.OnSpawnAtLocation(destination);
+	}
+
+	public bool IsAnyEnemyToFightWith()
+	{
+		bool b1 = false;
+		for (int i = 0; i < Player.Get().m_currentLocation.m_lstCardsAtHere.Count; ++i)
+		{
+			Card card = Player.Get().m_currentLocation.m_lstCardsAtHere[i];
+			if (card is EnemyCard)
+			{
+				b1 = true;
+				break;
+			}
+		}
+
+		return b1 || Player.Get().GetEnemyCards().Count > 0;
 	}
 }

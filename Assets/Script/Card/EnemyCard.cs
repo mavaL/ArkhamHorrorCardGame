@@ -55,7 +55,7 @@ public class EnemyCard : Card
 		{
 			if (Player.Get().m_currentAction == PlayerAction.Fight)
 			{
-				DecreaseHealth(1);
+				DecreaseHealth(Player.Get().m_attackDamage);
 			}
 			else
 			{
@@ -91,6 +91,8 @@ public class EnemyCard : Card
 	{
 		m_health -= amount;
 		GameLogic.Get().OutputGameLog(string.Format("{0}对{1}造成了{2}点伤害！\n", Player.Get().m_investigatorCard.m_cardName, m_cardName, amount));
+
+		GameLogic.Get().m_afterEnemyDamagedEvent.Invoke();
 
 		if (m_health <= 0)
 		{		

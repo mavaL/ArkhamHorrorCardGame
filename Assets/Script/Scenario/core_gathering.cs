@@ -84,6 +84,16 @@ public class core_gathering : scenario_base
 			ui.m_statsInfoText.text += string.Format("{0}\n血量：<color=green>{1}</color> 神智：<color=green>{2}</color>\n", ally.m_cardName, ally.m_health, ally.m_sanity);
 		}
 
+		var leftHandAsset = Player.Get().GetAssetCardInSlot(AssetSlot.Hand1);
+		if (leftHandAsset != null && leftHandAsset.GetComponent<PlayerCardLogic>())
+		{
+			int resLeft = leftHandAsset.GetComponent<PlayerCardLogic>().GetAssetResource();
+			if(resLeft > 0)
+			{
+				ui.m_statsInfoText.text += string.Format("{0}\n剩余使用次数：<color=green>{1}</color>\n", leftHandAsset.m_cardName, resLeft);
+			}
+		}
+
 		ui.m_statsInfoText.text += "威胁区统计：\n";
 
 		var enemies = Player.Get().GetEnemyCards();

@@ -38,7 +38,9 @@ public class Card : MonoBehaviour
 		Event,
 		Skill,
 		Fast,
-		Ally
+		Ally,
+		Firearm,
+		Weapon,
 	}
 
 	public List<Keyword> m_lstKeywords = new List<Keyword>();

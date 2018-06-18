@@ -70,15 +70,16 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Guardian/core_guardian_dynamite_blast",
+		"Guardian/core_guardian_extra_ammunition",
+		"Guardian/core_guardian_beat_cop",
+		"Guardian/core_guardian_dot45_automatic",
 		"Guardian/core_guardian_dog",
 		"Guardian/core_guardian_vicious_blow",
 		"Guardian/core_guardian_evidence",
-		"Guardian/core_guardian_dynamite_blast",
 		"Guardian/core_guardian_dodge",
 		"Neutral/core_roland_dot38_special",
-		"Guardian/core_guardian_dot45_automatic",
 		"Guardian/core_guardian_physical_training",
-		"Guardian/core_guardian_beat_cop",
 		"Guardian/core_guardian_first_aid",
 		"Guardian/core_guardian_machete",
 		"Seeker/core_seeker_magnifying_glass",
@@ -214,6 +215,7 @@ public class MainGame : MonoBehaviour
 				GainOneResource();
 				break;
 			case PlayerAction.Skip:
+				Player.Get().m_currentAction = PlayerAction.None;
 				EnterEnemyPhase();
 				break;
 		}

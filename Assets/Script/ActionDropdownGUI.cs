@@ -45,6 +45,16 @@ public class ActionDropdownGUI : MonoBehaviour
 			case PlayerAction.NonStandardAction8:
 			case PlayerAction.NonStandardAction9:
 			case PlayerAction.NonStandardAction10:
+			case PlayerAction.NonStandardAction11:
+			case PlayerAction.NonStandardAction12:
+			case PlayerAction.NonStandardAction13:
+			case PlayerAction.NonStandardAction14:
+			case PlayerAction.NonStandardAction15:
+			case PlayerAction.NonStandardAction16:
+			case PlayerAction.NonStandardAction17:
+			case PlayerAction.NonStandardAction18:
+			case PlayerAction.NonStandardAction19:
+			case PlayerAction.NonStandardAction20:
 				item.interactable = ui.m_isActionEnable[action];
 				break;
 		}

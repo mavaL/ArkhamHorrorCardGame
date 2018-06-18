@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224668479061763470}
   - component: {fileID: 222282977448639498}
   - component: {fileID: 114925342422124392}
+  - component: {fileID: 114009490443476392}
   m_Layer: 0
   m_Name: core_guardian_extra_ammunition
   m_TagString: Untagged
@@ -28,6 +29,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114009490443476392
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1536137409259030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28a73cb4b5bad144390cb4783107e1a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114925342422124392
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -46,10 +58,19 @@ MonoBehaviour:
   m_cardName: "\u989D\u5916\u5F39\u836F"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 01000000
     _values: 01000000
+  m_cost: 2
+  m_slot: 10
   m_isPlayerDeck: 1
+  m_eventTiming: 3
+  m_skillCardEffect:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SkillCardEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!222 &222282977448639498
 CanvasRenderer:
   m_ObjectHideFlags: 1

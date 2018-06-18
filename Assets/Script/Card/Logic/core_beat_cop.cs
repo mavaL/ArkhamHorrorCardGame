@@ -80,4 +80,9 @@ public class core_beat_cop : PlayerCardLogic
 		Player.Get().m_currentAction = PlayerAction.None;
 		Player.Get().ActionDone(PlayerAction.BeatcopCardAction);
 	}
+
+	private void Update()
+	{
+		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = GameLogic.Get().IsAnyEnemyToFightWith();
+	}
 }

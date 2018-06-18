@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224274293553302036}
   - component: {fileID: 222658044981260768}
   - component: {fileID: 114859119630325596}
+  - component: {fileID: 114692991044965302}
   m_Layer: 0
   m_Name: core_guardian_dot45_automatic
   m_TagString: Untagged
@@ -28,6 +29,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114692991044965302
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550328790144840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19e0cf03309541b489da392677108705, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_bullet: 4
 --- !u!114 &114859119630325596
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -39,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9af3d81cf6f68a4a890baa050bbc57d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lstKeywords: 09000000
+  m_lstKeywords: 090000000e0000000f000000
   m_frontImage: {fileID: 21300026, guid: 2bbb8465d5d336345964bb4927144046, type: 3}
   m_backImage: {fileID: 21300028, guid: 2bbb8465d5d336345964bb4927144046, type: 3}
   m_image: {fileID: 0}
@@ -51,6 +64,7 @@ MonoBehaviour:
     _keys: 03000000
     _values: 01000000
   m_cost: 4
+  m_slot: 3
   m_isPlayerDeck: 1
   m_eventTiming: 0
   m_skillCardEffect:

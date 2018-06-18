@@ -67,8 +67,10 @@
     <Compile Include="Assets\Script\Card\Logic\core_beat_cop.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_dissonant_voices.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_dodge.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_dot45_automatic.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_dynamite_blast.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_evidence.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_extra_ammunition.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_frozen_in_fear.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_guard_dog.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_lita_chantler.cs" />

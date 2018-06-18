@@ -48,8 +48,12 @@ public enum AssetSlot
 	Accessory = 0,
 	Body,
 	Ally,
-	LeftHand,
-	RightHand,
+	Hand1,
+	Hand2,
+	TwoHands,
+	Arcane1,
+	Arcane2,
+	TwoArcanes,
 	SlotCount,
 	None
 }
@@ -70,6 +74,7 @@ public class Player
 	public int					m_clues;
 	public int					m_actionUsed = 0;
 	public int					m_totalActions = 3;
+	public int					m_attackDamage = 1;
 
 	public PlayerAction			m_currentAction { get; set; } = PlayerAction.None;
 	public ActionDoneEvent		m_actionDoneEvent = new ActionDoneEvent();
@@ -166,6 +171,11 @@ public class Player
 		return m_lstPlayerCards;
 	}
 
+	public List<PlayerCard> GetAssetAreaCards()
+	{
+		return m_lstAssetCards;
+	}
+
 	public List<EnemyCard> GetEnemyCards()
 	{
 		return m_lstEnemyCards;
@@ -208,7 +218,17 @@ public class Player
 	public bool CanPlayHandCard(PlayerCard card)
 	{
 		bool bAsset = card.m_lstKeywords.Contains(Card.Keyword.Asset) && m_resources >= card.m_cost;
-		bool bEvent = card.m_lstKeywords.Contains(Card.Keyword.Event) && card.m_eventTiming == EventTiming.InvestigatePhase && m_resources >= card.m_cost;
+
+		bool bCanPlayEvent = true;
+		if(card.GetComponent<PlayerCardLogic>())
+		{
+			bCanPlayEvent = card.GetComponent<PlayerCardLogic>().CanPlayEvent();
+		}
+
+		bool bEvent = card.m_lstKeywords.Contains(Card.Keyword.Event) && 
+			card.m_eventTiming == EventTiming.InvestigatePhase && 
+			m_resources >= card.m_cost &&
+			bCanPlayEvent;
 
 		if(bAsset || bEvent)
 		{
@@ -415,6 +435,7 @@ public class Player
 		// Which slot is this asset in?
 		if (card.m_slot != AssetSlot.None)
 		{
+			// TODO: single hand asset and single slot arcane
 			PlayerCard oldSlot = m_lstAssetSlots[(int)card.m_slot];
 			if(oldSlot != null)
 			{
