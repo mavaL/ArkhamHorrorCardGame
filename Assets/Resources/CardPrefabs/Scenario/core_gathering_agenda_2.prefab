@@ -46,7 +46,8 @@ MonoBehaviour:
   m_cardName: "\u96C6\u7ED3-\u6076\u51462"
   m_canFocus: 1
   m_canFlip: 0
-  m_tokenToAdvance: 3
+  m_autoEventTrigger: 1
+  m_tokenToAdvance: 7
 --- !u!222 &222933991294205178
 CanvasRenderer:
   m_ObjectHideFlags: 1
