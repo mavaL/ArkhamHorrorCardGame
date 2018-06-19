@@ -162,7 +162,26 @@ public class core_gathering : scenario_base
 
 		if (m_indexCurrentAct >= m_lstActCards.Count)
 		{
+			// Reach the end
+			List<string> options = new List<string>();
+			options.Add("烧家!");
+			options.Add("不烧家...");
 
+			var mainUI = GameLogic.Get().m_mainGameUI;
+			mainUI.m_choiceDropdown.ClearOptions();
+			mainUI.m_choiceDropdown.AddOptions(options);
+			mainUI.m_choiceDropdown.RefreshShownValue();
+
+			mainUI.m_choiceDropdown.gameObject.SetActive(true);
+			mainUI.m_confirmChoiceBtn.gameObject.SetActive(true);
+			mainUI.m_choiceMode = MainGame.ConfirmButtonMode.TextOnly;
+
+			mainUI.m_lstChoiceEvent.Clear();
+			mainUI.m_lstChoiceEvent.Add(new UnityEvent());
+			mainUI.m_lstChoiceEvent.Add(new UnityEvent());
+
+			mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction(OnAct_Ending1));
+			mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction(OnAct_Ending2));
 		}
 		else
 		{
@@ -233,7 +252,14 @@ public class core_gathering : scenario_base
 
 		if (m_indexCurrentAgenda >= m_lstAgendaCards.Count)
 		{
-
+			if(m_indexCurrentAct < 2)
+			{
+				_ShowEnding(3);
+			}
+			else
+			{
+				_ShowEnding(4);
+			}
 		}
 		else
 		{
@@ -242,7 +268,7 @@ public class core_gathering : scenario_base
 
 			if (m_indexCurrentAgenda == 1)
 			{
-				// Agenda 2
+				// Effect of agenda 1
 				List<string> options = new List<string>();
 				options.Add("每位调查员受到2点恐怖");
 				options.Add("每位调查员丢弃一张随机手牌");
@@ -265,20 +291,28 @@ public class core_gathering : scenario_base
 			}
 			else
 			{
-				// Agenda 3
+				// Effect of agenda 2
+				m_lstEncounterCards.AddRange(GameLogic.Get().m_lstDiscardEncounterCards);
+				GameLogic.Shuffle(m_lstEncounterCards);
+				GameLogic.Get().m_lstDiscardEncounterCards.Clear();
 
+				GameLogic.Get().ShowHighlightCardExclusive(m_lstEncounterCards[0].GetComponent<Card>(), false);
+
+				var mainUI = GameLogic.Get().m_mainGameUI;
+				mainUI.m_choiceMode = MainGame.ConfirmButtonMode.DrawEncounterCard;
+				mainUI.m_confirmChoiceBtn.gameObject.SetActive(true);
 			}
 		}
 	}
 
-	public void OnAgenda1_Option1()
+	private void OnAgenda1_Option1()
 	{
 		Player.Get().DecreaseSanity(2);
 		GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "选择了恶兆影响：受到2点恐怖\n");
 		GameLogic.Get().m_mainGameUI.m_InvestigationPhaseBtn.gameObject.SetActive(true);
 	}
 
-	public void OnAgenda1_Option2()
+	private void OnAgenda1_Option2()
 	{
 		var cards = Player.Get().GetHandCards();
 		var cardToDiscard = cards[Random.Range(0, cards.Count-1)];
@@ -289,19 +323,60 @@ public class core_gathering : scenario_base
 		GameLogic.Get().m_mainGameUI.m_InvestigationPhaseBtn.gameObject.SetActive(true);
 	}
 
+	private void OnAct_Ending1()
+	{
+		_ShowEnding(1);
+	}
+
+	private void OnAct_Ending2()
+	{
+		_ShowEnding(2);
+	}
+
+	private void _ShowEnding(int which)
+	{
+		var mainUI = GameLogic.Get().m_mainGameUI;
+		mainUI.m_lstChoiceEvent.Clear();
+		mainUI.m_endingPanel.SetActive(true);
+
+		if(which == 1)
+		{
+			mainUI.m_endingPanel.GetComponentInChildren<Text>().text = "你点点头，允许那个红发女人将你屋子的墙壁和地板逐一点燃。火焰燃烧的很快，你快速冲出前门，以免又被抓回地狱。你站在人行道上，看着你所拥有的一切被火焰所吞没。“跟我来。”那个女人说道，“你必须知道我们将要面对什么。如果我们孤军奋战，我们必定失败……但如果我们并肩作战，我们就能阻止这一切。”";
+		}
+		else if(which == 2)
+		{
+			mainUI.m_endingPanel.GetComponentInChildren<Text>().text = "你拒绝服从那个过分热心女人的建议，你将她推出你的屋子，以免她在没有获取你允许的情况下点燃整个屋子。“蠢货！你犯了一个很严重的错误！”她警告道，“你根本不知道那些凶兆之下潜伏着什么……你害我们陷入了巨大的危机之中！”经历了今晚的事情，你仍在瑟瑟发抖，你决定让这个女人说完。或许她能在这些离奇诡异的事件中指出一条明路……但似乎她并不怎么信任你。";
+		}
+		else if (which == 3)
+		{
+			mainUI.m_endingPanel.GetComponentInChildren<Text>().text = "你跑向客厅，试图找到一条可以逃出屋子的路。但是炽热的障碍依旧挡住了你前进的道路。你完全陷入困境，一大群令人恐惧的生物涌入你的屋子并将你包围，而你无路可逃。";
+		}
+		else
+		{
+			mainUI.m_endingPanel.GetComponentInChildren<Text>().text = "Game Over";
+		}
+
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
+
+		mainUI.m_confirmToMainMenuBtn.gameObject.SetActive(true);
+	}
+
 	void Update()
 	{
+		var ui = GameLogic.Get().m_mainGameUI;
+
 		if(m_indexCurrentAct == 1)
 		{
 			if (GameLogic.Get().m_currentPhase == TurnPhase.UpkeepPhase &&
 				Player.Get().m_currentLocation == m_lstOtherLocations[0] &&
 				GameLogic.Get().IsClueEnoughToAdvanceAct())
 			{
-				GameLogic.Get().m_mainGameUI.m_advanceActBtn.gameObject.SetActive(true);
+				ui.m_advanceActBtn.gameObject.SetActive(true);
 			}
 			else
 			{
-				GameLogic.Get().m_mainGameUI.m_advanceActBtn.gameObject.SetActive(false);
+				ui.m_advanceActBtn.gameObject.SetActive(false);
 			}
 		}
 		else if(m_indexCurrentAct == 2)
@@ -311,11 +386,20 @@ public class core_gathering : scenario_base
 				m_lita.m_currentLocation &&
 				Player.Get().m_currentLocation.m_cardName == m_lita.m_currentLocation.m_cardName)
 			{
-				GameLogic.Get().m_mainGameUI.m_isActionEnable[m_parleyAction] = true;
+				ui.m_isActionEnable[m_parleyAction] = true;
 			}
 			else
 			{
-				GameLogic.Get().m_mainGameUI.m_isActionEnable[m_parleyAction] = false;
+				ui.m_isActionEnable[m_parleyAction] = false;
+			}
+
+			for(int i=0; i<GameLogic.Get().m_lstDiscardEncounterCards.Count; ++i)
+			{
+				if(GameLogic.Get().m_lstDiscardEncounterCards[i].GetComponent<Card>().m_cardName == m_ghoulPriest.m_cardName)
+				{
+					ui.m_advanceActBtn.gameObject.SetActive(true);
+					break;
+				}
 			}
 		}
 	}

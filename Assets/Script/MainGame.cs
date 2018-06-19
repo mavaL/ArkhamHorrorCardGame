@@ -15,6 +15,7 @@ public class MainGame : MonoBehaviour
 	public Text					m_statsInfoText;
 	public Scrollbar			m_logScrollBar;
 	public Scrollbar			m_statsScrollBar;
+	public GameObject			m_endingPanel;
 
 	public ActionDropdownGUI	m_actionGUI;
 	public Dictionary<PlayerAction, bool> m_isActionEnable { get; set; } = new Dictionary<PlayerAction, bool>();
@@ -27,6 +28,7 @@ public class MainGame : MonoBehaviour
 	public Button m_confirmActResultBtn;
 	public Button m_confirmAgendaResultBtn;
 	public Button m_confirmEnterLocationBtn;
+	public Button m_confirmToMainMenuBtn;
 	public Button m_confirmChoiceBtn;
 	public Button m_useLocationAbilityBtn;
 
@@ -493,7 +495,7 @@ public class MainGame : MonoBehaviour
 		m_confirmActResultBtn.gameObject.SetActive(true);
 	}
 
-	// 0 means ActCard, 1 means LocationCard, 2 means AgendaCard
+	// 0 means ActCard, 1 means LocationCard, 2 means AgendaCard, 3 means ReturnToMainMenu
 	public void OnButtonConfirmCardHighlight(int type)
 	{
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -525,6 +527,11 @@ public class MainGame : MonoBehaviour
 			scenario.m_currentAgenda.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 
 			scenario.AdvanceAgenda();
+		}
+		else if(type == 3)
+		{
+			m_confirmToMainMenuBtn.gameObject.SetActive(false);
+			UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
 		}
 	}
 
