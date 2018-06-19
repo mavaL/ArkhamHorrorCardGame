@@ -27,7 +27,8 @@ public enum TurnPhase
 	MythosPhase,
 	InvestigationPhase,
 	EnemyPhase,
-	UpkeepPhase
+	UpkeepPhase,
+	ScenarioEnd
 }
 
 // Param 1: attacker causes this damage
@@ -61,6 +62,7 @@ public class GameLogic
 	public EventTiming		m_currentTiming = EventTiming.None;
 	public ChaosBag			m_chaosBag = new ChaosBag();
 	public MainGame			m_mainGameUI;
+	public bool				m_bCanAdvanceAct = false;
 
 	public List<GameObject>			m_lstPlayerCards = new List<GameObject>();
 	public List<GameObject>			m_lstDiscardEncounterCards = new List<GameObject>();
@@ -271,9 +273,10 @@ public class GameLogic
 		m_mainGameUI._OutputLog(log);
 	}
 
-	public bool IsClueEnoughToAdvanceAct()
+	public bool CanAdvanceAct()
 	{
-		return m_currentScenario.m_currentAct.m_currentToken + Player.Get().m_clues >= m_currentScenario.m_currentAct.m_tokenToAdvance;
+		bool bEnoughClues = m_currentScenario.m_currentAct.m_currentToken + Player.Get().m_clues >= m_currentScenario.m_currentAct.m_tokenToAdvance;
+		return m_bCanAdvanceAct || bEnoughClues;
 	}
 
 	// Just reveal, not enter it

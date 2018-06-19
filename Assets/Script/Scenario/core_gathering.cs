@@ -162,6 +162,9 @@ public class core_gathering : scenario_base
 		if (m_indexCurrentAct >= m_lstActCards.Count)
 		{
 			// Reach the end
+			GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
+			GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
+
 			List<string> options = new List<string>();
 			options.Add("烧家!");
 			options.Add("不烧家...");
@@ -355,9 +358,6 @@ public class core_gathering : scenario_base
 			mainUI.m_endingPanel.GetComponentInChildren<Text>().text = "Game Over";
 		}
 
-		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
-		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
-
 		mainUI.m_confirmToMainMenuBtn.gameObject.SetActive(true);
 	}
 
@@ -369,7 +369,7 @@ public class core_gathering : scenario_base
 		{
 			if (GameLogic.Get().m_currentPhase == TurnPhase.UpkeepPhase &&
 				Player.Get().m_currentLocation == m_lstOtherLocations[0] &&
-				GameLogic.Get().IsClueEnoughToAdvanceAct())
+				GameLogic.Get().CanAdvanceAct())
 			{
 				ui.m_advanceActBtn.gameObject.SetActive(true);
 			}
@@ -391,12 +391,23 @@ public class core_gathering : scenario_base
 			{
 				ui.m_isActionEnable[m_parleyAction] = false;
 			}
+		}
+	}
 
-			for(int i=0; i<GameLogic.Get().m_lstDiscardEncounterCards.Count; ++i)
+	private void LateUpdate()
+	{
+		var ui = GameLogic.Get().m_mainGameUI;
+
+		if (m_indexCurrentAct == 2)
+		{
+			for (int i = 0; i < GameLogic.Get().m_lstDiscardEncounterCards.Count; ++i)
 			{
-				if(GameLogic.Get().m_lstDiscardEncounterCards[i].GetComponent<Card>().m_cardName == m_ghoulPriest.m_cardName)
+				if (GameLogic.Get().m_lstDiscardEncounterCards[i].GetComponent<Card>().m_cardName == m_ghoulPriest.m_cardName &&
+					Player.Get().m_currentAction == PlayerAction.None &&
+					GameLogic.Get().m_currentPhase != TurnPhase.ScenarioEnd)
 				{
-					ui.m_advanceActBtn.gameObject.SetActive(true);
+					GameLogic.Get().m_currentPhase = TurnPhase.ScenarioEnd;
+					ui.OnButtonAdvanceAct(false);
 					break;
 				}
 			}

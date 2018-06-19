@@ -334,6 +334,7 @@ public class Player
 
 		if (ActionLeft() == 0)
 		{
+			Player.Get().m_currentAction = PlayerAction.None;
 			GameLogic.Get().m_mainGameUI.EnterEnemyPhase();
 		}
 		else
@@ -364,7 +365,6 @@ public class Player
 			enemy.m_currentLocation.m_lstCardsAtHere.Remove(enemy);
 			enemy.m_currentLocation = null;
 			enemy.gameObject.transform.SetParent(GameLogic.Get().m_mainGameUI.transform.root.parent);
-			enemy.gameObject.SetActive(false);
 		}
 
 		var ui = GameLogic.Get().m_mainGameUI;

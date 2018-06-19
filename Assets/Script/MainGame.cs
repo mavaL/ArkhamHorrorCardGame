@@ -242,7 +242,12 @@ public class MainGame : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		m_advanceActBtn.interactable = GameLogic.Get().IsClueEnoughToAdvanceAct();
+		m_advanceActBtn.interactable = GameLogic.Get().CanAdvanceAct();
+
+		if(GameLogic.Get().m_currentPhase == TurnPhase.ScenarioEnd)
+		{
+			m_actionDropdown.gameObject.SetActive(false);
+		}
 
 		GameLogic.Get().Update();
 	}
@@ -481,12 +486,15 @@ public class MainGame : MonoBehaviour
 		ResetActionDropdown();
 	}
 
-	public void OnButtonAdvanceAct()
+	public void OnButtonAdvanceAct(bool bUseClues = true)
 	{
 		var scenario = GameLogic.Get().m_currentScenario;
-		Player.Get().m_clues -= scenario.m_currentAct.m_tokenToAdvance - scenario.m_currentAct.m_currentToken;
 
-		UnityEngine.Assertions.Assert.IsTrue(Player.Get().m_clues >= 0, "Assert failed in OnButtonAdvanceAct()!!");
+		if(bUseClues)
+		{
+			Player.Get().m_clues -= scenario.m_currentAct.m_tokenToAdvance - scenario.m_currentAct.m_currentToken;
+			UnityEngine.Assertions.Assert.IsTrue(Player.Get().m_clues >= 0, "Assert failed in OnButtonAdvanceAct()!!");
+		}
 
 		// Show player the result of the current act.
 		GameLogic.Get().ShowHighlightCardExclusive(scenario.m_currentAct, true);
