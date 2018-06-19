@@ -9,4 +9,5 @@ public class PlayerCardLogic : MonoBehaviour
 	public virtual void	OnDiscard(Card card) { }
 	public virtual void AddAssetResource(int num) { }
 	public virtual int GetAssetResource() { return 0; }
+	public virtual bool HasUseLimit() { return false; }
 }

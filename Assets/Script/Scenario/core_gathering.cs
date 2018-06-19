@@ -87,10 +87,9 @@ public class core_gathering : scenario_base
 		var leftHandAsset = Player.Get().GetAssetCardInSlot(AssetSlot.Hand1);
 		if (leftHandAsset != null && leftHandAsset.GetComponent<PlayerCardLogic>())
 		{
-			int resLeft = leftHandAsset.GetComponent<PlayerCardLogic>().GetAssetResource();
-			if(resLeft > 0)
+			if(leftHandAsset.GetComponent<PlayerCardLogic>().HasUseLimit())
 			{
-				ui.m_statsInfoText.text += string.Format("{0}\n剩余使用次数：<color=green>{1}</color>\n", leftHandAsset.m_cardName, resLeft);
+				ui.m_statsInfoText.text += string.Format("{0}\n剩余使用次数：<color=green>{1}</color>\n", leftHandAsset.m_cardName, leftHandAsset.GetComponent<PlayerCardLogic>().GetAssetResource());
 			}
 		}
 

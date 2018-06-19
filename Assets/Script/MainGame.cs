@@ -71,7 +71,6 @@ public class MainGame : MonoBehaviour
 	string[] m_roland_def_cards =
 	{
 		"Guardian/core_guardian_dynamite_blast",
-		"Guardian/core_guardian_extra_ammunition",
 		"Guardian/core_guardian_beat_cop",
 		"Guardian/core_guardian_dot45_automatic",
 		"Guardian/core_guardian_dog",

@@ -57,16 +57,12 @@ public class core_dot45_automatic : PlayerCardLogic
 		Player.Get().m_attackDamage -= 1;
 		m_bullet -= 1;
 
-		if(m_bullet == 0)
-		{
-			GameLogic.Get().OutputGameLog(".45自动手枪子弹用尽，自动丢弃\n");
-			GetComponent<Card>().Discard(true);
-		}
+		UnityEngine.Assertions.Assert.IsTrue(m_bullet>=0, "Assert failed in core_dot45_automatic.AfterEnemyDamaged()!!!");
 	}
 
 	private void Update()
 	{
-		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = GameLogic.Get().IsAnyEnemyToFightWith();
+		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = GameLogic.Get().IsAnyEnemyToFightWith() && m_bullet > 0;
 	}
 
 	public override void AddAssetResource(int num)
@@ -77,5 +73,10 @@ public class core_dot45_automatic : PlayerCardLogic
 	public override int GetAssetResource()
 	{
 		return m_bullet;
+	}
+
+	public override bool HasUseLimit()
+	{
+		return true;
 	}
 }
