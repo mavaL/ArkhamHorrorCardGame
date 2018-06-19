@@ -84,14 +84,16 @@ public class core_gathering : scenario_base
 			ui.m_statsInfoText.text += string.Format("{0}\n血量：<color=green>{1}</color> 神智：<color=green>{2}</color>\n", ally.m_cardName, ally.m_health, ally.m_sanity);
 		}
 
-		var leftHandAsset = Player.Get().GetAssetCardInSlot(AssetSlot.Hand1);
-		if (leftHandAsset != null && leftHandAsset.GetComponent<PlayerCardLogic>())
+
+		var assets = Player.Get().GetAssetAreaCards();
+		assets.ForEach((asset) =>
 		{
-			if(leftHandAsset.GetComponent<PlayerCardLogic>().HasUseLimit())
+			var logic = asset.GetComponent<PlayerCardLogic>();
+			if(logic && logic.HasUseLimit())
 			{
-				ui.m_statsInfoText.text += string.Format("{0}\n剩余使用次数：<color=green>{1}</color>\n", leftHandAsset.m_cardName, leftHandAsset.GetComponent<PlayerCardLogic>().GetAssetResource());
+				ui.m_statsInfoText.text += string.Format("{0}\n剩余使用次数：<color=green>{1}</color>\n", asset.m_cardName, logic.GetAssetResource());
 			}
-		}
+		});
 
 		ui.m_statsInfoText.text += "威胁区统计：\n";
 

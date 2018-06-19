@@ -100,7 +100,7 @@ public class EnemyCard : Card
 
 			if (GameLogic.Get().m_mainGameUI.OnEventTiming(EventTiming.DefeatEnemy))
 			{
-				GameLogic.Get().ShowHighlightCardExclusive(this, false);
+				GameLogic.Get().ShowHighlightCardExclusive(this, false, false);
 				yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
 			}
 	

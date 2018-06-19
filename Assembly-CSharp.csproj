@@ -71,6 +71,7 @@
     <Compile Include="Assets\Script\Card\Logic\core_dynamite_blast.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_evidence.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_extra_ammunition.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_first_aid.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_frozen_in_fear.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_guard_dog.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_lita_chantler.cs" />

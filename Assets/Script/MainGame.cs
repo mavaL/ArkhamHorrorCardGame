@@ -72,6 +72,7 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Guardian/core_guardian_first_aid",
 		"Guardian/core_guardian_dynamite_blast",
 		"Guardian/core_guardian_beat_cop",
 		"Guardian/core_guardian_dot45_automatic",
@@ -81,7 +82,6 @@ public class MainGame : MonoBehaviour
 		"Guardian/core_guardian_dodge",
 		"Neutral/core_roland_dot38_special",
 		"Guardian/core_guardian_physical_training",
-		"Guardian/core_guardian_first_aid",
 		"Guardian/core_guardian_machete",
 		"Seeker/core_seeker_magnifying_glass",
 		"Seeker/core_seeker_old_book_of_lore",
@@ -188,13 +188,19 @@ public class MainGame : MonoBehaviour
 
 	public void OnActionDropdownChange(Dropdown d)
 	{
-		// Only process standard actions
-		if (d.value == 0 || d.value >= (int)PlayerAction.NonStandardAction1)
+		if (d.value == 0)
 		{
 			return;
 		}
 
 		m_actionDropdown.gameObject.SetActive(false);
+
+		// Only process standard actions
+		if (d.value >= (int)PlayerAction.NonStandardAction1)
+		{
+			return;
+		}
+
 		Player.Get().m_currentAction = (PlayerAction)d.value;
 
 		switch (Player.Get().m_currentAction)
@@ -559,8 +565,8 @@ public class MainGame : MonoBehaviour
 		}
 		else if (m_choiceMode == ConfirmButtonMode.TextOnly)
 		{
-			GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
-			GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
+			//GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
+			//GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
 		}
 	}
 
@@ -587,6 +593,7 @@ public class MainGame : MonoBehaviour
 		{
 			m_choiceDropdown.gameObject.SetActive(false);
 			m_lstChoiceEvent[m_choiceDropdown.value].Invoke();
+			m_choiceDropdown.value = 0;
 		}
 		else if(m_choiceMode == ConfirmButtonMode.RevealCard)
 		{

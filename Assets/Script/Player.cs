@@ -273,6 +273,20 @@ public class Player
 		return m_sanity;
 	}
 
+	public void HealHealth(int amount)
+	{
+		m_health += 1;
+		UnityEngine.Assertions.Assert.IsTrue(m_health <= m_investigatorCard.m_health, "Assert failed in Player.HealHealth()!!!");
+		GameLogic.Get().OutputGameLog(string.Format("{0}恢复了{1}点生命\n", Player.Get().m_investigatorCard.m_cardName, amount));
+	}
+
+	public void HealSanity(int amount)
+	{
+		m_sanity += 1;
+		UnityEngine.Assertions.Assert.IsTrue(m_sanity <= m_investigatorCard.m_sanity, "Assert failed in Player.HealHorror()!!!");
+		GameLogic.Get().OutputGameLog(string.Format("{0}恢复了{1}点神智\n", Player.Get().m_investigatorCard.m_cardName, amount));
+	}
+
 	public void DecreaseHealth(EnemyCard attacker, int amount = 1)
 	{
 		if(m_lstAssetSlots[(int)AssetSlot.Ally] != null)
