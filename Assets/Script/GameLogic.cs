@@ -72,6 +72,7 @@ public class GameLogic
 	public UnityEvent				m_enemyAttackEvent { get; set; } = new UnityEvent();
 	public AfterAssignDamageEvent	m_afterAssignDamageEvent { get; set; } = new AfterAssignDamageEvent();
 	public UnityEvent				m_afterEnemyDamagedEvent { get; set; } = new UnityEvent();
+	public SkillTestEvent			m_afterSkillTest { get; set; } = new SkillTestEvent();
 
 	public static void Swap<T>(ref T a, ref T b)
 	{
@@ -226,6 +227,8 @@ public class GameLogic
 			chaosResult,
 			-AgainstValue,
 			finalValue));
+
+		m_afterSkillTest.Invoke(finalValue);
 
 		return finalValue;
 	}

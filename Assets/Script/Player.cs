@@ -38,6 +38,7 @@ public enum PlayerAction
 	NonStandardAction19,
 	NonStandardAction20,
 	ReactiveEvent,
+	ReactiveAsset,
 	AssignDamage,
 	AssignHorror,
 	BeatcopCardAction
@@ -222,7 +223,7 @@ public class Player
 		bool bCanPlayEvent = true;
 		if(card.GetComponent<PlayerCardLogic>())
 		{
-			bCanPlayEvent = card.GetComponent<PlayerCardLogic>().CanPlayEvent();
+			bCanPlayEvent = card.GetComponent<PlayerCardLogic>().CanTrigger();
 		}
 
 		bool bEvent = card.m_lstKeywords.Contains(Card.Keyword.Event) && 
@@ -249,7 +250,20 @@ public class Player
 		{
 			if (card.m_eventTiming == timing && 
 				m_resources >= card.m_cost && 
-				card.GetComponent<PlayerCardLogic>().CanPlayEvent())
+				card.GetComponent<PlayerCardLogic>().CanTrigger())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public bool CanTriggerAsset(EventTiming timing)
+	{
+		foreach (var card in m_lstAssetCards)
+		{
+			if (card.m_eventTiming == timing &&
+				card.GetComponent<PlayerCardLogic>().CanTrigger())
 			{
 				return true;
 			}

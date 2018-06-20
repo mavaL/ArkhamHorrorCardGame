@@ -28,7 +28,8 @@ public enum EventTiming
 	None,
 	EnemyAttack,
 	DefeatEnemy,
-	InvestigatePhase
+	InvestigatePhase,
+	BeforeSkillTest
 }
 
 [System.Serializable]

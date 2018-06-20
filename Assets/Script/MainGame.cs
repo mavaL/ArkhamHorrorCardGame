@@ -69,6 +69,7 @@ public class MainGame : MonoBehaviour
 	public UnityEvent		m_mythosPhaseBeginEvent { get; set; } = new UnityEvent();
 	public UnityEvent		m_roundEndEvent { get; set; } = new UnityEvent();
 	private UnityAction<int> m_onPlayReactiveEvent;
+	private UnityAction<int> m_onUseReactiveAsset;
 
 	string[] m_roland_def_cards =
 	{
@@ -131,6 +132,7 @@ public class MainGame : MonoBehaviour
 		m_isActionEnable.Add(PlayerAction.NonStandardAction10, true);
 
 		m_onPlayReactiveEvent = new UnityAction<int>(OnPlayReactiveEvent);
+		m_onUseReactiveAsset = new UnityAction<int>(OnUseReactiveAsset);
 	}
 
 	// Use this for initialization
@@ -353,6 +355,10 @@ public class MainGame : MonoBehaviour
 			return;
 		}
 
+		m_targetDropdown.onValueChanged.RemoveListener(m_onPlayReactiveEvent);
+		m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+		m_tempHighlightCard = null;
+
 		var cards = Player.Get().GetHandCards();
 
 		for (int i = 0; i < cards.Count; ++i)
@@ -361,6 +367,9 @@ public class MainGame : MonoBehaviour
 			{
 				cards[i].GetComponent<PlayerCardLogic>().OnReveal(m_tempHighlightCard.GetComponent<Card>());
 				Player.Get().m_resources -= cards[i].m_cost;
+
+				UnityEngine.Assertions.Assert.IsTrue(Player.Get().m_resources >= 0, "Assert failed in MainGame.OnPlayReactiveEvent()!!!");
+
 				cards[i].Discard();
 				break;
 			}
@@ -369,9 +378,6 @@ public class MainGame : MonoBehaviour
 		GameLogic.Get().m_currentTiming = EventTiming.None;
 		Player.Get().m_currentAction = PlayerAction.None;
 
-		m_targetDropdown.onValueChanged.RemoveListener(m_onPlayReactiveEvent);
-		m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
-		m_tempHighlightCard = null;
 		m_targetDropdown.gameObject.SetActive(false);
 		m_actionDropdown.gameObject.SetActive(GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase);
 	}
@@ -391,6 +397,50 @@ public class MainGame : MonoBehaviour
 			return true;
 		}
 		return false;
+	}
+
+	public bool OnAssetTiming(EventTiming timing)
+	{
+		if (Player.Get().CanTriggerAsset(timing))
+		{
+			GameLogic.Get().m_currentTiming = timing;
+			Player.Get().m_currentAction = PlayerAction.ReactiveAsset;
+
+			m_actionDropdown.gameObject.SetActive(false);
+			m_targetDropdown.gameObject.SetActive(true);
+			UpdateTargetDropdown();
+			m_targetDropdown.onValueChanged.AddListener(m_onUseReactiveAsset);
+
+			return true;
+		}
+		return false;
+	}
+
+	public void OnUseReactiveAsset(int index)
+	{
+		if (index < 1)
+		{
+			return;
+		}
+
+		m_targetDropdown.onValueChanged.RemoveListener(m_onUseReactiveAsset);
+
+		var cards = Player.Get().GetAssetAreaCards();
+
+		for (int i = 0; i < cards.Count; ++i)
+		{
+			if (cards[i].m_cardName == m_targetDropdown.options[index].text)
+			{
+				cards[i].GetComponent<PlayerCardLogic>().OnUseReactiveAsset();
+				break;
+			}
+		}
+
+		// Call below in PlayerCardLogic after using reactive asset
+		//GameLogic.Get().m_currentTiming = EventTiming.None;
+		//Player.Get().m_currentAction = PlayerAction.None;
+
+		m_targetDropdown.gameObject.SetActive(false);
 	}
 
 	public void OnButtonEnterUpkeepPhase()
@@ -733,12 +783,23 @@ public class MainGame : MonoBehaviour
 
 	public void BeginSelectCardToSpend()
 	{
-		m_confirmChoiceBtn.gameObject.SetActive(true);	
-		m_confirmSkillTestText.gameObject.SetActive(true);
+		StartCoroutine(_BeginSelectCardToSpend());
+	}
+
+	private IEnumerator _BeginSelectCardToSpend()
+	{
 		m_gameArea.SetActive(false);
+
+		if (m_choiceMode == ConfirmButtonMode.SkillTest && OnAssetTiming(EventTiming.BeforeSkillTest))
+		{
+			yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
+		}
+
+		m_confirmChoiceBtn.gameObject.SetActive(true);
+		m_confirmSkillTestText.gameObject.SetActive(true);
 		GameLogic.Get().m_cardClickMode = Card.CardClickMode.MultiSelect;
 
-		if(m_choiceMode == ConfirmButtonMode.SkillTest)
+		if (m_choiceMode == ConfirmButtonMode.SkillTest)
 		{
 			m_confirmSkillTestText.text = "请选择参与检定的手牌：";
 		}
@@ -901,6 +962,22 @@ public class MainGame : MonoBehaviour
 					var cards = Player.Get().GetHandCards();
 
 					optionNames.Add("是否要打出事件牌...");
+					optionNames.Add("不打出");
+					cards.ForEach(dest =>
+					{
+						if (dest.m_eventTiming == GameLogic.Get().m_currentTiming)
+						{
+							optionNames.Add(dest.m_cardName);
+						}
+					});
+				}
+				break;
+
+			case PlayerAction.ReactiveAsset:
+				{
+					var cards = Player.Get().GetAssetAreaCards();
+
+					optionNames.Add("是否要使用资产牌的技能...");
 					optionNames.Add("不打出");
 					cards.ForEach(dest =>
 					{

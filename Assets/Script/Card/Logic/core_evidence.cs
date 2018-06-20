@@ -22,7 +22,7 @@ public class core_evidence : PlayerCardLogic
 		GameLogic.Get().OutputGameLog(string.Format("{0}打出<证据>，花费{1}资源，获取了1线索\n", Player.Get().m_investigatorCard.m_cardName, pc.m_cost));
 	}
 
-	public override bool CanPlayEvent()
+	public override bool CanTrigger()
 	{
 		return Player.Get().m_currentLocation.m_clues > 0;
 	}

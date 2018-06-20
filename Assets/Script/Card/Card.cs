@@ -166,7 +166,7 @@ public class Card : MonoBehaviour
 		{
 			PlayerCard pc = this as PlayerCard;
 
-			if(pc != null && pc.m_skillIcons.Count > 0)
+			if(Player.Get().GetHandCards().Contains(pc) && pc.m_skillIcons.Count > 0)
 			{
 				if (m_bSelected)
 				{

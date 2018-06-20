@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224296421901256042}
   - component: {fileID: 222036380263764184}
   - component: {fileID: 114590173750419206}
+  - component: {fileID: 114823236401537070}
   m_Layer: 0
   m_Name: core_guardian_physical_training
   m_TagString: Untagged
@@ -46,10 +47,30 @@ MonoBehaviour:
   m_cardName: "\u4F53\u80FD\u8BAD\u7EC3"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 0000000002000000
     _values: 0100000001000000
+  m_cost: 2
+  m_slot: 10
   m_isPlayerDeck: 1
+  m_eventTiming: 4
+  m_skillCardEffect:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SkillCardEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+--- !u!114 &114823236401537070
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1422701929717942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 584e065a485a6e844a415d3c06bfe6b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222036380263764184
 CanvasRenderer:
   m_ObjectHideFlags: 1
