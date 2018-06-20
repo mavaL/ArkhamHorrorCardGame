@@ -20,7 +20,7 @@ public class core_dynamite_blast : PlayerCardLogic
 	public override void OnReveal(Card card)
 	{
 		var ui = GameLogic.Get().m_mainGameUI;
-		Player.Get().m_currentAction = PlayerAction.NonStandardAction1;
+		Player.Get().m_currentAction.Push(PlayerAction.NonStandardAction1);
 
 		// ...................Seems like Unity's BUG.......................
 		ScrollRect dropDownList = ui.m_targetDropdown.GetComponentInChildren<ScrollRect>();
@@ -100,6 +100,6 @@ public class core_dynamite_blast : PlayerCardLogic
 		});
 
 		yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
-		Player.Get().m_currentAction = PlayerAction.None;
+		Player.Get().m_currentAction.Pop();
 	}
 }

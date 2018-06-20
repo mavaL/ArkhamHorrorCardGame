@@ -40,7 +40,7 @@ public class core_beat_cop : PlayerCardLogic
 	{
 		if (index == (int)m_cardAction)
 		{
-			Player.Get().m_currentAction = PlayerAction.BeatcopCardAction;
+			Player.Get().m_currentAction.Push(PlayerAction.BeatcopCardAction);
 
 			var ui = GameLogic.Get().m_mainGameUI;
 			ui.m_actionDropdown.gameObject.SetActive(false);
@@ -62,6 +62,8 @@ public class core_beat_cop : PlayerCardLogic
 
 	private IEnumerator _OnChooseTarget(int index)
 	{
+		GameLogic.Get().OutputGameLog("<疲惫的巡警>执行了卡牌行动\n");
+
 		var ui = GameLogic.Get().m_mainGameUI;
 		ui.m_actionDropdown.onValueChanged.RemoveListener(m_onCardAction);
 		ui.m_targetDropdown.onValueChanged.RemoveListener(m_onTargetDropdownChanged);
@@ -69,7 +71,7 @@ public class core_beat_cop : PlayerCardLogic
 
 		ui.m_targetDropdown.gameObject.SetActive(false);
 
-		var enemy = Player.Get().GetEnemyCards()[index - 1];
+		var enemy = Player.Get().GetEnemyFromEngagedOrLocation(index - 1);
 		enemy.DecreaseHealth(1);
 
 		yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
@@ -81,6 +83,6 @@ public class core_beat_cop : PlayerCardLogic
 
 	private void Update()
 	{
-		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = GameLogic.Get().IsAnyEnemyToFightWith();
+		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = Player.Get().IsAnyEnemyToFightWith();
 	}
 }

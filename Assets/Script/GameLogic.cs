@@ -311,20 +311,4 @@ public class GameLogic
 
 		card.OnSpawnAtLocation(destination);
 	}
-
-	public bool IsAnyEnemyToFightWith()
-	{
-		bool b1 = false;
-		for (int i = 0; i < Player.Get().m_currentLocation.m_lstCardsAtHere.Count; ++i)
-		{
-			Card card = Player.Get().m_currentLocation.m_lstCardsAtHere[i];
-			if (card is EnemyCard)
-			{
-				b1 = true;
-				break;
-			}
-		}
-
-		return b1 || Player.Get().GetEnemyCards().Count > 0;
-	}
 }

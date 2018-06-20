@@ -17,6 +17,8 @@ public class TreacheryCard : Card
 
 	public override void Discard(bool bFromAssetArea = false)
 	{
+		base.Discard(bFromAssetArea);
+
 		gameObject.transform.SetParent(GameLogic.Get().m_mainGameUI.transform.root.parent);
 		gameObject.SetActive(false);
 		GameLogic.Get().m_lstDiscardEncounterCards.Add(gameObject);

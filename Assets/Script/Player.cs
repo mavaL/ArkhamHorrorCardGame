@@ -8,7 +8,6 @@ public class ActionDoneEvent : UnityEvent<PlayerAction> { }
 // Value should correspond with ActionDropdown control
 public enum PlayerAction
 {
-	None = 0,
 	Move = 1,
 	Investigate,
 	Fight,
@@ -77,7 +76,7 @@ public class Player
 	public int					m_totalActions = 3;
 	public int					m_attackDamage = 1;
 
-	public PlayerAction			m_currentAction { get; set; } = PlayerAction.None;
+	public Stack<PlayerAction>	m_currentAction = new Stack<PlayerAction>();
 	public ActionDoneEvent		m_actionDoneEvent = new ActionDoneEvent();
 	public List<PlayerAction>	m_actionRecord = new List<PlayerAction>();
 
@@ -306,7 +305,7 @@ public class Player
 	{
 		if(m_lstAssetSlots[(int)AssetSlot.Ally] != null)
 		{
-			m_currentAction = PlayerAction.AssignDamage;
+			m_currentAction.Push(PlayerAction.AssignDamage);
 			m_assignDamage = amount;
 			m_attacker = attacker;
 
@@ -331,7 +330,7 @@ public class Player
 	{
 		if (m_lstAssetSlots[(int)AssetSlot.Ally] != null)
 		{
-			m_currentAction = PlayerAction.AssignHorror;
+			m_currentAction.Push(PlayerAction.AssignHorror);
 			m_assignDamage = amount;
 
 			var ui = GameLogic.Get().m_mainGameUI;
@@ -363,7 +362,7 @@ public class Player
 
 		if (ActionLeft() == 0)
 		{
-			Player.Get().m_currentAction = PlayerAction.None;
+			Player.Get().m_currentAction.Pop();
 			GameLogic.Get().m_mainGameUI.EnterEnemyPhase();
 		}
 		else
@@ -488,5 +487,47 @@ public class Player
 		ListViewItem item = new ListViewItem();
 		item.card = card;
 		ui.m_assetListView.AddItemsAt(ui.m_assetListView.GetItemsCount(), item);
+	}
+
+	public bool IsAnyEnemyToFightWith()
+	{
+		bool b1 = false;
+		for (int i = 0; i < m_currentLocation.m_lstCardsAtHere.Count; ++i)
+		{
+			Card card = m_currentLocation.m_lstCardsAtHere[i];
+			if (card is EnemyCard)
+			{
+				b1 = true;
+				break;
+			}
+		}
+
+		return b1 || GetEnemyCards().Count > 0;
+	}
+
+	public EnemyCard GetEnemyFromEngagedOrLocation(int index)
+	{
+		if(index < m_lstEnemyCards.Count)
+		{
+			return m_lstEnemyCards[index];
+		}
+		else
+		{
+			int n = m_lstEnemyCards.Count - 1;
+			for (int i=0; i<m_currentLocation.m_lstCardsAtHere.Count; ++i)
+			{
+				if(m_currentLocation.m_lstCardsAtHere[i] is EnemyCard)
+				{
+					++n;
+					if(n == index)
+					{
+						return m_currentLocation.m_lstCardsAtHere[i] as EnemyCard;
+					}
+				}
+			}
+
+			UnityEngine.Assertions.Assert.IsTrue(false, "Assert failed in Player.GetEnemyFromEngagedOrLocation()!!!");
+			return null;
+		}
 	}
 }

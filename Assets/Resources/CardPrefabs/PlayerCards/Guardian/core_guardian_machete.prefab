@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224030874565490786}
   - component: {fileID: 222266588237673918}
   - component: {fileID: 114047097055946794}
+  - component: {fileID: 114661210301177880}
   m_Layer: 0
   m_Name: core_guardian_machete
   m_TagString: Untagged
@@ -46,10 +47,30 @@ MonoBehaviour:
   m_cardName: "\u5F2F\u5200"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 02000000
     _values: 01000000
+  m_cost: 3
+  m_slot: 3
   m_isPlayerDeck: 1
+  m_eventTiming: 0
+  m_skillCardEffect:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SkillCardEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+--- !u!114 &114661210301177880
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1175172325940214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fad71530653430d4daaacc9b9529b26e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222266588237673918
 CanvasRenderer:
   m_ObjectHideFlags: 1

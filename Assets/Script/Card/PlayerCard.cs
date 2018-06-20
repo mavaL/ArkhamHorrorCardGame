@@ -48,6 +48,8 @@ public class PlayerCard : Card
 
 	public override void Discard(bool bFromAssetArea = false)
 	{
+		base.Discard(bFromAssetArea);
+
 		if (GetComponent<PlayerCardLogic>() && bFromAssetArea)
 		{
 			GetComponent<PlayerCardLogic>().OnDiscard(this);
@@ -73,7 +75,7 @@ public class PlayerCard : Card
 
 			GetComponent<PlayerCardLogic>().OnReveal(this);
 
-			yield return new WaitUntil(() => Player.Get().m_currentAction == PlayerAction.None);
+			yield return new WaitUntil(() => Player.Get().m_currentAction.Count == 0);
 
 			Discard();
 		}

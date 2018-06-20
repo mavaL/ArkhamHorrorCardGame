@@ -73,6 +73,7 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Guardian/core_guardian_physical_training",
 		"Guardian/core_guardian_machete",
 		"Guardian/core_guardian_first_aid",
 		"Guardian/core_guardian_dynamite_blast",
@@ -83,7 +84,6 @@ public class MainGame : MonoBehaviour
 		"Guardian/core_guardian_evidence",
 		"Guardian/core_guardian_dodge",
 		"Neutral/core_roland_dot38_special",
-		"Guardian/core_guardian_physical_training",
 		"Seeker/core_seeker_magnifying_glass",
 		"Seeker/core_seeker_old_book_of_lore",
 		"Seeker/core_seeker_research_librarian",
@@ -203,9 +203,9 @@ public class MainGame : MonoBehaviour
 			return;
 		}
 
-		Player.Get().m_currentAction = (PlayerAction)d.value;
+		Player.Get().m_currentAction.Push((PlayerAction)d.value);
 
-		switch (Player.Get().m_currentAction)
+		switch (Player.Get().m_currentAction.Peek())
 		{
 			case PlayerAction.Investigate:
 				InvestigateCurrentLocation();
@@ -224,7 +224,7 @@ public class MainGame : MonoBehaviour
 				GainOneResource();
 				break;
 			case PlayerAction.Skip:
-				Player.Get().m_currentAction = PlayerAction.None;
+				Player.Get().m_currentAction.Pop();
 				EnterEnemyPhase();
 				break;
 		}
@@ -232,12 +232,12 @@ public class MainGame : MonoBehaviour
 
 	public void InvestigateCurrentLocation()
 	{
+		GameLogic.Get().OutputGameLog(string.Format("{0}调查了{1}\n", Player.Get().m_investigatorCard.m_cardName, Player.Get().m_currentLocation.m_cardName));
+
 		m_tempHighlightCard = Player.Get().m_currentLocation.gameObject;
-		m_confirmChoiceBtn.gameObject.SetActive(true);
 		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 
 		BeginSelectCardToSpend();
-		Player.Get().ActionDone(PlayerAction.Investigate);
 	}
 
 	public void GainOneResource()
@@ -318,7 +318,7 @@ public class MainGame : MonoBehaviour
 
 			StartCoroutine(ResolveEngagedEnemyAttack(tmpList[i]));
 
-			yield return new WaitUntil(() => Player.Get().m_currentAction == PlayerAction.None);
+			yield return new WaitUntil(() => Player.Get().m_currentAction.Count == 0);
 		}
 
 		m_UpkeepPhaseBtn.gameObject.SetActive(true);
@@ -337,7 +337,7 @@ public class MainGame : MonoBehaviour
 				Player.Get().DecreaseHealth(enemy, enemy.m_damage);
 			}
 
-			yield return new WaitUntil(() => Player.Get().m_currentAction == PlayerAction.None);
+			yield return new WaitUntil(() => Player.Get().m_currentAction.Count == 0);
 
 			if (enemy.m_horror > 0)
 			{
@@ -356,6 +356,8 @@ public class MainGame : MonoBehaviour
 		}
 
 		m_targetDropdown.onValueChanged.RemoveListener(m_onPlayReactiveEvent);
+
+		var highlightCard = m_tempHighlightCard;
 		m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
 		m_tempHighlightCard = null;
 
@@ -365,7 +367,7 @@ public class MainGame : MonoBehaviour
 		{
 			if (cards[i].m_cardName == m_targetDropdown.options[index].text)
 			{
-				cards[i].GetComponent<PlayerCardLogic>().OnReveal(m_tempHighlightCard.GetComponent<Card>());
+				cards[i].GetComponent<PlayerCardLogic>().OnReveal(highlightCard.GetComponent<Card>());
 				Player.Get().m_resources -= cards[i].m_cost;
 
 				UnityEngine.Assertions.Assert.IsTrue(Player.Get().m_resources >= 0, "Assert failed in MainGame.OnPlayReactiveEvent()!!!");
@@ -376,7 +378,7 @@ public class MainGame : MonoBehaviour
 		}		
 
 		GameLogic.Get().m_currentTiming = EventTiming.None;
-		Player.Get().m_currentAction = PlayerAction.None;
+		Player.Get().m_currentAction.Pop();
 
 		m_targetDropdown.gameObject.SetActive(false);
 		m_actionDropdown.gameObject.SetActive(GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase);
@@ -387,7 +389,7 @@ public class MainGame : MonoBehaviour
 		if (Player.Get().CanPlayEvent(timing))
 		{
 			GameLogic.Get().m_currentTiming = timing;
-			Player.Get().m_currentAction = PlayerAction.ReactiveEvent;
+			Player.Get().m_currentAction.Push(PlayerAction.ReactiveEvent);
 
 			m_actionDropdown.gameObject.SetActive(false);
 			m_targetDropdown.gameObject.SetActive(true);
@@ -404,7 +406,7 @@ public class MainGame : MonoBehaviour
 		if (Player.Get().CanTriggerAsset(timing))
 		{
 			GameLogic.Get().m_currentTiming = timing;
-			Player.Get().m_currentAction = PlayerAction.ReactiveAsset;
+			Player.Get().m_currentAction.Push(PlayerAction.ReactiveAsset);
 
 			m_actionDropdown.gameObject.SetActive(false);
 			m_targetDropdown.gameObject.SetActive(true);
@@ -425,20 +427,25 @@ public class MainGame : MonoBehaviour
 
 		m_targetDropdown.onValueChanged.RemoveListener(m_onUseReactiveAsset);
 
-		var cards = Player.Get().GetAssetAreaCards();
-
-		for (int i = 0; i < cards.Count; ++i)
+		if(index == 1)
 		{
-			if (cards[i].m_cardName == m_targetDropdown.options[index].text)
+			// Call below in PlayerCardLogic after using reactive asset
+			GameLogic.Get().m_currentTiming = EventTiming.None;
+			Player.Get().m_currentAction.Pop();
+		}
+		else
+		{
+			var cards = Player.Get().GetAssetAreaCards();
+
+			for (int i = 0; i < cards.Count; ++i)
 			{
-				cards[i].GetComponent<PlayerCardLogic>().OnUseReactiveAsset();
-				break;
+				if (cards[i].m_cardName == m_targetDropdown.options[index].text)
+				{
+					cards[i].GetComponent<PlayerCardLogic>().OnUseReactiveAsset();
+					break;
+				}
 			}
 		}
-
-		// Call below in PlayerCardLogic after using reactive asset
-		//GameLogic.Get().m_currentTiming = EventTiming.None;
-		//Player.Get().m_currentAction = PlayerAction.None;
 
 		m_targetDropdown.gameObject.SetActive(false);
 	}
@@ -746,6 +753,8 @@ public class MainGame : MonoBehaviour
 
 	public void OnPlayerFightEnemy(EnemyCard enemy)
 	{
+		GameLogic.Get().OutputGameLog(string.Format("{0}对{1}发动了攻击\n", Player.Get().m_investigatorCard.m_cardName, enemy.m_cardName));
+
 		m_confirmChoiceBtn.gameObject.SetActive(true);
 		m_tempHighlightCard = enemy.gameObject;
 		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
@@ -754,6 +763,8 @@ public class MainGame : MonoBehaviour
 
 	public void OnPlayerEvadeEnemy(EnemyCard enemy)
 	{
+		GameLogic.Get().OutputGameLog(string.Format("{0}试图闪避{1}\n", Player.Get().m_investigatorCard.m_cardName, enemy.m_cardName));
+
 		m_confirmChoiceBtn.gameObject.SetActive(true);
 		m_tempHighlightCard = enemy.gameObject;
 		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
@@ -771,7 +782,11 @@ public class MainGame : MonoBehaviour
 
 		m_actionDropdown.gameObject.SetActive(true);
 		m_actionDropdown.value = 0;
-		Player.Get().m_currentAction = PlayerAction.None;
+
+		if(Player.Get().m_currentAction.Count > 0)
+		{
+			Player.Get().m_currentAction.Pop();
+		}
 
 		// ...................Seems like Unity's BUG.......................
 		ScrollRect dropDownList = m_actionDropdown.GetComponentInChildren<ScrollRect>();
@@ -788,13 +803,12 @@ public class MainGame : MonoBehaviour
 
 	private IEnumerator _BeginSelectCardToSpend()
 	{
-		m_gameArea.SetActive(false);
-
 		if (m_choiceMode == ConfirmButtonMode.SkillTest && OnAssetTiming(EventTiming.BeforeSkillTest))
 		{
 			yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
 		}
 
+		m_gameArea.SetActive(false);
 		m_confirmChoiceBtn.gameObject.SetActive(true);
 		m_confirmSkillTestText.gameObject.SetActive(true);
 		GameLogic.Get().m_cardClickMode = Card.CardClickMode.MultiSelect;
@@ -841,22 +855,22 @@ public class MainGame : MonoBehaviour
 	public void OnTargetDropdownChanged(Dropdown d)
 	{
 		// Option 0 is reserved
-		if(d.value == 0 || Player.Get().m_currentAction >= PlayerAction.NonStandardAction1)
+		if(d.value == 0 || Player.Get().m_currentAction.Peek() >= PlayerAction.NonStandardAction1)
 		{
 			return;
 		}
 
 		m_targetDropdown.gameObject.SetActive(false);
 
-		if (Player.Get().m_currentAction == PlayerAction.Fight)
+		if (Player.Get().m_currentAction.Peek() == PlayerAction.Fight)
 		{
-			OnPlayerFightEnemy(Player.Get().GetEnemyCards()[d.value - 1]);
+			OnPlayerFightEnemy(Player.Get().GetEnemyFromEngagedOrLocation(d.value - 1));
 		}
-		else if(Player.Get().m_currentAction == PlayerAction.Evade)
+		else if(Player.Get().m_currentAction.Peek() == PlayerAction.Evade)
 		{
 			OnPlayerEvadeEnemy(Player.Get().GetEnemyCards()[d.value - 1]);
 		}
-		else if(Player.Get().m_currentAction == PlayerAction.Move)
+		else if(Player.Get().m_currentAction.Peek() == PlayerAction.Move)
 		{
 			string locName = d.options[d.value].text;
 			var locList = GameLogic.Get().m_currentScenario.m_lstOtherLocations;
@@ -866,12 +880,11 @@ public class MainGame : MonoBehaviour
 				if (locList[i].m_cardName == locName)
 				{
 					GameLogic.Get().PlayerEnterLocation(locList[i].gameObject);
-					Player.Get().m_currentAction = PlayerAction.None;
 					break;
 				}
 			}
 		}
-		else if(Player.Get().m_currentAction == PlayerAction.PlayCard)
+		else if(Player.Get().m_currentAction.Peek() == PlayerAction.PlayCard)
 		{
 			string cardName = d.options[d.value].text;
 			var cards = Player.Get().GetHandCards();
@@ -920,7 +933,7 @@ public class MainGame : MonoBehaviour
 		m_targetDropdown.ClearOptions();
 		List<string> optionNames = new List<string>();
 
-		switch(Player.Get().m_currentAction)
+		switch(Player.Get().m_currentAction.Peek())
 		{
 			case PlayerAction.Move:
 				{
@@ -946,14 +959,30 @@ public class MainGame : MonoBehaviour
 				}
 				break;
 
-			case PlayerAction.Fight:
 			case PlayerAction.Evade:
+				{
+					optionNames.Add("请选择目标...");
+					var enemies = Player.Get().GetEnemyCards();
+
+					enemies.ForEach(enemy => { optionNames.Add(enemy.m_cardName); });
+				}
+				break;
+
+			case PlayerAction.Fight:
 			case PlayerAction.BeatcopCardAction:
 				{
 					optionNames.Add("请选择目标...");
 					var enemies = Player.Get().GetEnemyCards();
 
 					enemies.ForEach(enemy => { optionNames.Add(enemy.m_cardName); });
+
+					Player.Get().m_currentLocation.m_lstCardsAtHere.ForEach(card => 
+					{
+						if(card is EnemyCard)
+						{
+							optionNames.Add(card.m_cardName);
+						}
+					});
 				}
 				break;
 
@@ -978,7 +1007,7 @@ public class MainGame : MonoBehaviour
 					var cards = Player.Get().GetAssetAreaCards();
 
 					optionNames.Add("是否要使用资产牌的技能...");
-					optionNames.Add("不打出");
+					optionNames.Add("不使用");
 					cards.ForEach(dest =>
 					{
 						if (dest.m_eventTiming == GameLogic.Get().m_currentTiming)
@@ -1056,7 +1085,7 @@ public class MainGame : MonoBehaviour
 		int allyDamage = index - 1;
 		int investigatorDamage = Player.Get().m_assignDamage - allyDamage;
 
-		if (Player.Get().m_currentAction == PlayerAction.AssignDamage)
+		if (Player.Get().m_currentAction.Peek() == PlayerAction.AssignDamage)
 		{
 			ally.m_health -= allyDamage;
 			Player.Get().m_health -= investigatorDamage;
@@ -1083,7 +1112,7 @@ public class MainGame : MonoBehaviour
 
 		ui.m_targetDropdown.gameObject.SetActive(false);
 		ui.m_actionDropdown.gameObject.SetActive(GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase);
-		Player.Get().m_currentAction = PlayerAction.None;
+		Player.Get().m_currentAction.Pop();
 	}
 
 	public void RemoveCardFromListView(CardListView list, int index, Card card)

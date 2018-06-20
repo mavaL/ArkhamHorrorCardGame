@@ -238,7 +238,7 @@ public class core_gathering : scenario_base
 	{
 		if(index == (int)m_parleyAction)
 		{
-			Player.Get().m_currentAction = m_parleyAction;
+			Player.Get().m_currentAction.Push(m_parleyAction);
 
 			var ui = GameLogic.Get().m_mainGameUI;
 			ui.m_confirmChoiceBtn.gameObject.SetActive(true);
@@ -405,7 +405,7 @@ public class core_gathering : scenario_base
 			for (int i = 0; i < GameLogic.Get().m_lstDiscardEncounterCards.Count; ++i)
 			{
 				if (GameLogic.Get().m_lstDiscardEncounterCards[i].GetComponent<Card>().m_cardName == m_ghoulPriest.m_cardName &&
-					Player.Get().m_currentAction == PlayerAction.None &&
+					Player.Get().m_currentAction.Count == 0 &&
 					GameLogic.Get().m_currentPhase != TurnPhase.ScenarioEnd)
 				{
 					GameLogic.Get().m_currentPhase = TurnPhase.ScenarioEnd;
@@ -429,7 +429,7 @@ public class core_gathering : scenario_base
 		ui.m_confirmChoiceBtn.gameObject.SetActive(false);
 		ui.m_confirmChoiceBtn.onClick.RemoveListener(m_onParleyConfirm);
 		ui.m_actionDropdown.options.RemoveAt((int)m_parleyAction);
-		Player.Get().m_currentAction = PlayerAction.None;
+		Player.Get().m_currentAction.Pop();
 
 		ChaosBag.ChaosTokenType chaosToken;
 		int result = GameLogic.Get().SkillTest(SkillType.Intellect, 4, out chaosToken);

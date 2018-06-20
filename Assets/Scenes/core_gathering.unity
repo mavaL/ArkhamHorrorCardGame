@@ -1180,7 +1180,7 @@ MonoBehaviour:
   m_lstEncounterCards:
   - {fileID: 1315489162840404, guid: 05a95b4749caa4c4491e9f7230223b4b, type: 2}
   - {fileID: 1165009897082102, guid: 78c1e93592f703844b31f4f500adf94d, type: 2}
-  - {fileID: 1804929542902170, guid: 1a27420f7f892ec4095a454fc877948f, type: 2}
+  - {fileID: 1315489162840404, guid: 05a95b4749caa4c4491e9f7230223b4b, type: 2}
   - {fileID: 1804929542902170, guid: 1a27420f7f892ec4095a454fc877948f, type: 2}
   m_lita: {fileID: 114023195593983030, guid: 9bd2a7ccc35ab094fbfe11d3aa6da3d8, type: 2}
   m_ghoulPriest: {fileID: 114409183997872782, guid: 29e6866d5146e2045bd17f902969d7f3,

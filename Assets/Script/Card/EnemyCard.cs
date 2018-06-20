@@ -36,24 +36,22 @@ public class EnemyCard : Card
 
 	public override void OnSkillTest()
 	{
-		if(Player.Get().m_currentAction == PlayerAction.Fight)
+		if(Player.Get().m_currentAction.Peek() == PlayerAction.Fight)
 		{
-			GameLogic.Get().OutputGameLog(string.Format("{0}攻击了{1}\n", Player.Get().m_investigatorCard.m_cardName, m_cardName));
 			GameLogic.Get().m_currentScenario.m_skillTest.CombatTest(m_fight);
 		}
 		else
 		{
-			GameLogic.Get().OutputGameLog(string.Format("{0}试图闪避{1}\n", Player.Get().m_investigatorCard.m_cardName, m_cardName));
 			GameLogic.Get().m_currentScenario.m_skillTest.AgilityTest(m_evade);
 		}
 	}
 
 	public override void OnSkillTestResult(int result)
 	{
-		result = 99;
+		//result = 99;
 		if (result >= 0)
 		{
-			if (Player.Get().m_currentAction == PlayerAction.Fight)
+			if (Player.Get().m_currentAction.Peek() == PlayerAction.Fight)
 			{
 				GameLogic.Get().m_beforeEnemyDamagedEvent.Invoke(this);
 
@@ -72,7 +70,7 @@ public class EnemyCard : Card
 		}
 		else
 		{
-			if(Player.Get().m_currentAction == PlayerAction.Fight)
+			if(Player.Get().m_currentAction.Peek() == PlayerAction.Fight)
 			{
 				GameLogic.Get().OutputGameLog("结果未造成伤害\n");
 			}
@@ -81,7 +79,7 @@ public class EnemyCard : Card
 				GameLogic.Get().OutputGameLog("闪避结果失败\n");
 			}
 		}
-		Player.Get().ActionDone(Player.Get().m_currentAction);
+		Player.Get().ActionDone(Player.Get().m_currentAction.Peek());
 	}
 
 	public void DecreaseHealth(int amount = 1)
@@ -155,8 +153,20 @@ public class EnemyCard : Card
 
 	public override void Discard(bool bFromAssetArea = false)
 	{
+		base.Discard(bFromAssetArea);
+
 		GameLogic.m_lstUnengagedEnemyCards.Remove(this);
-		Player.Get().RemoveEngagedEnemy(this);
+
+		if(m_engaged)
+		{
+			Player.Get().RemoveEngagedEnemy(this);
+		}
+		else
+		{
+			m_currentLocation.m_lstCardsAtHere.Remove(this);
+			m_currentLocation = null;
+		}
+
 		GameLogic.Get().m_lstDiscardEncounterCards.Add(gameObject);
 		gameObject.SetActive(false);
 	}

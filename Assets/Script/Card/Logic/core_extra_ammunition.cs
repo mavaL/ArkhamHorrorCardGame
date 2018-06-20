@@ -27,7 +27,7 @@ public class core_extra_ammunition : PlayerCardLogic
 
 		GameLogic.Get().OutputGameLog(string.Format("{0}打出对<{1}><额外弹药>，花费{2}资源，增加了3子弹\n", Player.Get().m_investigatorCard.m_cardName, firearm.m_cardName, GetComponent<PlayerCard>().m_cost));
 
-		Player.Get().m_currentAction = PlayerAction.None;
+		Player.Get().m_currentAction.Pop();
 	}
 
 	public override bool CanTrigger()

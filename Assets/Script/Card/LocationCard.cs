@@ -65,13 +65,12 @@ public class LocationCard : Card
 
 	public override void OnSkillTest()
 	{
-		GameLogic.Get().OutputGameLog(string.Format("{0}调查了{1}\n", Player.Get().m_investigatorCard.m_cardName, m_cardName));
 		GameLogic.Get().m_currentScenario.m_skillTest.IntellectTest(m_shroud);
 	}
 
 	public override void OnSkillTestResult(int result)
 	{
-		result = 99;
+		//result = 99;
 		if (result >= 0)
 		{
 			// Succeed!
@@ -86,6 +85,8 @@ public class LocationCard : Card
 		}
 
 		m_onLocationInvestigate.Invoke(result);
+
+		Player.Get().ActionDone(PlayerAction.Investigate);
 	}
 
 	public override void Discard(bool bFromAssetArea = false)

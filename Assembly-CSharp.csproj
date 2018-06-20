@@ -77,6 +77,7 @@
     <Compile Include="Assets\Script\Card\Logic\core_lita_chantler.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_machete.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_obscuring_fog.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_physical_training.cs" />
     <Compile Include="Assets\Script\Card\Logic\InvestigatorAbility.cs" />
     <Compile Include="Assets\Script\Card\Logic\LocationEvent.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCardLogic.cs" />

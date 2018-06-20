@@ -82,7 +82,7 @@ public class core_physical_training : PlayerCardLogic
 		mainUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 
 		GameLogic.Get().m_currentTiming = EventTiming.None;
-		Player.Get().m_currentAction = PlayerAction.None;
+		Player.Get().m_currentAction.Pop();
 	}
 
 	private void AfterSkillTest(int result)

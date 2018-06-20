@@ -45,8 +45,6 @@ public class core_machete : PlayerCardLogic
 		{
 			GameLogic.Get().m_beforeEnemyDamagedEvent.AddListener(m_beforeEnemyDamaged);
 			GameLogic.Get().m_mainGameUI.m_actionDropdown.value = (int)PlayerAction.Fight;
-
-			闪避了再攻击不对。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。
 		}
 	}
 
@@ -80,6 +78,6 @@ public class core_machete : PlayerCardLogic
 
 	private void Update()
 	{
-		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = GameLogic.Get().IsAnyEnemyToFightWith();
+		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = Player.Get().IsAnyEnemyToFightWith();
 	}
 }

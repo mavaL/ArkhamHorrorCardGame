@@ -24,7 +24,7 @@ public class ActionDropdownGUI : MonoBehaviour
 				item.interactable = Player.Get().GetEnemyCards().Count > 0 && ui.m_isActionEnable[PlayerAction.Evade];
 				break;
 			case PlayerAction.Fight:
-				item.interactable = Player.Get().GetEnemyCards().Count > 0 && ui.m_isActionEnable[PlayerAction.Fight];
+				item.interactable = Player.Get().IsAnyEnemyToFightWith() && ui.m_isActionEnable[PlayerAction.Fight];
 				break;
 			case PlayerAction.DrawOneCard:
 				item.interactable = ui.m_isActionEnable[PlayerAction.DrawOneCard];

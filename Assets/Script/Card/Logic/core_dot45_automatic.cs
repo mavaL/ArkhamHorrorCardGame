@@ -62,7 +62,7 @@ public class core_dot45_automatic : PlayerCardLogic
 
 	private void Update()
 	{
-		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = GameLogic.Get().IsAnyEnemyToFightWith() && m_bullet > 0;
+		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = Player.Get().IsAnyEnemyToFightWith() && m_bullet > 0;
 	}
 
 	public override void AddAssetResource(int num)
