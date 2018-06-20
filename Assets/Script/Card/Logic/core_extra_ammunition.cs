@@ -30,7 +30,7 @@ public class core_extra_ammunition : PlayerCardLogic
 		Player.Get().m_currentAction = PlayerAction.None;
 	}
 
-	public override bool CanPlayEvent()
+	public override bool CanTrigger()
 	{
 		return Card.HowManyPlayerCardContainTheKeyword(Player.Get().GetAssetAreaCards(), Card.Keyword.Firearm) > 0;
 	}
