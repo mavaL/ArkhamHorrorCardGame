@@ -72,6 +72,7 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Guardian/core_guardian_machete",
 		"Guardian/core_guardian_first_aid",
 		"Guardian/core_guardian_dynamite_blast",
 		"Guardian/core_guardian_beat_cop",
@@ -82,7 +83,6 @@ public class MainGame : MonoBehaviour
 		"Guardian/core_guardian_dodge",
 		"Neutral/core_roland_dot38_special",
 		"Guardian/core_guardian_physical_training",
-		"Guardian/core_guardian_machete",
 		"Seeker/core_seeker_magnifying_glass",
 		"Seeker/core_seeker_old_book_of_lore",
 		"Seeker/core_seeker_research_librarian",
@@ -1007,5 +1007,11 @@ public class MainGame : MonoBehaviour
 		ui.m_targetDropdown.gameObject.SetActive(false);
 		ui.m_actionDropdown.gameObject.SetActive(GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase);
 		Player.Get().m_currentAction = PlayerAction.None;
+	}
+
+	public void RemoveCardFromListView(CardListView list, int index, Card card)
+	{
+		list.RemoveItemFrom(index, 1);
+		card.m_thisInListView = card;
 	}
 }

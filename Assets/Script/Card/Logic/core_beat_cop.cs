@@ -67,18 +67,16 @@ public class core_beat_cop : PlayerCardLogic
 		ui.m_targetDropdown.onValueChanged.RemoveListener(m_onTargetDropdownChanged);
 		ui.m_actionDropdown.options.RemoveAt((int)m_cardAction);
 
+		ui.m_targetDropdown.gameObject.SetActive(false);
+
 		var enemy = Player.Get().GetEnemyCards()[index - 1];
 		enemy.DecreaseHealth(1);
 
 		yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
 
 		GetComponent<Card>().Discard(true);
-	
-		ui.m_actionDropdown.gameObject.SetActive(true);
-		ui.m_targetDropdown.gameObject.SetActive(false);
 		
-		Player.Get().m_currentAction = PlayerAction.None;
-		Player.Get().ActionDone(PlayerAction.BeatcopCardAction);
+		Player.Get().ActionDone(PlayerAction.BeatcopCardAction, false);
 	}
 
 	private void Update()

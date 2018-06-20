@@ -36,6 +36,8 @@ public enum TurnPhase
 // Param 3: damage assign to ally
 public class AfterAssignDamageEvent : UnityEvent<EnemyCard, int, int> { }
 
+public class BeforeDamageEnemeyEvent : UnityEvent<EnemyCard> { }
+
 public class GameLogic
 {
     public static GameLogic s_gameLogic = null;
@@ -72,6 +74,7 @@ public class GameLogic
 	public UnityEvent				m_enemyAttackEvent { get; set; } = new UnityEvent();
 	public AfterAssignDamageEvent	m_afterAssignDamageEvent { get; set; } = new AfterAssignDamageEvent();
 	public UnityEvent				m_afterEnemyDamagedEvent { get; set; } = new UnityEvent();
+	public BeforeDamageEnemeyEvent	m_beforeEnemyDamagedEvent { get; set; } = new BeforeDamageEnemeyEvent();
 
 	public static void Swap<T>(ref T a, ref T b)
 	{

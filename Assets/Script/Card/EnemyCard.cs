@@ -55,6 +55,8 @@ public class EnemyCard : Card
 		{
 			if (Player.Get().m_currentAction == PlayerAction.Fight)
 			{
+				GameLogic.Get().m_beforeEnemyDamagedEvent.Invoke(this);
+
 				DecreaseHealth(Player.Get().m_attackDamage);
 			}
 			else

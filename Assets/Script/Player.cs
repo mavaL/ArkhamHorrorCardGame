@@ -150,7 +150,7 @@ public class Player
 		{
 			if(m_lstAssetCards.Contains(card))
 			{
-				GameLogic.Get().m_mainGameUI.m_assetListView.RemoveItemFrom(m_lstAssetCards.IndexOf(card), 1);
+				GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_assetListView, m_lstAssetCards.IndexOf(card), card);
 				m_lstAssetCards.Remove(card);
 
 				if (card.m_slot != AssetSlot.None)
@@ -160,7 +160,8 @@ public class Player
 			}
 			else
 			{
-				GameLogic.Get().m_mainGameUI.m_handCardListView.RemoveItemFrom(m_lstPlayerCards.IndexOf(card), 1);
+				GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_handCardListView, m_lstPlayerCards.IndexOf(card), card);
+
 				m_lstPlayerCards.Remove(card);
 			}
 		}
@@ -398,7 +399,7 @@ public class Player
 	public void RemoveEngagedEnemy(EnemyCard enemy)
 	{
 		enemy.m_engaged = false;
-		GameLogic.Get().m_mainGameUI.m_threatListView.RemoveItemFrom(m_lstEnemyCards.IndexOf(enemy), 1);
+		GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_threatListView, m_lstEnemyCards.IndexOf(enemy), enemy);
 		m_lstEnemyCards.Remove(enemy);
 	}
 

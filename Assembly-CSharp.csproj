@@ -75,6 +75,7 @@
     <Compile Include="Assets\Script\Card\Logic\core_frozen_in_fear.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_guard_dog.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_lita_chantler.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_machete.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_obscuring_fog.cs" />
     <Compile Include="Assets\Script\Card\Logic\InvestigatorAbility.cs" />
     <Compile Include="Assets\Script\Card\Logic\LocationEvent.cs" />
