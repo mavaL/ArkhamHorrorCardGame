@@ -8,12 +8,19 @@ public class LocationCard : Card
 	public int					m_clues = 0;
 	public int					m_shroud = 0;
 	public List<LocationCard>	m_lstDestinations;
+
 	[System.NonSerialized]
 	public SkillTestEvent		m_onLocationInvestigate = new SkillTestEvent();
 	[System.NonSerialized]
 	public List<Card>			m_lstCardsAtHere = new List<Card>();
-	[System.NonSerialized]
-	public bool					m_isVisit = false;
+	public bool					m_isVisit { get; set; } = false;
+
+	#region
+	/// fields for pathfinding
+	public LocationCard			m_BFS_parent { get; set; }
+	public bool					m_BFS_checked { get; set; }
+	#endregion
+
 
 	[System.Serializable]
 	public class LocationCallback : UnityEvent<LocationCard> { }

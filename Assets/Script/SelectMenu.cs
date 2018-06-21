@@ -28,8 +28,11 @@ public class SelectMenu : MonoBehaviour {
         _InitScenario("CardPrefabs/core_gathering", 0);
         _InitScenario("CardPrefabs/core_mask_of_midnight", 1);
         _InitScenario("CardPrefabs/core_devourer_below", 2);
+#if UNITY_EDITOR
+		_InitScenario("PathfindingTest/pathfinding_test", 3);
+#endif
 
-        _SetCurrentRoleInfo(0);
+		_SetCurrentRoleInfo(0);
 
         // Init dropdown control
         List<string> roleNames = new List<string>();
@@ -154,6 +157,10 @@ public class SelectMenu : MonoBehaviour {
 		else if (Player.Get().m_currentScenario == 2)
 		{
 			UnityEngine.SceneManagement.SceneManager.LoadScene("core_devourer_below");
+		}
+		else if (Player.Get().m_currentScenario == 3)
+		{
+			UnityEngine.SceneManagement.SceneManager.LoadScene("pathfinding_test");
 		}
 	}
 }

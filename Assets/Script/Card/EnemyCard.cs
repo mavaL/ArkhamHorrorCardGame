@@ -30,12 +30,65 @@ public class EnemyCard : Card
 			return;
 		}
 
-		PathFinding();
+		PathFinding(m_currentLocation, Player.Get().m_currentLocation);
 	}
 
-	private void PathFinding()
+	/// <summary>
+	/// BFS
+	/// </summary>
+	/// <param name="start"></param>
+	/// <param name="end"></param>
+	private void PathFinding(LocationCard start, LocationCard end)
 	{
-		List<List<LocationCard>> pathes = new List<List<LocationCard>>();
+		UnityEngine.Assertions.Assert.IsTrue(start.m_cardName != end.m_cardName, "Start and end can't be same in EnemyCard.PathFinding()!!!");
+
+		// First reset all nodes
+		var all = FindObjectsOfType<LocationCard>();
+		foreach(var node in all)
+		{
+			node.m_BFS_checked = false;
+			node.m_BFS_parent = null;
+		}
+
+		List<LocationCard> path = new List<LocationCard>();
+		Queue<LocationCard> queue = new Queue<LocationCard>();
+		queue.Enqueue(m_currentLocation);
+		m_currentLocation.m_BFS_checked = true;
+		bool bFind = false;
+
+		while(queue.Count > 0 && !bFind)
+		{
+			var parent = queue.Dequeue();
+
+			for(int i=0; i< parent.m_lstDestinations.Count; ++i)
+			{
+				var child = parent.m_lstDestinations[i];
+
+				if (child.m_cardName == end.m_cardName)
+				{
+					// Found it!
+					_BuildPathRecur(child, path);
+					path.Add(child);
+					bFind = true;
+					break;
+				}
+				else if(!child.m_BFS_checked)
+				{
+					child.m_BFS_parent = parent;
+					queue.Enqueue(child);
+					child.m_BFS_checked = true;
+				}
+			}
+		}
+
+		UnityEngine.Assertions.Assert.IsTrue(path.Count > 0, "Pathfinding failed in EnemyCard.PathFinding()!!!");
+	}
+
+	private void _BuildPathRecur(LocationCard node, List<LocationCard> pathToBuild)
+	{
+		var parent = node.m_BFS_parent;
+		_BuildPathRecur(parent, pathToBuild);
+		pathToBuild.Add(parent);
 	}
 
 	public override void OnSkillTest()
