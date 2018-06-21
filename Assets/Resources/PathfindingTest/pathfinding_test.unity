@@ -113,6 +113,75 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &92005620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 92005621}
+  - component: {fileID: 92005622}
+  m_Layer: 5
+  m_Name: node0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &92005621
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 92005620}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.999, y: 0.999, z: 1.00008}
+  m_Children: []
+  m_Father: {fileID: 351792212}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -2958, y: 0}
+  m_SizeDelta: {x: 583, y: 833}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &92005622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 92005620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd63b616aa9410c4eaf6af6140c197b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lstKeywords: 
+  m_frontImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_backImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_image: {fileID: 0}
+  m_cardName: 0
+  m_canFocus: 0
+  m_canFlip: 0
+  m_autoEventTrigger: 1
+  m_clues: 0
+  m_shroud: 0
+  m_lstDestinations:
+  - {fileID: 545283629}
+  - {fileID: 854106501}
+  - {fileID: 1176715344}
+  m_enterLocationCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_locationAbilityCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &351792211
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +206,13 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 92005621}
+  - {fileID: 545283628}
+  - {fileID: 854106500}
+  - {fileID: 1176715343}
+  - {fileID: 2098927792}
+  - {fileID: 1004872679}
   m_Father: {fileID: 577799210}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -375,6 +450,30 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 224197934083899238, guid: ffb9add71e1cecd44b1b7e0fa3445078,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 119.99999
+      objectReference: {fileID: 0}
+    - target: {fileID: 224489546502814250, guid: ffb9add71e1cecd44b1b7e0fa3445078,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 53.99998
+      objectReference: {fileID: 0}
+    - target: {fileID: 224622407982412748, guid: ffb9add71e1cecd44b1b7e0fa3445078,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224203981244091944, guid: ffb9add71e1cecd44b1b7e0fa3445078,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1864372019675722, guid: ffb9add71e1cecd44b1b7e0fa3445078, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ffb9add71e1cecd44b1b7e0fa3445078, type: 2}
   m_IsPrefabParent: 0
@@ -389,6 +488,75 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224968620639626794, guid: ffb9add71e1cecd44b1b7e0fa3445078,
     type: 2}
   m_PrefabInternal: {fileID: 532638989}
+--- !u!1 &545283627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 545283628}
+  - component: {fileID: 545283629}
+  m_Layer: 5
+  m_Name: node1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &545283628
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 545283627}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.999, y: 0.999, z: 1.00008}
+  m_Children: []
+  m_Father: {fileID: 351792212}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -1265, y: 0}
+  m_SizeDelta: {x: 583, y: 833}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &545283629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 545283627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd63b616aa9410c4eaf6af6140c197b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lstKeywords: 
+  m_frontImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_backImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_image: {fileID: 0}
+  m_cardName: 1
+  m_canFocus: 0
+  m_canFlip: 0
+  m_autoEventTrigger: 1
+  m_clues: 0
+  m_shroud: 0
+  m_lstDestinations:
+  - {fileID: 1176715344}
+  - {fileID: 2098927793}
+  - {fileID: 854106501}
+  m_enterLocationCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_locationAbilityCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &577799209
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,6 +723,73 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &854106499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 854106500}
+  - component: {fileID: 854106501}
+  m_Layer: 5
+  m_Name: node2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &854106500
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 854106499}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.999, y: 0.999, z: 1.00008}
+  m_Children: []
+  m_Father: {fileID: 351792212}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -226, y: -1059}
+  m_SizeDelta: {x: 583, y: 833}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &854106501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 854106499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd63b616aa9410c4eaf6af6140c197b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lstKeywords: 
+  m_frontImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_backImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_image: {fileID: 0}
+  m_cardName: 2
+  m_canFocus: 0
+  m_canFlip: 0
+  m_autoEventTrigger: 1
+  m_clues: 0
+  m_shroud: 0
+  m_lstDestinations:
+  - {fileID: 1566278180}
+  m_enterLocationCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_locationAbilityCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &955067392
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,6 +860,73 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 955067392}
+--- !u!1 &1004872678
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1004872679}
+  - component: {fileID: 1004872680}
+  m_Layer: 5
+  m_Name: node5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1004872679
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1004872678}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.999, y: 0.999, z: 1.00008}
+  m_Children: []
+  m_Father: {fileID: 351792212}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 1940, y: 416.5}
+  m_SizeDelta: {x: 583, y: 833}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1004872680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1004872678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd63b616aa9410c4eaf6af6140c197b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lstKeywords: 
+  m_frontImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_backImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_image: {fileID: 0}
+  m_cardName: 5
+  m_canFocus: 0
+  m_canFlip: 0
+  m_autoEventTrigger: 1
+  m_clues: 0
+  m_shroud: 0
+  m_lstDestinations:
+  - {fileID: 1566278180}
+  m_enterLocationCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_locationAbilityCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &1064446121
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,6 +1094,73 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224641603773484348, guid: ffb9add71e1cecd44b1b7e0fa3445078,
     type: 2}
   m_PrefabInternal: {fileID: 532638989}
+--- !u!1 &1176715342
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1176715343}
+  - component: {fileID: 1176715344}
+  m_Layer: 5
+  m_Name: node3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1176715343
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1176715342}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.999, y: 0.999, z: 1.00008}
+  m_Children: []
+  m_Father: {fileID: 351792212}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 504, y: 1112}
+  m_SizeDelta: {x: 583, y: 833}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1176715344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1176715342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd63b616aa9410c4eaf6af6140c197b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lstKeywords: 
+  m_frontImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_backImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_image: {fileID: 0}
+  m_cardName: 3
+  m_canFocus: 0
+  m_canFlip: 0
+  m_autoEventTrigger: 1
+  m_clues: 0
+  m_shroud: 0
+  m_lstDestinations:
+  - {fileID: 1004872680}
+  m_enterLocationCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_locationAbilityCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &1335655212
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,12 +1188,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d61d71565306f754c9f01b22b64dc7c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lstOtherLocations: []
+  m_lstOtherLocations:
+  - {fileID: 92005622}
+  - {fileID: 545283629}
+  - {fileID: 854106501}
+  - {fileID: 1176715344}
+  - {fileID: 2098927793}
+  - {fileID: 1004872680}
   m_startLocation: {fileID: 1566278179}
   m_skillTest: {fileID: 0}
-  m_lstActCards: []
-  m_lstAgendaCards: []
-  m_lstEncounterCards: []
+  m_lstActCards:
+  - {fileID: 1351678379103480, guid: def5257f163a5c74bb429ebe33e2538f, type: 2}
+  m_lstAgendaCards:
+  - {fileID: 1777014522220698, guid: f794d73b8b4e58e41b103fc346c24c2e, type: 2}
+  m_lstEncounterCards:
+  - {fileID: 1441055645324898, guid: a9d4af758044465418d997121e4644c9, type: 2}
+  - {fileID: 1441055645324898, guid: a9d4af758044465418d997121e4644c9, type: 2}
+  - {fileID: 1441055645324898, guid: a9d4af758044465418d997121e4644c9, type: 2}
+  - {fileID: 1441055645324898, guid: a9d4af758044465418d997121e4644c9, type: 2}
+  - {fileID: 1441055645324898, guid: a9d4af758044465418d997121e4644c9, type: 2}
+  - {fileID: 1441055645324898, guid: a9d4af758044465418d997121e4644c9, type: 2}
+  - {fileID: 1441055645324898, guid: a9d4af758044465418d997121e4644c9, type: 2}
+  - {fileID: 1441055645324898, guid: a9d4af758044465418d997121e4644c9, type: 2}
+  - {fileID: 1441055645324898, guid: a9d4af758044465418d997121e4644c9, type: 2}
+  - {fileID: 1441055645324898, guid: a9d4af758044465418d997121e4644c9, type: 2}
+  m_hunter: {fileID: 114409183997872782, guid: 29e6866d5146e2045bd17f902969d7f3, type: 2}
 --- !u!4 &1335655214
 Transform:
   m_ObjectHideFlags: 0
@@ -1059,6 +1447,72 @@ RectTransform:
   m_AnchoredPosition: {x: 3509, y: 176}
   m_SizeDelta: {x: 583, y: 833}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2098927791
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2098927792}
+  - component: {fileID: 2098927793}
+  m_Layer: 5
+  m_Name: node4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2098927792
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2098927791}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.999, y: 0.999, z: 1.00008}
+  m_Children: []
+  m_Father: {fileID: 351792212}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 357, y: -111}
+  m_SizeDelta: {x: 583, y: 833}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2098927793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2098927791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd63b616aa9410c4eaf6af6140c197b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lstKeywords: 
+  m_frontImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_backImage: {fileID: 21300000, guid: a9883fba9c2721a4282434e4cb8b5e68, type: 3}
+  m_image: {fileID: 0}
+  m_cardName: 4
+  m_canFocus: 0
+  m_canFlip: 0
+  m_autoEventTrigger: 1
+  m_clues: 0
+  m_shroud: 0
+  m_lstDestinations: []
+  m_enterLocationCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_locationAbilityCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LocationCard+LocationCallback, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &2140839828
 GameObject:
   m_ObjectHideFlags: 0

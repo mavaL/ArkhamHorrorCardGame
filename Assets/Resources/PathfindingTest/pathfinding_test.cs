@@ -7,22 +7,32 @@ using UnityEngine.Events;
 
 public class pathfinding_test : scenario_base
 {
+	public EnemyCard	m_hunter;
+
 	void Awake()
 	{
 		InstantiateCards();
+
+		m_hunter = Instantiate(m_hunter.gameObject).GetComponent<EnemyCard>();
 
 		GameLogic.Get().m_currentScenario = this;
 	}
 
 	void Start()
 	{
-		m_startLocation = Instantiate(m_startLocation);
+		m_currentAct = Instantiate(m_lstActCards[0]).GetComponent<QuestCard>();
+		m_currentAgenda = Instantiate(m_lstAgendaCards[0]).GetComponent<QuestCard>();
+
+		GameLogic.DockCard(m_currentAct.gameObject, GameObject.Find("Act"));
+		GameLogic.DockCard(m_currentAgenda.gameObject, GameObject.Find("Agenda"));
+
 		GameLogic.Get().PlayerEnterLocation(m_startLocation, false);
-		GameLogic.DockCard(m_startLocation, GameObject.Find("StartLocation"));
 
 		GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "进入了场景\n章节1开始\n");
 
 		GameLogic.Get().m_mainGameUI.OnButtonEnterInvestigationPhase();
+
+		GameLogic.Get().SpawnAtLocation(m_hunter, m_lstOtherLocations[0], true);
 	}
 
 	public override void ShowPlayInfo()

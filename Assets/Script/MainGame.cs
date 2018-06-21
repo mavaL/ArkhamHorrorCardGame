@@ -287,13 +287,16 @@ public class MainGame : MonoBehaviour
 		var enemies = GameLogic.m_lstUnengagedEnemyCards;
 
 		// 1. Unengaged hunter enemies move
-		if (enemies.Count > 0)
+		for(int i=0; i< enemies.Count; ++i)
 		{
-			foreach (var enemy in enemies)
+			var enemy = enemies[i];
+		
+			if (enemy.IsKeywordContain(Card.Keyword.Hunter) && enemy.HunterMoveToNearestInvestigator())
 			{
-				if (enemy.IsKeywordContain(Card.Keyword.Hunter))
+				if (enemy.m_currentLocation.m_cardName == Player.Get().m_currentLocation.m_cardName)
 				{
-					enemy.HunterMoveToNearestInvestigator();
+					Player.Get().AddEngagedEnemy(enemy);
+					--i;
 				}
 			}
 		}
@@ -724,6 +727,11 @@ public class MainGame : MonoBehaviour
 				{
 					GameLogic.Get().m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 					GameLogic.Get().m_mainGameUI.BeginSelectCardToSpend();
+				}
+				else
+				{
+					card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+					m_tempHighlightCard = null;
 				}
 			}
 		}

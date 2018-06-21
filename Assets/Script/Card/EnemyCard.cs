@@ -14,11 +14,11 @@ public class EnemyCard : Card
 	public bool				m_engaged { set; get; } = false;
 	public PlayerCard		m_target { set; get; }
 
-	public void HunterMoveToNearestInvestigator()
+	public bool HunterMoveToNearestInvestigator()
 	{
 		if(m_exhausted || m_engaged)
 		{
-			return;
+			return false;
 		}
 
 		UnityEngine.Assertions.Assert.IsNotNull(m_currentLocation, "A enemy is not at any place in HunterMoveToNearestInvestigator()!!");
@@ -26,11 +26,16 @@ public class EnemyCard : Card
 		// If any investigator at the same location
 		if(m_currentLocation.m_cardName == Player.Get().m_currentLocation.m_cardName)
 		{
-			Player.Get().AddEngagedEnemy(this);
-			return;
+			return true;
 		}
 
-		PathFinding(m_currentLocation, Player.Get().m_currentLocation);
+		var path = PathFinding(m_currentLocation, Player.Get().m_currentLocation);
+
+		GameLogic.DockCard(gameObject, path[1].gameObject, 300, true, true);
+
+		GameLogic.Get().OutputGameLog(string.Format("{0}朝着{1}移动了一个地点，距离：{2}\n", m_cardName, Player.Get().m_investigatorCard.m_cardName, path.Count-2));
+
+		return true;
 	}
 
 	/// <summary>
@@ -38,7 +43,7 @@ public class EnemyCard : Card
 	/// </summary>
 	/// <param name="start"></param>
 	/// <param name="end"></param>
-	private void PathFinding(LocationCard start, LocationCard end)
+	private List<LocationCard> PathFinding(LocationCard start, LocationCard end)
 	{
 		UnityEngine.Assertions.Assert.IsTrue(start.m_cardName != end.m_cardName, "Start and end can't be same in EnemyCard.PathFinding()!!!");
 
@@ -67,6 +72,7 @@ public class EnemyCard : Card
 				if (child.m_cardName == end.m_cardName)
 				{
 					// Found it!
+					child.m_BFS_parent = parent;
 					_BuildPathRecur(child, path);
 					path.Add(child);
 					bFind = true;
@@ -81,14 +87,20 @@ public class EnemyCard : Card
 			}
 		}
 
-		UnityEngine.Assertions.Assert.IsTrue(path.Count > 0, "Pathfinding failed in EnemyCard.PathFinding()!!!");
+		UnityEngine.Assertions.Assert.IsTrue(path.Count > 1, "Pathfinding failed in EnemyCard.PathFinding()!!!");
+
+		return path;
 	}
 
 	private void _BuildPathRecur(LocationCard node, List<LocationCard> pathToBuild)
 	{
 		var parent = node.m_BFS_parent;
-		_BuildPathRecur(parent, pathToBuild);
-		pathToBuild.Add(parent);
+
+		if(parent)
+		{
+			_BuildPathRecur(parent, pathToBuild);
+			pathToBuild.Add(parent);
+		}
 	}
 
 	public override void OnSkillTest()

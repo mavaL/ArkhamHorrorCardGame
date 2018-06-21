@@ -47,7 +47,7 @@ MonoBehaviour:
   m_canFocus: 1
   m_canFlip: 0
   m_autoEventTrigger: 1
-  m_tokenToAdvance: 3
+  m_tokenToAdvance: 999
 --- !u!222 &222853336134230296
 CanvasRenderer:
   m_ObjectHideFlags: 1
