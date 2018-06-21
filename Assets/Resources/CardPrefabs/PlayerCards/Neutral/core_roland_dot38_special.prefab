@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224532843574688122}
   - component: {fileID: 222721372479610130}
   - component: {fileID: 114053238129278934}
+  - component: {fileID: 114305548832965678}
   m_Layer: 0
   m_Name: core_roland_dot38_special
   m_TagString: Untagged
@@ -59,6 +60,18 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: SkillCardEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+--- !u!114 &114305548832965678
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1879540736229126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 635953ed0b3e216459ae901d11be8736, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_bullet: 4
 --- !u!222 &222721372479610130
 CanvasRenderer:
   m_ObjectHideFlags: 1

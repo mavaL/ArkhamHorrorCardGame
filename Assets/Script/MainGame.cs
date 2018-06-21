@@ -73,6 +73,7 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Seeker/core_seeker_barricade",
 		"Guardian/core_guardian_physical_training",
 		"Guardian/core_guardian_machete",
 		"Guardian/core_guardian_first_aid",
@@ -92,7 +93,6 @@ public class MainGame : MonoBehaviour
 		"Seeker/core_seeker_medical_texts",
 		"Seeker/core_seeker_mind_over_matter",
 		"Seeker/core_seeker_working_a_hunch",
-		"Seeker/core_seeker_barricade",
 		"Seeker/core_seeker_deduction",
 		// TODO: 重复加载资源？
 		"Neutral/core_knife",

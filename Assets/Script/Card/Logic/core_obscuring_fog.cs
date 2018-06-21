@@ -30,7 +30,6 @@ public class core_obscuring_fog : Treachery
 		}
 
 		GameLogic.Get().SpawnAtLocation(card, Player.Get().m_currentLocation, false);
-		attachedCards.Add(card);
 		Player.Get().m_currentLocation.m_shroud += 2;
 
 		m_onAttachLocationInvestigate = new UnityAction<int>(OnAttachLocationInvestigate);

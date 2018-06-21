@@ -30,8 +30,12 @@ public class EnemyCard : Card
 			return;
 		}
 
-		// TODO: hunter enemy pathfinding..
-		throw new System.NotImplementedException();
+		PathFinding();
+	}
+
+	private void PathFinding()
+	{
+		List<List<LocationCard>> pathes = new List<List<LocationCard>>();
 	}
 
 	public override void OnSkillTest()

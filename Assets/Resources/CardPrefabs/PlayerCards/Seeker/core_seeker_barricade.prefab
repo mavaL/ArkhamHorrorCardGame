@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224746069315456050}
   - component: {fileID: 222766206302145172}
   - component: {fileID: 114458199611329610}
+  - component: {fileID: 114584603791815792}
   m_Layer: 0
   m_Name: core_seeker_barricade
   m_TagString: Untagged
@@ -46,10 +47,30 @@ MonoBehaviour:
   m_cardName: "\u969C\u788D\u7269"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 000000000100000003000000
     _values: 010000000100000001000000
+  m_cost: 0
+  m_slot: 10
   m_isPlayerDeck: 1
+  m_eventTiming: 3
+  m_skillCardEffect:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SkillCardEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+--- !u!114 &114584603791815792
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1682329564990526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9e1d16915a4c40469f8e0835b1582b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222766206302145172
 CanvasRenderer:
   m_ObjectHideFlags: 1
