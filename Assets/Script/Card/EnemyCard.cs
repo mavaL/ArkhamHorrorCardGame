@@ -12,6 +12,7 @@ public class EnemyCard : Card
 	public LocationCard		m_spawnLocation;
 
 	public bool				m_engaged { set; get; } = false;
+	public bool				m_canMove { set; get; } = true;
 	public PlayerCard		m_target { set; get; }
 
 	public bool HunterMoveToNearestInvestigator()
@@ -31,9 +32,17 @@ public class EnemyCard : Card
 
 		var path = PathFinding(m_currentLocation, Player.Get().m_currentLocation);
 
-		GameLogic.DockCard(gameObject, path[1].gameObject, 300, true, true);
+		GameLogic.Get().m_beforeEnemyMoveEvent.Invoke(this, path[1]);
 
-		GameLogic.Get().OutputGameLog(string.Format("{0}朝着{1}移动了一个地点，距离：{2}\n", m_cardName, Player.Get().m_investigatorCard.m_cardName, path.Count-2));
+		if (m_canMove)
+		{
+			GameLogic.Get().OutputGameLog(string.Format("{0}朝着{1}移动了一个地点，距离：{2}\n", m_cardName, Player.Get().m_investigatorCard.m_cardName, path.Count - 2));
+			GameLogic.DockCard(gameObject, path[1].gameObject, 300, true, true);
+		}
+		else
+		{
+			m_canMove = true;
+		}
 
 		return true;
 	}
@@ -220,9 +229,9 @@ public class EnemyCard : Card
 		}	
 	}
 
-	public override void Discard(bool bFromAssetArea = false)
+	public override void Discard()
 	{
-		base.Discard(bFromAssetArea);
+		base.Discard();
 
 		GameLogic.m_lstUnengagedEnemyCards.Remove(this);
 

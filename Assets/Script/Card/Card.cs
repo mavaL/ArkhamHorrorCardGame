@@ -213,7 +213,7 @@ public class Card : MonoBehaviour
         }
     }
 
-	public virtual void Discard(bool bFromAssetArea = false)
+	public virtual void Discard()
 	{
 		if(m_exhausted)
 		{

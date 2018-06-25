@@ -43,14 +43,15 @@ public class PlayerCard : Card
 	public int					m_cost;
 	public AssetSlot			m_slot = AssetSlot.None;
 	public bool					m_isPlayerDeck = true;
+	public bool					m_persistent = false;
 	public EventTiming			m_eventTiming = EventTiming.None;
 	public SkillCardEffect		m_skillCardEffect;
 
-	public override void Discard(bool bFromAssetArea = false)
+	public override void Discard()
 	{
-		base.Discard(bFromAssetArea);
+		base.Discard();
 
-		if (GetComponent<PlayerCardLogic>() && bFromAssetArea)
+		if (GetComponent<PlayerCardLogic>())
 		{
 			GetComponent<PlayerCardLogic>().OnDiscard(this);
 		}
@@ -77,7 +78,14 @@ public class PlayerCard : Card
 
 			yield return new WaitUntil(() => Player.Get().m_currentAction.Count == 0);
 
-			Discard();
+			if(m_persistent)
+			{
+				Player.Get().RemoveHandCard(this);
+			}
+			else
+			{
+				Discard();
+			}
 		}
 
 		Player.Get().ActionDone(PlayerAction.PlayCard, !m_lstKeywords.Contains(Keyword.Fast));

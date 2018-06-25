@@ -76,7 +76,7 @@ public class core_beat_cop : PlayerCardLogic
 
 		yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
 
-		GetComponent<Card>().Discard(true);
+		GetComponent<Card>().Discard();
 		
 		Player.Get().ActionDone(PlayerAction.BeatcopCardAction, false);
 	}

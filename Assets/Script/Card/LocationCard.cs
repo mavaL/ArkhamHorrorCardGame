@@ -77,7 +77,7 @@ public class LocationCard : Card
 
 	public override void OnSkillTestResult(int result)
 	{
-		//result = 99;
+		result = 99;
 		if (result >= 0)
 		{
 			// Succeed!
@@ -96,7 +96,7 @@ public class LocationCard : Card
 		Player.Get().ActionDone(PlayerAction.Investigate);
 	}
 
-	public override void Discard(bool bFromAssetArea = false)
+	public override void Discard()
 	{
 		gameObject.SetActive(false);
 

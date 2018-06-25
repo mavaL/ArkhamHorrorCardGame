@@ -37,6 +37,7 @@ public enum TurnPhase
 public class AfterAssignDamageEvent : UnityEvent<EnemyCard, int, int> { }
 
 public class BeforeDamageEnemeyEvent : UnityEvent<EnemyCard> { }
+public class BeforeEnemeyMoveEvent : UnityEvent<EnemyCard, LocationCard> { }
 
 public class GameLogic
 {
@@ -75,6 +76,7 @@ public class GameLogic
 	public AfterAssignDamageEvent	m_afterAssignDamageEvent { get; set; } = new AfterAssignDamageEvent();
 	public UnityEvent				m_afterEnemyDamagedEvent { get; set; } = new UnityEvent();
 	public BeforeDamageEnemeyEvent	m_beforeEnemyDamagedEvent { get; set; } = new BeforeDamageEnemeyEvent();
+	public BeforeEnemeyMoveEvent	m_beforeEnemyMoveEvent { get; set; } = new BeforeEnemeyMoveEvent();
 	public SkillTestEvent			m_afterSkillTest { get; set; } = new SkillTestEvent();
 
 	public static void Swap<T>(ref T a, ref T b)

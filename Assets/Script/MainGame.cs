@@ -1113,7 +1113,7 @@ public class MainGame : MonoBehaviour
 
 		if (ally.m_health <= 0 || ally.m_sanity <= 0)
 		{
-			ally.Discard(true);
+			ally.Discard();
 
 			GameLogic.Get().OutputGameLog(string.Format("{0}的盟友<{1}>被打死了！\n", Player.Get().m_investigatorCard.m_cardName, ally.m_cardName));
 		}

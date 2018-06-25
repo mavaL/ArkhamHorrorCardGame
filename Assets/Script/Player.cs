@@ -160,9 +160,12 @@ public class Player
 			}
 			else
 			{
-				GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_handCardListView, m_lstPlayerCards.IndexOf(card), card);
-
-				m_lstPlayerCards.Remove(card);
+				int index = m_lstPlayerCards.IndexOf(card);
+				if(index >= 0)
+				{
+					GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_handCardListView, m_lstPlayerCards.IndexOf(card), card);
+					m_lstPlayerCards.Remove(card);
+				}
 			}
 		}
 	}
@@ -362,7 +365,7 @@ public class Player
 
 		if (ActionLeft() == 0)
 		{
-			Player.Get().m_currentAction.Pop();
+			//Player.Get().m_currentAction.Pop();
 			GameLogic.Get().m_mainGameUI.EnterEnemyPhase();
 		}
 		else
@@ -469,7 +472,7 @@ public class Player
 			{
 				// Replace this slot asset
 				m_lstAssetCards.Remove(oldSlot);
-				oldSlot.Discard(true);
+				oldSlot.Discard();
 
 				GameLogic.Get().OutputGameLog(string.Format("{0}被替换下场\n", card.m_cardName));
 			}

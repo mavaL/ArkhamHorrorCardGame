@@ -54,6 +54,7 @@ MonoBehaviour:
   m_cost: 0
   m_slot: 10
   m_isPlayerDeck: 1
+  m_persistent: 1
   m_eventTiming: 3
   m_skillCardEffect:
     m_PersistentCalls:

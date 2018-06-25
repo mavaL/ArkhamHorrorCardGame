@@ -15,9 +15,9 @@ public class TreacheryCard : Card
 	public SkillTestEvent	m_skillTestResultEvent;
 	public UnityEvent		m_onRevealEvent = new UnityEvent();
 
-	public override void Discard(bool bFromAssetArea = false)
+	public override void Discard()
 	{
-		base.Discard(bFromAssetArea);
+		base.Discard();
 
 		gameObject.transform.SetParent(GameLogic.Get().m_mainGameUI.transform.root.parent);
 		gameObject.SetActive(false);
