@@ -6,30 +6,30 @@ using UnityEngine.Assertions;
 
 public class SkillTestEvents : MonoBehaviour
 {
-	public void WillpowerTest(int value)
+	public void WillpowerTest(int value, Card target)
 	{
-		_GeneralSkillTest(SkillType.Willpower, value);
+		_GeneralSkillTest(SkillType.Willpower, value, target);
 	}
 
-	public void IntellectTest(int value)
+	public void IntellectTest(int value, Card target)
 	{
-		_GeneralSkillTest(SkillType.Intellect, value);
+		_GeneralSkillTest(SkillType.Intellect, value, target);
 	}
 
-	public void CombatTest(int value)
+	public void CombatTest(int value, Card target)
 	{
-		_GeneralSkillTest(SkillType.Combat, value);
+		_GeneralSkillTest(SkillType.Combat, value, target);
 	}
 
-	public void AgilityTest(int value)
+	public void AgilityTest(int value, Card target)
 	{
-		_GeneralSkillTest(SkillType.Agility, value);
+		_GeneralSkillTest(SkillType.Agility, value, target);
 	}
 
-	private void _GeneralSkillTest(SkillType skill, int againstValue)
+	private void _GeneralSkillTest(SkillType skill, int againstValue, Card target)
 	{
 		ChaosBag.ChaosTokenType chaosToken;
-		int result = GameLogic.Get().SkillTest(skill, againstValue, out chaosToken);
+		int result = GameLogic.Get().SkillTest(skill, againstValue, target, out chaosToken);
 
 		bool bSucceed = result >= 0;
 		Card card = GameLogic.Get().m_mainGameUI.m_tempHighlightCard.GetComponent<Card>();

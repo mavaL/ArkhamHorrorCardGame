@@ -242,7 +242,7 @@ public class core_gathering : scenario_base
 
 			var ui = GameLogic.Get().m_mainGameUI;
 			ui.m_confirmChoiceBtn.gameObject.SetActive(true);
-			ui.m_choiceMode = MainGame.ConfirmButtonMode.ParleyWithLita;
+			ui.m_choiceMode = MainGame.ConfirmButtonMode.Custom;
 			ui.m_confirmChoiceBtn.onClick.AddListener(m_onParleyConfirm);
 
 			ui.BeginSelectCardToSpend();
@@ -421,7 +421,7 @@ public class core_gathering : scenario_base
 		GameLogic.Get().OutputGameLog(string.Format("{0}执行行动与丽塔谈判\n", Player.Get().m_investigatorCard.m_cardName));
 
 		var ui = GameLogic.Get().m_mainGameUI;
-		UnityEngine.Assertions.Assert.AreEqual(MainGame.ConfirmButtonMode.ParleyWithLita, ui.m_choiceMode, "Assert failed in OnButtonParleyConfirm()!!");
+		UnityEngine.Assertions.Assert.AreEqual(MainGame.ConfirmButtonMode.Custom, ui.m_choiceMode, "Assert failed in core_gathering.OnButtonParleyConfirm()!!");
 
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = true;
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = true;
@@ -432,7 +432,7 @@ public class core_gathering : scenario_base
 		Player.Get().m_currentAction.Pop();
 
 		ChaosBag.ChaosTokenType chaosToken;
-		int result = GameLogic.Get().SkillTest(SkillType.Intellect, 4, out chaosToken);
+		int result = GameLogic.Get().SkillTest(SkillType.Intellect, 4, m_lita, out chaosToken);
 		bool bSucceed = result >= 0;
 		bSucceed = true;
 

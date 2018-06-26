@@ -116,11 +116,11 @@ public class EnemyCard : Card
 	{
 		if(Player.Get().m_currentAction.Peek() == PlayerAction.Fight)
 		{
-			GameLogic.Get().m_currentScenario.m_skillTest.CombatTest(m_fight);
+			GameLogic.Get().m_currentScenario.m_skillTest.CombatTest(m_fight, this);
 		}
 		else
 		{
-			GameLogic.Get().m_currentScenario.m_skillTest.AgilityTest(m_evade);
+			GameLogic.Get().m_currentScenario.m_skillTest.AgilityTest(m_evade, this);
 		}
 	}
 
@@ -183,14 +183,6 @@ public class EnemyCard : Card
 			}
 	
 			Discard();
-		}
-		else
-		{
-			Card.m_lstSelectCards.ForEach(card =>
-			{
-				PlayerCard pc = card as PlayerCard;
-				pc.m_skillCardEffect.Invoke(99, gameObject);
-			});
 		}
 	}
 

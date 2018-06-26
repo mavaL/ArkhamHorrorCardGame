@@ -50,8 +50,8 @@ public class MainGame : MonoBehaviour
 		RevealCard,
 		DrawEncounterCard,
 		SkillTest,
-		ParleyWithLita,
-		DiscardExcessHandCards
+		DiscardExcessHandCards,
+		Custom
 	}
 	[System.NonSerialized]
 	public ConfirmButtonMode m_choiceMode = ConfirmButtonMode.None;
@@ -73,6 +73,11 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Seeker/core_seeker_medical_texts",
+		"Seeker/core_seeker_magnifying_glass",
+		"Seeker/core_seeker_hyperawreness",
+		"Seeker/core_seeker_deduction",
+		"Guardian/core_guardian_vicious_blow",
 		"Seeker/core_seeker_barricade",
 		"Guardian/core_guardian_physical_training",
 		"Guardian/core_guardian_machete",
@@ -81,19 +86,14 @@ public class MainGame : MonoBehaviour
 		"Guardian/core_guardian_beat_cop",
 		"Guardian/core_guardian_dot45_automatic",
 		"Guardian/core_guardian_dog",
-		"Guardian/core_guardian_vicious_blow",
 		"Guardian/core_guardian_evidence",
 		"Guardian/core_guardian_dodge",
 		"Neutral/core_roland_dot38_special",
-		"Seeker/core_seeker_magnifying_glass",
 		"Seeker/core_seeker_old_book_of_lore",
 		"Seeker/core_seeker_research_librarian",
 		"Seeker/core_seeker_milan_christopher",
-		"Seeker/core_seeker_hyperawreness",
-		"Seeker/core_seeker_medical_texts",
 		"Seeker/core_seeker_mind_over_matter",
 		"Seeker/core_seeker_working_a_hunch",
-		"Seeker/core_seeker_deduction",
 		// TODO: 重复加载资源？
 		"Neutral/core_knife",
 		"Neutral/core_knife",

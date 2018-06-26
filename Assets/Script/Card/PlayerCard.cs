@@ -45,7 +45,6 @@ public class PlayerCard : Card
 	public bool					m_isPlayerDeck = true;
 	public bool					m_persistent = false;
 	public EventTiming			m_eventTiming = EventTiming.None;
-	public SkillCardEffect		m_skillCardEffect;
 
 	public override void Discard()
 	{

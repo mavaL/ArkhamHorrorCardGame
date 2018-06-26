@@ -38,6 +38,9 @@ public class AfterAssignDamageEvent : UnityEvent<EnemyCard, int, int> { }
 
 public class BeforeDamageEnemeyEvent : UnityEvent<EnemyCard> { }
 public class BeforeEnemeyMoveEvent : UnityEvent<EnemyCard, LocationCard> { }
+// Param 1: skill test result
+// Param 2: target of this skill test
+public class AfterSkillTestEvent : UnityEvent<int, Card> { }
 
 public class GameLogic
 {
@@ -77,7 +80,7 @@ public class GameLogic
 	public UnityEvent				m_afterEnemyDamagedEvent { get; set; } = new UnityEvent();
 	public BeforeDamageEnemeyEvent	m_beforeEnemyDamagedEvent { get; set; } = new BeforeDamageEnemeyEvent();
 	public BeforeEnemeyMoveEvent	m_beforeEnemyMoveEvent { get; set; } = new BeforeEnemeyMoveEvent();
-	public SkillTestEvent			m_afterSkillTest { get; set; } = new SkillTestEvent();
+	public AfterSkillTestEvent		m_afterSkillTest { get; set; } = new AfterSkillTestEvent();
 
 	public static void Swap<T>(ref T a, ref T b)
 	{
@@ -189,7 +192,7 @@ public class GameLogic
 		m_currentScenario.ShowPlayInfo();
 	}
 
-	public int SkillTest(SkillType skill, int AgainstValue, out ChaosBag.ChaosTokenType chaosToken)
+	public int SkillTest(SkillType skill, int AgainstValue, Card target, out ChaosBag.ChaosTokenType chaosToken)
 	{
 		int chaosResult = 0;
 		int skillIconValue = GetSkillIconNumInSelectCards(skill);
@@ -225,6 +228,14 @@ public class GameLogic
 		
 		int finalValue = skillIconValue + chaosResult + playerSkillValue - AgainstValue;
 
+		Card.m_lstSelectCards.ForEach(card =>
+		{
+			if (card.IsKeywordContain(Card.Keyword.Skill) && card.GetComponent<PlayerCardLogic>())
+			{
+				card.GetComponent<PlayerCardLogic>().OnSkillTest(finalValue);
+			}
+		});
+
 		OutputGameLog(string.Format("技能检定如下：\n对应技能：<color=green>{0}</color>\n打出技能图标：<color=green>{1}</color>\n混沌标记<{2}>：<color=orange>{3}</color>\n检定值：<color=red>{4}</color>\n最终结果：{5}\n",
 			playerSkillValue,
 			skillIconValue,
@@ -233,7 +244,7 @@ public class GameLogic
 			-AgainstValue,
 			finalValue));
 
-		m_afterSkillTest.Invoke(finalValue);
+		m_afterSkillTest.Invoke(finalValue, target);
 
 		return finalValue;
 	}

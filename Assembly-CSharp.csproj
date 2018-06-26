@@ -67,6 +67,7 @@
     <Compile Include="Assets\Script\Card\LocationCard.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_barricade.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_beat_cop.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_deduction.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_dissonant_voices.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_dodge.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_dot45_automatic.cs" />
@@ -76,11 +77,15 @@
     <Compile Include="Assets\Script\Card\Logic\core_first_aid.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_frozen_in_fear.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_guard_dog.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_hyperawareness.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_lita_chantler.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_machete.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_magnifying_glass.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_medical_texts.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_obscuring_fog.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_physical_training.cs" />
     <Compile Include="Assets\Script\Card\Logic\core_roland_dot38_special.cs" />
+    <Compile Include="Assets\Script\Card\Logic\core_vicious_blow.cs" />
     <Compile Include="Assets\Script\Card\Logic\InvestigatorAbility.cs" />
     <Compile Include="Assets\Script\Card\Logic\LocationEvent.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCardLogic.cs" />

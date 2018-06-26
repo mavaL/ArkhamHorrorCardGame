@@ -72,7 +72,7 @@ public class LocationCard : Card
 
 	public override void OnSkillTest()
 	{
-		GameLogic.Get().m_currentScenario.m_skillTest.IntellectTest(m_shroud);
+		GameLogic.Get().m_currentScenario.m_skillTest.IntellectTest(m_shroud, this);
 	}
 
 	public override void OnSkillTestResult(int result)
@@ -81,8 +81,8 @@ public class LocationCard : Card
 		if (result >= 0)
 		{
 			// Succeed!
-			Player.Get().m_clues += 1;
-			m_clues -= 1;
+			Player.Get().m_clues += Player.Get().m_cluesDuringInvest;
+			m_clues -= Player.Get().m_cluesDuringInvest;
 			GameLogic.Get().OutputGameLog("调查成功！\n");
 		}
 		else

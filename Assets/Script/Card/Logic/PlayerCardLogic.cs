@@ -11,4 +11,5 @@ public class PlayerCardLogic : MonoBehaviour
 	public virtual int GetAssetResource() { return 0; }
 	public virtual bool HasUseLimit() { return false; }
 	public virtual void OnUseReactiveAsset() { }
+	public virtual void OnSkillTest(int result) { }
 }

@@ -72,9 +72,11 @@ public class Player
 	public int					m_resources = -1;
 	public Faction				m_faction;
 	public int					m_clues;
+
 	public int					m_actionUsed = 0;
 	public int					m_totalActions = 3;
 	public int					m_attackDamage = 1;
+	public int					m_cluesDuringInvest = 1;
 
 	public Stack<PlayerAction>	m_currentAction = new Stack<PlayerAction>();
 	public ActionDoneEvent		m_actionDoneEvent = new ActionDoneEvent();
