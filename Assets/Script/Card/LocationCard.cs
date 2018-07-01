@@ -9,10 +9,8 @@ public class LocationCard : Card
 	public int					m_shroud = 0;
 	public List<LocationCard>	m_lstDestinations;
 
-	[System.NonSerialized]
-	public SkillTestEvent		m_onLocationInvestigate = new SkillTestEvent();
-	[System.NonSerialized]
-	public List<Card>			m_lstCardsAtHere = new List<Card>();
+	public SkillTestEvent		m_onLocationInvestigate { get; set; } = new SkillTestEvent();
+	public List<Card>			m_lstCardsAtHere { get; set; } = new List<Card>();
 	public bool					m_isVisit { get; set; } = false;
 
 	#region

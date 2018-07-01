@@ -20,7 +20,8 @@ public enum SkillType
 	Intellect,
 	Combat,
 	Agility,
-	Wild    // Can be treat as any other
+	Wild,    // Can be treat as any other
+	None
 }
 
 public enum EventTiming

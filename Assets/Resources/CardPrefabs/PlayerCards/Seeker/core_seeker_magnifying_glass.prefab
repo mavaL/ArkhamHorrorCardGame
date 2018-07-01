@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224592219646902870}
   - component: {fileID: 222970512348193314}
   - component: {fileID: 114314510264508268}
+  - component: {fileID: 114711992047332776}
   m_Layer: 0
   m_Name: core_seeker_magnifying_glass
   m_TagString: Untagged
@@ -46,10 +47,26 @@ MonoBehaviour:
   m_cardName: "\u653E\u5927\u955C"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 01000000
     _values: 01000000
+  m_cost: 1
+  m_slot: 3
   m_isPlayerDeck: 1
+  m_persistent: 0
+  m_eventTiming: 4
+--- !u!114 &114711992047332776
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1591914307517096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5323d22a8c817146aeca1b54d7a9e8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222970512348193314
 CanvasRenderer:
   m_ObjectHideFlags: 1

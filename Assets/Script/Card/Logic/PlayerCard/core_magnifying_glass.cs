@@ -38,4 +38,9 @@ public class core_magnifying_glass : PlayerCardLogic
 		GameLogic.Get().m_afterSkillTest.RemoveListener(m_afterSkillTest);
 		Player.Get().m_investigatorCard.m_intellect -= 1;
 	}
+
+	public override bool CanTrigger()
+	{
+		return Player.Get().GetCurrentAction() == PlayerAction.Investigate;
+	}
 }

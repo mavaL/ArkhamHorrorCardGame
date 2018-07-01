@@ -12,17 +12,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class core_frozen_in_fear : Treachery
+public class core_frozen_in_fear : TreacheryLogic
 {
 	private UnityAction<PlayerAction>	m_actionDone;
 	private UnityAction					m_roundEnd;
+	private UnityAction<int, Card>		m_afterSkillTest;
 
-	public override void OnReveal(TreacheryCard card)
+	public override void OnReveal()
 	{
-		Player.Get().AddTreachery(card);
+		Player.Get().AddTreachery(GetComponent<TreacheryCard>());
 
 		m_actionDone = new UnityAction<PlayerAction>(OnActionDone);
 		m_roundEnd = new UnityAction(OnRoundEnd);
+		m_afterSkillTest = new UnityAction<int, Card>(AfterSkillTest);
 
 		Player.Get().m_actionDoneEvent.AddListener(m_actionDone);
 		GameLogic.Get().m_mainGameUI.m_roundEndEvent.AddListener(m_roundEnd);
@@ -71,7 +73,7 @@ public class core_frozen_in_fear : Treachery
 		}
 	}
 
-	public void OnRoundEnd()
+	private void OnRoundEnd()
 	{
 		var ui = GameLogic.Get().m_mainGameUI;
 		var card = GetComponent<TreacheryCard>();
@@ -79,16 +81,23 @@ public class core_frozen_in_fear : Treachery
 
 		GameLogic.Get().ShowHighlightCardExclusive(card, false);
 		ui.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
-		ui.BeginSelectCardToSpend();
+		ui.BeginSelectCardToSpend(SkillType.Willpower);
+		GameLogic.Get().m_afterSkillTest.AddListener(m_afterSkillTest);
 
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = true;
 		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = true;
 	}
 
-	public void SkillTestResult(int result)
+	public override void OnSkillTest()
+	{
+		GameLogic.Get().m_currentScenario.m_skillTest.WillpowerTest(3, null);
+	}
+
+	public void AfterSkillTest(int result, Card Target)
 	{
 		if(result >= 0)
 		{
+			GameLogic.Get().m_afterSkillTest.RemoveListener(m_afterSkillTest);
 			Player.Get().m_actionDoneEvent.RemoveListener(m_actionDone);
 			GameLogic.Get().m_mainGameUI.m_roundEndEvent.RemoveListener(m_roundEnd);
 			GetComponent<TreacheryCard>().Discard();

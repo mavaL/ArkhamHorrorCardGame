@@ -90,6 +90,7 @@ public class ChaosBag
 	
 	public ChaosTokenType GetResult()
 	{
+		return ChaosTokenType.Cultist;
 		return m_chaosBag[Random.Range(0, 16)];
 	}
 }

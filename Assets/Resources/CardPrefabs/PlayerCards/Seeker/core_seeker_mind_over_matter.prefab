@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224922747659417872}
   - component: {fileID: 222348263588874792}
   - component: {fileID: 114914794329056780}
+  - component: {fileID: 114197010741044684}
   m_Layer: 0
   m_Name: core_seeker_mind_over_matter
   m_TagString: Untagged
@@ -28,6 +29,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114197010741044684
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1652958651684236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be457fbcc164c4e46820af0d4caa3e96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114914794329056780
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -46,10 +58,15 @@ MonoBehaviour:
   m_cardName: "\u5FC3\u5982\u7535\u8F6C"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 0200000003000000
     _values: 0100000001000000
+  m_cost: 1
+  m_slot: 10
   m_isPlayerDeck: 1
+  m_persistent: 1
+  m_eventTiming: 3
 --- !u!222 &222348263588874792
 CanvasRenderer:
   m_ObjectHideFlags: 1

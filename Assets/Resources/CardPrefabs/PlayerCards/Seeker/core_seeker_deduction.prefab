@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224833666498803578}
   - component: {fileID: 222321770370419252}
   - component: {fileID: 114381679795050160}
+  - component: {fileID: 114326673229181114}
   m_Layer: 0
   m_Name: core_seeker_deduction
   m_TagString: Untagged
@@ -28,6 +29,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114326673229181114
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1464915171385874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8815bffcdd5fee499be4bd2b598a799, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114381679795050160
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -46,10 +58,15 @@ MonoBehaviour:
   m_cardName: "\u6F14\u7ECE\u6CD5"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 01000000
     _values: 01000000
+  m_cost: 0
+  m_slot: 10
   m_isPlayerDeck: 1
+  m_persistent: 0
+  m_eventTiming: 0
 --- !u!222 &222321770370419252
 CanvasRenderer:
   m_ObjectHideFlags: 1

@@ -16,5 +16,15 @@ public class core_lita_chantler: PlayerCardLogic
 	public override void OnReveal(Card card)
 	{
 		Player.Get().m_investigatorCard.m_combat += 1;
+		m_isActive = true;
+	}
+
+	public override void OnDiscard(Card card)
+	{
+		if(m_isActive)
+		{
+			m_isActive = false;
+			Player.Get().m_investigatorCard.m_combat -= 1;
+		}
 	}
 }

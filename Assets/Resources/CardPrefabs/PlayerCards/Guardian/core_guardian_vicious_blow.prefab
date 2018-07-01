@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224346508858109276}
   - component: {fileID: 222907497635183392}
   - component: {fileID: 114630436966159970}
+  - component: {fileID: 114992364852952060}
   m_Layer: 0
   m_Name: core_guardian_vicious_blow
   m_TagString: Untagged
@@ -46,29 +47,26 @@ MonoBehaviour:
   m_cardName: "\u6B8B\u5FCD\u6253\u51FB"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 02000000
     _values: 01000000
   m_cost: 0
+  m_slot: 10
   m_isPlayerDeck: 1
+  m_persistent: 0
   m_eventTiming: 0
-  m_skillCardEffect:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114902594422151592, guid: 86141fb62e04b1b41bbe3ef4f25d8201,
-          type: 2}
-        m_MethodName: OnSkillTestResult_Vicious_Blow
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: SkillCardEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+--- !u!114 &114992364852952060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1199507237608220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1dc9b9257fad9341be291162cdf604f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222907497635183392
 CanvasRenderer:
   m_ObjectHideFlags: 1

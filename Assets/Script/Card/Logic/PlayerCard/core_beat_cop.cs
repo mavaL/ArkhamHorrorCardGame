@@ -31,11 +31,6 @@ public class core_beat_cop : PlayerCardLogic
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
 	}
 
-	public override void OnDiscard(Card card)
-	{
-		Player.Get().m_investigatorCard.m_combat -= 1;
-	}
-
 	private void OnCardAction(int index)
 	{
 		if (index == (int)m_cardAction)
@@ -77,7 +72,8 @@ public class core_beat_cop : PlayerCardLogic
 		yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
 
 		GetComponent<Card>().Discard();
-		
+		Player.Get().m_investigatorCard.m_combat -= 1;
+
 		Player.Get().ActionDone(PlayerAction.BeatcopCardAction, false);
 	}
 

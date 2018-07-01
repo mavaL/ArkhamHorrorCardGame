@@ -245,7 +245,7 @@ public class core_gathering : scenario_base
 			ui.m_choiceMode = MainGame.ConfirmButtonMode.Custom;
 			ui.m_confirmChoiceBtn.onClick.AddListener(m_onParleyConfirm);
 
-			ui.BeginSelectCardToSpend();
+			ui.BeginSelectCardToSpend(SkillType.Intellect);
 			Player.Get().ActionDone(m_parleyAction);
 		}
 	}
@@ -431,8 +431,7 @@ public class core_gathering : scenario_base
 		ui.m_actionDropdown.options.RemoveAt((int)m_parleyAction);
 		Player.Get().m_currentAction.Pop();
 
-		ChaosBag.ChaosTokenType chaosToken;
-		int result = GameLogic.Get().SkillTest(SkillType.Intellect, 4, m_lita, out chaosToken);
+		int result = GameLogic.Get().SkillTest(SkillType.Intellect, 4, m_lita);
 		bool bSucceed = result >= 0;
 		bSucceed = true;
 
@@ -447,9 +446,7 @@ public class core_gathering : scenario_base
 			GameLogic.Get().OutputGameLog("谈判失败！\n");
 		}
 
-		GameLogic.Get().AfterSkillTest(bSucceed, chaosToken);
-
-		m_lstOtherLocations[3].OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+		m_lstOtherLocations[3].OnPointerExit(null);
 		ui.EndSelectCardToSpend();
 	}
 }

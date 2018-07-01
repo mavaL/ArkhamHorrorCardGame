@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224710326909381148}
   - component: {fileID: 114027056583488322}
+  - component: {fileID: 114796455680705904}
   m_Layer: 0
   m_Name: core_treachery_crypt_chill
   m_TagString: Untagged
@@ -45,46 +46,19 @@ MonoBehaviour:
   m_cardName: "\u5730\u7A74\u6076\u5BD2"
   m_canFocus: 1
   m_canFlip: 1
-  m_discardAfterReveal: 1
-  m_skillTestEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114902594422151592, guid: 86141fb62e04b1b41bbe3ef4f25d8201,
-          type: 2}
-        m_MethodName: WillpowerTest
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 4
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: SkillTestEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  m_skillTestResultEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114902594422151592, guid: 86141fb62e04b1b41bbe3ef4f25d8201,
-          type: 2}
-        m_MethodName: OnSkillTestResult_Crypt_Chill
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: SkillTestEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  m_onRevealEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  m_autoEventTrigger: 1
+  m_persistent: 0
+--- !u!114 &114796455680705904
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1350818854179394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11fac0820418a4b4a84e1a7fb99d37c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &224710326909381148
 RectTransform:
   m_ObjectHideFlags: 1

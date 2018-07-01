@@ -1142,6 +1142,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1335655214}
   - component: {fileID: 1335655213}
+  - component: {fileID: 1335655215}
   m_Layer: 0
   m_Name: Scenario
   m_TagString: Untagged
@@ -1167,8 +1168,7 @@ MonoBehaviour:
   - {fileID: 1549220252}
   m_startLocation: {fileID: 1446705582362468, guid: bffce3cbc850a044cade4fce5cc40d84,
     type: 2}
-  m_skillTest: {fileID: 114902594422151592, guid: 86141fb62e04b1b41bbe3ef4f25d8201,
-    type: 2}
+  m_skillTest: {fileID: 1335655215}
   m_lstActCards:
   - {fileID: 1351678379103480, guid: dea7ab1723df6784fa82673e58207659, type: 2}
   - {fileID: 1860970082764374, guid: 5b96f362af0e34c4b8ccf6076f308b78, type: 2}
@@ -1178,8 +1178,8 @@ MonoBehaviour:
   - {fileID: 1663982882883288, guid: fc421da96bfad6e4396f2e3966ae98db, type: 2}
   - {fileID: 1613507560164418, guid: 44d7eeee8aca3a3428fea3de9eb1b568, type: 2}
   m_lstEncounterCards:
-  - {fileID: 1315489162840404, guid: 05a95b4749caa4c4491e9f7230223b4b, type: 2}
-  - {fileID: 1165009897082102, guid: 78c1e93592f703844b31f4f500adf94d, type: 2}
+  - {fileID: 1804929542902170, guid: 1a27420f7f892ec4095a454fc877948f, type: 2}
+  - {fileID: 1921257340341606, guid: 85d38b24fbfa46b49be4a6223a80fd4e, type: 2}
   - {fileID: 1315489162840404, guid: 05a95b4749caa4c4491e9f7230223b4b, type: 2}
   - {fileID: 1804929542902170, guid: 1a27420f7f892ec4095a454fc877948f, type: 2}
   m_lita: {fileID: 114023195593983030, guid: 9bd2a7ccc35ab094fbfe11d3aa6da3d8, type: 2}
@@ -1198,6 +1198,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1335655215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1335655212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5704fc873fb38df4da7a216b25692183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1357998171
 GameObject:
   m_ObjectHideFlags: 0

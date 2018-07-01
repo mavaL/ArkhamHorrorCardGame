@@ -73,6 +73,10 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Guardian/core_guardian_dog",
+		"Guardian/core_guardian_evidence",
+		"Seeker/core_seeker_mind_over_matter",
+		"Seeker/core_seeker_milan_christopher",
 		"Seeker/core_seeker_medical_texts",
 		"Seeker/core_seeker_magnifying_glass",
 		"Seeker/core_seeker_hyperawreness",
@@ -85,14 +89,10 @@ public class MainGame : MonoBehaviour
 		"Guardian/core_guardian_dynamite_blast",
 		"Guardian/core_guardian_beat_cop",
 		"Guardian/core_guardian_dot45_automatic",
-		"Guardian/core_guardian_dog",
-		"Guardian/core_guardian_evidence",
 		"Guardian/core_guardian_dodge",
 		"Neutral/core_roland_dot38_special",
 		"Seeker/core_seeker_old_book_of_lore",
 		"Seeker/core_seeker_research_librarian",
-		"Seeker/core_seeker_milan_christopher",
-		"Seeker/core_seeker_mind_over_matter",
 		"Seeker/core_seeker_working_a_hunch",
 		// TODO: 重复加载资源？
 		"Neutral/core_knife",
@@ -205,7 +205,7 @@ public class MainGame : MonoBehaviour
 
 		Player.Get().m_currentAction.Push((PlayerAction)d.value);
 
-		switch (Player.Get().m_currentAction.Peek())
+		switch (Player.Get().GetCurrentAction())
 		{
 			case PlayerAction.Investigate:
 				InvestigateCurrentLocation();
@@ -237,7 +237,7 @@ public class MainGame : MonoBehaviour
 		m_tempHighlightCard = Player.Get().m_currentLocation.gameObject;
 		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
 
-		BeginSelectCardToSpend();
+		BeginSelectCardToSpend(SkillType.Intellect);
 	}
 
 	public void GainOneResource()
@@ -361,7 +361,7 @@ public class MainGame : MonoBehaviour
 		m_targetDropdown.onValueChanged.RemoveListener(m_onPlayReactiveEvent);
 
 		var highlightCard = m_tempHighlightCard;
-		m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+		m_tempHighlightCard.GetComponent<Card>().OnPointerExit(null);
 		m_tempHighlightCard = null;
 
 		var cards = Player.Get().GetHandCards();
@@ -493,7 +493,7 @@ public class MainGame : MonoBehaviour
 			m_confirmChoiceBtn.gameObject.SetActive(true);
 			m_choiceMode = MainGame.ConfirmButtonMode.DiscardExcessHandCards;
 
-			BeginSelectCardToSpend();
+			BeginSelectCardToSpend(SkillType.None);
 
 			yield return new WaitUntil(() => m_bConfirmModeEnd == true);
 		}
@@ -579,7 +579,7 @@ public class MainGame : MonoBehaviour
 			m_confirmActResultBtn.gameObject.SetActive(false);
 
 			var scenario = GameLogic.Get().m_currentScenario;
-			scenario.m_currentAct.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+			scenario.m_currentAct.OnPointerExit(null);
 
 			// Show next act or reach the end
 			scenario.AdvanceAct();
@@ -588,7 +588,7 @@ public class MainGame : MonoBehaviour
 		{
 			m_confirmEnterLocationBtn.gameObject.SetActive(false);
 
-			Player.Get().m_currentLocation.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+			Player.Get().m_currentLocation.OnPointerExit(null);
 			Player.Get().m_currentLocation.EnterLocation();
 			m_bConfirmModeEnd = true;
 		}
@@ -597,7 +597,7 @@ public class MainGame : MonoBehaviour
 			m_confirmAgendaResultBtn.gameObject.SetActive(false);
 
 			var scenario = GameLogic.Get().m_currentScenario;
-			scenario.m_currentAgenda.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+			scenario.m_currentAgenda.OnPointerExit(null);
 
 			scenario.AdvanceAgenda();
 		}
@@ -619,7 +619,7 @@ public class MainGame : MonoBehaviour
 		{
 			if (m_tempHighlightCard != null)
 			{
-				m_tempHighlightCard.GetComponent<Card>().OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+				m_tempHighlightCard.GetComponent<Card>().OnPointerExit(null);
 			}
 			GameLogic.Get().ShowHighlightCardExclusive(m_lstCardChoice[d.value], false);
 		}
@@ -646,7 +646,7 @@ public class MainGame : MonoBehaviour
 			GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
 
 			m_choiceDropdown.gameObject.SetActive(false);
-			card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+			card.OnPointerExit(null);
 			GameLogic.Get().OutputGameLog(string.Format("{0}获取了手牌：{1}\n", Player.Get().m_investigatorCard.m_cardName, card.m_cardName));
 		}
 		else if (m_choiceMode == ConfirmButtonMode.TextOnly)
@@ -676,7 +676,7 @@ public class MainGame : MonoBehaviour
 				GameLogic.Get().OutputGameLog(string.Format("地点<{0}>被揭示\n", card.m_cardName));
 			}
 
-			card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+			card.OnPointerExit(null);
 			m_tempHighlightCard = null;
 		}
 		else if(m_choiceMode == ConfirmButtonMode.DrawEncounterCard)
@@ -707,32 +707,17 @@ public class MainGame : MonoBehaviour
 					Player.Get().AddEngagedEnemy(enemy);
 				}
 
-				card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+				card.OnPointerExit(null);
 				m_tempHighlightCard = null;
 			}
 			else if(card is TreacheryCard)
 			{
-				TreacheryCard treacheryCard = card as TreacheryCard;
-				treacheryCard.m_onRevealEvent.Invoke();
+				card.OnPointerExit(null);
+				m_tempHighlightCard = null;
 
-				Treachery treachery = card.GetComponent<Treachery>();
-
-				if (treachery != null)
-				{
-					treachery.OnReveal(treacheryCard);
-					card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
-					m_tempHighlightCard = null;
-				}	
-				else if(treacheryCard.m_skillTestEvent.GetPersistentEventCount() > 0)
-				{
-					GameLogic.Get().m_mainGameUI.m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
-					GameLogic.Get().m_mainGameUI.BeginSelectCardToSpend();
-				}
-				else
-				{
-					card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
-					m_tempHighlightCard = null;
-				}
+				TreacheryLogic treachery = card.GetComponent<TreacheryLogic>();
+				treachery.OnReveal();
+				
 			}
 		}
 		else if(m_choiceMode == ConfirmButtonMode.SkillTest)
@@ -755,7 +740,7 @@ public class MainGame : MonoBehaviour
 
 		yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
 
-		card.OnPointerExit(new UnityEngine.EventSystems.BaseEventData(null));
+		card.OnPointerExit(null);
 		m_tempHighlightCard = null;
 	}
 
@@ -766,7 +751,7 @@ public class MainGame : MonoBehaviour
 		m_confirmChoiceBtn.gameObject.SetActive(true);
 		m_tempHighlightCard = enemy.gameObject;
 		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
-		BeginSelectCardToSpend();
+		BeginSelectCardToSpend(SkillType.Combat);
 	}
 
 	public void OnPlayerEvadeEnemy(EnemyCard enemy)
@@ -776,7 +761,7 @@ public class MainGame : MonoBehaviour
 		m_confirmChoiceBtn.gameObject.SetActive(true);
 		m_tempHighlightCard = enemy.gameObject;
 		m_choiceMode = MainGame.ConfirmButtonMode.SkillTest;
-		BeginSelectCardToSpend();
+		BeginSelectCardToSpend(SkillType.Agility);
 	}
 
 	public void ResetActionDropdown()
@@ -804,17 +789,22 @@ public class MainGame : MonoBehaviour
 		}
 	}
 
-	public void BeginSelectCardToSpend()
+	public void BeginSelectCardToSpend(SkillType type)
 	{
-		StartCoroutine(_BeginSelectCardToSpend());
+		StartCoroutine(_BeginSelectCardToSpend(type));
 	}
 
-	private IEnumerator _BeginSelectCardToSpend()
+	private IEnumerator _BeginSelectCardToSpend(SkillType type)
 	{
 		if (m_choiceMode == ConfirmButtonMode.SkillTest && OnAssetTiming(EventTiming.BeforeSkillTest))
 		{
 			yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
 		}
+
+		var saveChoiceMode = m_choiceMode;
+		GameLogic.Get().m_beforeSkillTest.Invoke(type);
+		yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
+		m_choiceMode = saveChoiceMode;
 
 		m_gameArea.SetActive(false);
 		m_confirmChoiceBtn.gameObject.SetActive(true);
@@ -863,22 +853,22 @@ public class MainGame : MonoBehaviour
 	public void OnTargetDropdownChanged(Dropdown d)
 	{
 		// Option 0 is reserved
-		if(d.value == 0 || Player.Get().m_currentAction.Peek() >= PlayerAction.NonStandardAction1)
+		if(d.value == 0 || Player.Get().GetCurrentAction() >= PlayerAction.NonStandardAction1)
 		{
 			return;
 		}
 
 		m_targetDropdown.gameObject.SetActive(false);
 
-		if (Player.Get().m_currentAction.Peek() == PlayerAction.Fight)
+		if (Player.Get().GetCurrentAction() == PlayerAction.Fight)
 		{
 			OnPlayerFightEnemy(Player.Get().GetEnemyFromEngagedOrLocation(d.value - 1));
 		}
-		else if(Player.Get().m_currentAction.Peek() == PlayerAction.Evade)
+		else if(Player.Get().GetCurrentAction() == PlayerAction.Evade)
 		{
 			OnPlayerEvadeEnemy(Player.Get().GetEnemyCards()[d.value - 1]);
 		}
-		else if(Player.Get().m_currentAction.Peek() == PlayerAction.Move)
+		else if(Player.Get().GetCurrentAction() == PlayerAction.Move)
 		{
 			string locName = d.options[d.value].text;
 			var locList = GameLogic.Get().m_currentScenario.m_lstOtherLocations;
@@ -892,7 +882,7 @@ public class MainGame : MonoBehaviour
 				}
 			}
 		}
-		else if(Player.Get().m_currentAction.Peek() == PlayerAction.PlayCard)
+		else if(Player.Get().GetCurrentAction() == PlayerAction.PlayCard)
 		{
 			string cardName = d.options[d.value].text;
 			var cards = Player.Get().GetHandCards();
@@ -920,7 +910,7 @@ public class MainGame : MonoBehaviour
 		}
 
 		m_tempHighlightCard = card.gameObject;
-		card.OnPointerEnter(new UnityEngine.EventSystems.BaseEventData(null));
+		card.OnPointerEnter(null);
 		card.m_image.raycastTarget = false;
 
 		if (bDisableUI)
@@ -941,7 +931,7 @@ public class MainGame : MonoBehaviour
 		m_targetDropdown.ClearOptions();
 		List<string> optionNames = new List<string>();
 
-		switch(Player.Get().m_currentAction.Peek())
+		switch(Player.Get().GetCurrentAction())
 		{
 			case PlayerAction.Move:
 				{
@@ -1093,7 +1083,7 @@ public class MainGame : MonoBehaviour
 		int allyDamage = index - 1;
 		int investigatorDamage = Player.Get().m_assignDamage - allyDamage;
 
-		if (Player.Get().m_currentAction.Peek() == PlayerAction.AssignDamage)
+		if (Player.Get().GetCurrentAction() == PlayerAction.AssignDamage)
 		{
 			ally.m_health -= allyDamage;
 			Player.Get().m_health -= investigatorDamage;
@@ -1123,9 +1113,10 @@ public class MainGame : MonoBehaviour
 		Player.Get().m_currentAction.Pop();
 	}
 
-	public void RemoveCardFromListView(CardListView list, int index, Card card)
+	public void RemoveCardFromListView(CardListView list, Card card)
 	{
-		list.RemoveItemFrom(index, 1);
+		var holder = list.GetItemViewsHolderIfVisible(card.m_thisInListView.transform.parent as RectTransform);
+		list.RemoveItemFrom(holder.ItemIndex, 1);
 		card.m_thisInListView = card;
 	}
 }

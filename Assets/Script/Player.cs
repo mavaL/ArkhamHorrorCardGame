@@ -36,6 +36,7 @@ public enum PlayerAction
 	NonStandardAction18,
 	NonStandardAction19,
 	NonStandardAction20,
+	None,
 	ReactiveEvent,
 	ReactiveAsset,
 	AssignDamage,
@@ -152,7 +153,7 @@ public class Player
 		{
 			if(m_lstAssetCards.Contains(card))
 			{
-				GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_assetListView, m_lstAssetCards.IndexOf(card), card);
+				GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_assetListView, card);
 				m_lstAssetCards.Remove(card);
 
 				if (card.m_slot != AssetSlot.None)
@@ -165,7 +166,7 @@ public class Player
 				int index = m_lstPlayerCards.IndexOf(card);
 				if(index >= 0)
 				{
-					GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_handCardListView, m_lstPlayerCards.IndexOf(card), card);
+					GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_handCardListView, card);
 					m_lstPlayerCards.Remove(card);
 				}
 			}
@@ -411,13 +412,23 @@ public class Player
 	public void AddTreachery(TreacheryCard treachery)
 	{
 		m_lstTreacheryCards.Add(treachery);
-		treachery.gameObject.SetActive(true);
+
+		var ui = GameLogic.Get().m_mainGameUI;
+		ListViewItem item = new ListViewItem();
+		item.card = treachery;
+		ui.m_threatListView.AddItemsAt(ui.m_threatListView.GetItemsCount(), item);
+	}
+
+	public void RemoveTreachery(TreacheryCard treachery)
+	{
+		GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_threatListView, treachery);
+		m_lstTreacheryCards.Remove(treachery);
 	}
 
 	public void RemoveEngagedEnemy(EnemyCard enemy)
 	{
 		enemy.m_engaged = false;
-		GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_threatListView, m_lstEnemyCards.IndexOf(enemy), enemy);
+		GameLogic.Get().m_mainGameUI.RemoveCardFromListView(GameLogic.Get().m_mainGameUI.m_threatListView, enemy);
 		m_lstEnemyCards.Remove(enemy);
 	}
 
@@ -432,6 +443,19 @@ public class Player
 		}
 
 		return -999;
+	}
+
+	public string GetSkillStringByType(SkillType skill)
+	{
+		switch (skill)
+		{
+			case SkillType.Agility: return "敏捷";
+			case SkillType.Combat: return "力量";
+			case SkillType.Intellect: return "知识";
+			case SkillType.Willpower: return "意志";
+		}
+
+		return null;
 	}
 
 	private void OnConfirmAssignDamage(int index)
@@ -486,8 +510,6 @@ public class Player
 			card.GetComponent<PlayerCardLogic>().OnReveal(card);
 		}
 
-		//card.gameObject.SetActive(true);
-
 		var ui = GameLogic.Get().m_mainGameUI;
 		ListViewItem item = new ListViewItem();
 		item.card = card;
@@ -533,6 +555,18 @@ public class Player
 
 			UnityEngine.Assertions.Assert.IsTrue(false, "Assert failed in Player.GetEnemyFromEngagedOrLocation()!!!");
 			return null;
+		}
+	}
+
+	public PlayerAction GetCurrentAction()
+	{
+		if(m_currentAction.Count == 0)
+		{
+			return PlayerAction.None;
+		}
+		else
+		{
+			return m_currentAction.Peek();
 		}
 	}
 }

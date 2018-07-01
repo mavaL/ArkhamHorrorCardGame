@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224725604440361014}
   - component: {fileID: 114043856374507846}
+  - component: {fileID: 114491251258212894}
   m_Layer: 0
   m_Name: core_treachery_grasping_hands
   m_TagString: Untagged
@@ -45,40 +46,19 @@ MonoBehaviour:
   m_cardName: "\u6525\u53D6\u4E4B\u624B"
   m_canFocus: 1
   m_canFlip: 1
-  m_skillTestEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114902594422151592, guid: 86141fb62e04b1b41bbe3ef4f25d8201,
-          type: 2}
-        m_MethodName: AgilityTest
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: SkillTestEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  m_skillTestResultEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114902594422151592, guid: 86141fb62e04b1b41bbe3ef4f25d8201,
-          type: 2}
-        m_MethodName: SkillTestFailedWithDamage
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: SkillTestEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+  m_autoEventTrigger: 1
+  m_persistent: 0
+--- !u!114 &114491251258212894
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1804929542902170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 013e6e1f9df09f64ba52a5de3bd0d379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &224725604440361014
 RectTransform:
   m_ObjectHideFlags: 1

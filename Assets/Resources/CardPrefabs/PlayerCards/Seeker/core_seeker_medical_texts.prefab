@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224269070022350160}
   - component: {fileID: 222057906592290842}
   - component: {fileID: 114100989449821882}
+  - component: {fileID: 114183609714369430}
   m_Layer: 0
   m_Name: core_seeker_medical_texts
   m_TagString: Untagged
@@ -46,10 +47,26 @@ MonoBehaviour:
   m_cardName: "\u533B\u5B66\u6587\u732E"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 02000000
     _values: 01000000
+  m_cost: 2
+  m_slot: 3
   m_isPlayerDeck: 1
+  m_persistent: 0
+  m_eventTiming: 0
+--- !u!114 &114183609714369430
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1320392300976870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7c43a082ec11b5419aecdbd2c36f14d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222057906592290842
 CanvasRenderer:
   m_ObjectHideFlags: 1

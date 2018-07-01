@@ -27,13 +27,20 @@ public class core_medical_texts : PlayerCardLogic
 		ui.m_actionDropdown.options.Add(new Dropdown.OptionData("<医学文献>卡牌行动"));
 		m_cardAction = (PlayerAction)ui.m_actionDropdown.options.Count - 1;
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
+
+		m_isActive = true;
 	}
 
 	public override void OnDiscard(Card card)
 	{
-		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_actionDropdown.onValueChanged.RemoveListener(m_onCardAction);
-		ui.m_actionDropdown.options.RemoveAt((int)m_cardAction);
+		if(m_isActive)
+		{
+			m_isActive = false;
+
+			var ui = GameLogic.Get().m_mainGameUI;
+			ui.m_actionDropdown.onValueChanged.RemoveListener(m_onCardAction);
+			ui.m_actionDropdown.options.RemoveAt((int)m_cardAction);
+		}
 	}
 
 	private void OnCardAction(int index)
@@ -50,7 +57,7 @@ public class core_medical_texts : PlayerCardLogic
 			ui.m_choiceMode = MainGame.ConfirmButtonMode.Custom;
 			ui.m_confirmChoiceBtn.onClick.AddListener(m_onSkillTest);
 
-			ui.BeginSelectCardToSpend();
+			ui.BeginSelectCardToSpend(SkillType.Intellect);
 		}
 	}
 
@@ -65,8 +72,7 @@ public class core_medical_texts : PlayerCardLogic
 		ui.m_confirmChoiceBtn.gameObject.SetActive(false);
 		ui.m_confirmChoiceBtn.onClick.RemoveListener(m_onSkillTest);
 
-		ChaosBag.ChaosTokenType chaosToken;
-		int result = GameLogic.Get().SkillTest(SkillType.Intellect, 2, null, out chaosToken);
+		int result = GameLogic.Get().SkillTest(SkillType.Intellect, 2, null);
 		bool bSucceed = result >= 0;
 		bSucceed = true;
 
@@ -80,8 +86,6 @@ public class core_medical_texts : PlayerCardLogic
 			GameLogic.Get().OutputGameLog(string.Format("<医学文献>使用失败\n", Player.Get().m_investigatorCard.m_cardName));
 			Player.Get().DecreaseHealth(null, 1);
 		}
-
-		GameLogic.Get().AfterSkillTest(bSucceed, chaosToken);
 
 		ui.EndSelectCardToSpend();
 

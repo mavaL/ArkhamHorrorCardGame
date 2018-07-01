@@ -11,13 +11,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class core_dissonant_voices : Treachery
+public class core_dissonant_voices : TreacheryLogic
 {
 	private UnityAction					m_roundEnd;
 
-	public override void OnReveal(TreacheryCard card)
+	public override void OnReveal()
 	{
-		Player.Get().AddTreachery(card);
+		Player.Get().AddTreachery(GetComponent<TreacheryCard>());
 
 		m_roundEnd = new UnityAction(OnRoundEnd);
 

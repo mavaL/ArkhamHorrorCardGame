@@ -114,7 +114,7 @@ public class EnemyCard : Card
 
 	public override void OnSkillTest()
 	{
-		if(Player.Get().m_currentAction.Peek() == PlayerAction.Fight)
+		if(Player.Get().GetCurrentAction() == PlayerAction.Fight)
 		{
 			GameLogic.Get().m_currentScenario.m_skillTest.CombatTest(m_fight, this);
 		}
@@ -129,7 +129,7 @@ public class EnemyCard : Card
 		//result = 99;
 		if (result >= 0)
 		{
-			if (Player.Get().m_currentAction.Peek() == PlayerAction.Fight)
+			if (Player.Get().GetCurrentAction() == PlayerAction.Fight)
 			{
 				GameLogic.Get().m_beforeEnemyDamagedEvent.Invoke(this);
 
@@ -148,7 +148,7 @@ public class EnemyCard : Card
 		}
 		else
 		{
-			if(Player.Get().m_currentAction.Peek() == PlayerAction.Fight)
+			if(Player.Get().GetCurrentAction() == PlayerAction.Fight)
 			{
 				GameLogic.Get().OutputGameLog("结果未造成伤害\n");
 			}
@@ -157,7 +157,7 @@ public class EnemyCard : Card
 				GameLogic.Get().OutputGameLog("闪避结果失败\n");
 			}
 		}
-		Player.Get().ActionDone(Player.Get().m_currentAction.Peek());
+		Player.Get().ActionDone(Player.Get().GetCurrentAction());
 	}
 
 	public void DecreaseHealth(int amount = 1)

@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224370047093611616}
   - component: {fileID: 114431317673692616}
+  - component: {fileID: 114835791629112036}
   m_Layer: 0
   m_Name: core_treachery_ancient_evils
   m_TagString: Untagged
@@ -45,34 +46,18 @@ MonoBehaviour:
   m_cardName: "\u8FDC\u53E4\u90AA\u6076"
   m_canFocus: 1
   m_canFlip: 1
-  m_discardAfterReveal: 1
-  m_skillTestEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SkillTestEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  m_skillTestResultEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SkillTestEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  m_onRevealEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114902594422151592, guid: 86141fb62e04b1b41bbe3ef4f25d8201,
-          type: 2}
-        m_MethodName: OnTreacheryReveal_Ancient_Evils
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  m_autoEventTrigger: 1
+--- !u!114 &114835791629112036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1441055645324898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d281db1c3b74d1546b0301eedb4df1d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &224370047093611616
 RectTransform:
   m_ObjectHideFlags: 1

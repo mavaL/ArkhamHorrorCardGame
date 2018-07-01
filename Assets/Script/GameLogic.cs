@@ -41,6 +41,7 @@ public class BeforeEnemeyMoveEvent : UnityEvent<EnemyCard, LocationCard> { }
 // Param 1: skill test result
 // Param 2: target of this skill test
 public class AfterSkillTestEvent : UnityEvent<int, Card> { }
+public class BeforeSkillTestEvent : UnityEvent<SkillType> { }
 
 public class GameLogic
 {
@@ -80,6 +81,7 @@ public class GameLogic
 	public UnityEvent				m_afterEnemyDamagedEvent { get; set; } = new UnityEvent();
 	public BeforeDamageEnemeyEvent	m_beforeEnemyDamagedEvent { get; set; } = new BeforeDamageEnemeyEvent();
 	public BeforeEnemeyMoveEvent	m_beforeEnemyMoveEvent { get; set; } = new BeforeEnemeyMoveEvent();
+	public BeforeSkillTestEvent		m_beforeSkillTest { get; set; } = new BeforeSkillTestEvent();
 	public AfterSkillTestEvent		m_afterSkillTest { get; set; } = new AfterSkillTestEvent();
 
 	public static void Swap<T>(ref T a, ref T b)
@@ -192,12 +194,12 @@ public class GameLogic
 		m_currentScenario.ShowPlayInfo();
 	}
 
-	public int SkillTest(SkillType skill, int AgainstValue, Card target, out ChaosBag.ChaosTokenType chaosToken)
+	public int SkillTest(SkillType skill, int AgainstValue, Card target)
 	{
 		int chaosResult = 0;
 		int skillIconValue = GetSkillIconNumInSelectCards(skill);
 		int playerSkillValue = Player.Get().GetSkillValueByType(skill);
-		chaosToken = m_chaosBag.GetResult();
+		ChaosBag.ChaosTokenType chaosToken = m_chaosBag.GetResult();
 
 		switch (chaosToken)
 		{
@@ -244,7 +246,7 @@ public class GameLogic
 			-AgainstValue,
 			finalValue));
 
-		m_afterSkillTest.Invoke(finalValue, target);
+		m_currentScenario.m_skillTest.AfterSkillTest(finalValue, chaosToken, target);
 
 		return finalValue;
 	}

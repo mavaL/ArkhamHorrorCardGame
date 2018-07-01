@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224718131129704582}
   - component: {fileID: 222807105260604822}
   - component: {fileID: 114706077272212018}
+  - component: {fileID: 114435401757202066}
   m_Layer: 0
   m_Name: core_seeker_hyperawreness
   m_TagString: Untagged
@@ -28,6 +29,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114435401757202066
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1333568593148010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48af12c2ed3746c47bdb0596a12fd6d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114706077272212018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -46,10 +58,15 @@ MonoBehaviour:
   m_cardName: "\u8FC7\u5EA6\u89C9\u77E5"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 0100000003000000
     _values: 0100000001000000
+  m_cost: 0
+  m_slot: 10
   m_isPlayerDeck: 1
+  m_persistent: 0
+  m_eventTiming: 4
 --- !u!222 &222807105260604822
 CanvasRenderer:
   m_ObjectHideFlags: 1

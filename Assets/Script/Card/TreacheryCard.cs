@@ -10,14 +10,16 @@ public class SkillTestEvent : UnityEvent<int> { }
 
 public class TreacheryCard : Card
 {
-	public bool				m_discardAfterReveal = true;
-	public SkillTestEvent	m_skillTestEvent;
-	public SkillTestEvent	m_skillTestResultEvent;
-	public UnityEvent		m_onRevealEvent = new UnityEvent();
+	public bool m_persistent = false;
 
 	public override void Discard()
 	{
 		base.Discard();
+
+		if(m_persistent)
+		{
+			Player.Get().RemoveTreachery(this);
+		}
 
 		gameObject.transform.SetParent(GameLogic.Get().m_mainGameUI.transform.root.parent);
 		gameObject.SetActive(false);
@@ -26,16 +28,6 @@ public class TreacheryCard : Card
 
 	public override void OnSkillTest()
 	{
-		m_skillTestEvent.Invoke(0);
-
-		if(m_discardAfterReveal)
-		{
-			Discard();
-		}
-	}
-
-	public override void OnSkillTestResult(int result)
-	{
-		m_skillTestResultEvent.Invoke(result);
+		GetComponent<TreacheryLogic>().OnSkillTest();
 	}
 }

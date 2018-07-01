@@ -27,13 +27,20 @@ public class core_first_aid : PlayerCardLogic
 		ui.m_actionDropdown.options.Add(new Dropdown.OptionData("<急救>卡牌行动"));
 		m_cardAction = (PlayerAction)ui.m_actionDropdown.options.Count - 1;
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
+
+		m_isActive = true;
 	}
 
 	public override void OnDiscard(Card card)
 	{
-		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_actionDropdown.onValueChanged.RemoveListener(m_onCardAction);
-		ui.m_actionDropdown.options.RemoveAt((int)m_cardAction);
+		if(m_isActive)
+		{
+			m_isActive = false;
+
+			var ui = GameLogic.Get().m_mainGameUI;
+			ui.m_actionDropdown.onValueChanged.RemoveListener(m_onCardAction);
+			ui.m_actionDropdown.options.RemoveAt((int)m_cardAction);
+		}
 	}
 
 	private void OnCardAction(int index)

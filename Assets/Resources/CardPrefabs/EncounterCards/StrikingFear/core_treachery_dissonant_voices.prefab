@@ -46,22 +46,8 @@ MonoBehaviour:
   m_cardName: "\u4E0D\u534F\u548C\u97F3"
   m_canFocus: 1
   m_canFlip: 1
-  m_discardAfterReveal: 0
-  m_skillTestEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SkillTestEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  m_skillTestResultEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SkillTestEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  m_onRevealEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  m_autoEventTrigger: 1
+  m_persistent: 1
 --- !u!114 &114631345116796232
 MonoBehaviour:
   m_ObjectHideFlags: 1

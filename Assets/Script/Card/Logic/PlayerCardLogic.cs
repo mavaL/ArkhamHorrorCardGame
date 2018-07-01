@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerCardLogic : MonoBehaviour
 {
+	// Is this player card been played/revealed
+	protected bool	m_isActive = false;
+
 	public virtual bool CanTrigger() { return true; }
 	public virtual void	OnReveal(Card card) { }
 	public virtual void	OnDiscard(Card card) { }

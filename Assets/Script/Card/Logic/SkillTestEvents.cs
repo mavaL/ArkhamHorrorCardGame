@@ -6,6 +6,9 @@ using UnityEngine.Assertions;
 
 public class SkillTestEvents : MonoBehaviour
 {
+	// For card like <Mind over Matter>..
+	public SkillType m_replaceSkillTest { get; set; } = SkillType.None;
+
 	public void WillpowerTest(int value, Card target)
 	{
 		_GeneralSkillTest(SkillType.Willpower, value, target);
@@ -28,65 +31,30 @@ public class SkillTestEvents : MonoBehaviour
 
 	private void _GeneralSkillTest(SkillType skill, int againstValue, Card target)
 	{
-		ChaosBag.ChaosTokenType chaosToken;
-		int result = GameLogic.Get().SkillTest(skill, againstValue, target, out chaosToken);
+		if(m_replaceSkillTest != SkillType.None)
+		{
+			GameLogic.Get().OutputGameLog(string.Format("{0}替代{1}进行检定\n", Player.Get().GetSkillStringByType(m_replaceSkillTest), Player.Get().GetSkillStringByType(skill)));
+			skill = m_replaceSkillTest;
+		}
+
+		int result = GameLogic.Get().SkillTest(skill, againstValue, target);
 
 		bool bSucceed = result >= 0;
 		Card card = GameLogic.Get().m_mainGameUI.m_tempHighlightCard.GetComponent<Card>();
 		card.OnSkillTestResult(result);
-
-		GameLogic.Get().AfterSkillTest(bSucceed, chaosToken);
 	}
 
-	public void SkillTestFailedWithDamage(int result)
+	public void AfterSkillTest(int result, ChaosBag.ChaosTokenType chaosToken, Card target)
 	{
-		if(result < 0)
-		{
-			Player.Get().DecreaseHealth(null, -result);
-			GameLogic.Get().OutputGameLog(string.Format("{0}因为技能检定失败受到了{1}点伤害！\n", Player.Get().m_investigatorCard.m_cardName, -result));
-		}
+		StartCoroutine(_AfterSkillTest(result, chaosToken, target));
 	}
 
-	public void SkillTestFailedWithHorror(int result)
+	private IEnumerator _AfterSkillTest(int result, ChaosBag.ChaosTokenType chaosToken, Card target)
 	{
-		if (result < 0)
-		{
-			Player.Get().DecreaseSanity(-result);
-			GameLogic.Get().OutputGameLog(string.Format("{0}因为技能检定失败受到了{1}点恐怖！\n", Player.Get().m_investigatorCard.m_cardName, -result));
-		}
-	}
+		GameLogic.Get().AfterSkillTest(result>=0, chaosToken);
+		// TODO: 协程越来越逻辑耦合了。。。。。。。。应该找个方法去掉协程了。。。。。。。。。
+		yield return new WaitUntil(() => Player.Get().GetCurrentAction() != PlayerAction.AssignDamage && Player.Get().GetCurrentAction() != PlayerAction.AssignHorror);
 
-	public void OnTreacheryReveal_Ancient_Evils()
-	{
-		var agenda = GameLogic.Get().m_currentScenario.m_currentAgenda;
-
-		if (agenda.AddDoom())
-		{
-			GameLogic.Get().OutputGameLog("恶兆已集满，触发事件！\n");
-			GameLogic.Get().ShowHighlightCardExclusive(agenda, true);
-			GameLogic.Get().m_mainGameUI.m_confirmAgendaResultBtn.gameObject.SetActive(true);
-		}
-	}
-
-	public void OnSkillTestResult_Crypt_Chill(int result)
-	{
-		if(result < 0)
-		{
-			if(!Player.Get().ChooseAndDiscardAssetCard())
-			{
-				Player.Get().DecreaseHealth(null, 2);
-				GameLogic.Get().OutputGameLog(string.Format("{0}结算<地穴恶寒>，因为没有在场资产牌，受到了2点伤害！\n", Player.Get().m_investigatorCard.m_cardName));
-			}
-		}
-	}
-
-	public void OnSkillTestResult_Vicious_Blow(int result, GameObject go)
-	{
-		if(result >= 0)
-		{
-			var enemy = go.GetComponent<EnemyCard>();
-			enemy.DecreaseHealth(1);
-			GameLogic.Get().OutputGameLog(string.Format("<{0}>因为<残忍打击>而多受了1点伤害！\n", enemy.m_cardName));
-		}
+		GameLogic.Get().m_afterSkillTest.Invoke(result, target);
 	}
 }
