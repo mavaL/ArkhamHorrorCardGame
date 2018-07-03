@@ -19,6 +19,7 @@ public class core_physical_training : PlayerCardLogic
 	public override void OnReveal(Card card)
 	{
 		m_afterSkillTest = new UnityAction<int, Card>(AfterSkillTest);
+		Player.Get().m_currentAction.Pop();
 	}
 
 	public override bool CanTrigger()
@@ -42,20 +43,20 @@ public class core_physical_training : PlayerCardLogic
 		mainUI.m_choiceMode = MainGame.ConfirmButtonMode.TextOnly;
 
 		mainUI.m_lstChoiceEvent.Clear();
-		mainUI.m_lstChoiceEvent.Add(new UnityEvent());
-		mainUI.m_lstChoiceEvent.Add(new UnityEvent());
+		mainUI.m_lstChoiceEvent.Add(new ChoiceEvent());
+		mainUI.m_lstChoiceEvent.Add(new ChoiceEvent());
 
-		mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction(OnOption1));
-		mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction(OnOption2));
+		mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction<object>(OnOption1));
+		mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction<object>(OnOption2));
 	}
 
-	private void OnOption1()
+	private void OnOption1(object param)
 	{
 		m_option1or2 = true;
 		_OnChoosedOption();
 	}
 
-	private void OnOption2()
+	private void OnOption2(object param)
 	{
 		m_option1or2 = false;
 		_OnChoosedOption();

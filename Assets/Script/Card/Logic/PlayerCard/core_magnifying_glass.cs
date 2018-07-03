@@ -19,6 +19,7 @@ public class core_magnifying_glass : PlayerCardLogic
 	public override void OnReveal(Card card)
 	{
 		m_afterSkillTest = new UnityAction<int, Card>(AfterSkillTest);
+		Player.Get().m_currentAction.Pop();
 	}
 
 	public override void OnUseReactiveAsset()

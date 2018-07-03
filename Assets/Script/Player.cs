@@ -368,7 +368,6 @@ public class Player
 
 		if (ActionLeft() == 0)
 		{
-			//Player.Get().m_currentAction.Pop();
 			GameLogic.Get().m_mainGameUI.EnterEnemyPhase();
 		}
 		else

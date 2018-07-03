@@ -4,6 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
+public class ChoiceEvent : UnityEvent<object>
+{
+	public object	m_eventParam { get; }
+
+	public ChoiceEvent()
+	{
+		m_eventParam = null;
+	}
+
+	public ChoiceEvent(object eventParam)
+	{
+		m_eventParam = eventParam;
+	}
+}
+
 public class MainGame : MonoBehaviour
 {
 	#region game UI
@@ -11,7 +26,7 @@ public class MainGame : MonoBehaviour
 	public GameObject			m_agendaArea;
 	public GameObject			m_gameArea;
 	public Text					m_gameLog;
-	public Text					m_confirmSkillTestText;
+	public Text					m_confirmChoiceText;
 	public Text					m_statsInfoText;
 	public Scrollbar			m_logScrollBar;
 	public Scrollbar			m_statsScrollBar;
@@ -53,15 +68,12 @@ public class MainGame : MonoBehaviour
 		DiscardExcessHandCards,
 		Custom
 	}
-	[System.NonSerialized]
-	public ConfirmButtonMode m_choiceMode = ConfirmButtonMode.None;
-	[System.NonSerialized]
-	public List<UnityEvent>	m_lstChoiceEvent = new List<UnityEvent>();
+
+	public ConfirmButtonMode m_choiceMode { get; set; } = ConfirmButtonMode.None;
+	public List<ChoiceEvent>	m_lstChoiceEvent { get; set; } = new List<ChoiceEvent>();
 	// Used by LocationEvent
-	[System.NonSerialized]
-	public List<PlayerCard> m_lstCardChoice = new List<PlayerCard>(0);
-	[System.NonSerialized]
-	public GameObject		m_tempHighlightCard;
+	public List<PlayerCard> m_lstCardChoice { get; set; } = new List<PlayerCard>(0);
+	public GameObject		m_tempHighlightCard { get; set; }
 	public bool				m_bConfirmModeEnd { get; set; }
 	public UnityEvent		m_investigatePhaseBeginEvent { get; set; } = new UnityEvent();
 	public UnityEvent		m_enemyPhaseBeginEvent { get; set; } = new UnityEvent();
@@ -73,6 +85,10 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Seeker/core_seeker_working_a_hunch",
+		"Seeker/core_seeker_research_librarian",
+		"Seeker/core_seeker_barricade",
+		"Seeker/core_seeker_old_book_of_lore",
 		"Guardian/core_guardian_dog",
 		"Guardian/core_guardian_evidence",
 		"Seeker/core_seeker_mind_over_matter",
@@ -82,7 +98,6 @@ public class MainGame : MonoBehaviour
 		"Seeker/core_seeker_hyperawreness",
 		"Seeker/core_seeker_deduction",
 		"Guardian/core_guardian_vicious_blow",
-		"Seeker/core_seeker_barricade",
 		"Guardian/core_guardian_physical_training",
 		"Guardian/core_guardian_machete",
 		"Guardian/core_guardian_first_aid",
@@ -91,9 +106,6 @@ public class MainGame : MonoBehaviour
 		"Guardian/core_guardian_dot45_automatic",
 		"Guardian/core_guardian_dodge",
 		"Neutral/core_roland_dot38_special",
-		"Seeker/core_seeker_old_book_of_lore",
-		"Seeker/core_seeker_research_librarian",
-		"Seeker/core_seeker_working_a_hunch",
 		// TODO: 重复加载资源？
 		"Neutral/core_knife",
 		"Neutral/core_knife",
@@ -370,7 +382,7 @@ public class MainGame : MonoBehaviour
 		{
 			if (cards[i].m_cardName == m_targetDropdown.options[index].text)
 			{
-				cards[i].GetComponent<PlayerCardLogic>().OnReveal(highlightCard.GetComponent<Card>());
+				cards[i].GetComponent<PlayerCardLogic>().OnPlayReactiveEvent(highlightCard.GetComponent<Card>());
 				Player.Get().m_resources -= cards[i].m_cost;
 
 				UnityEngine.Assertions.Assert.IsTrue(Player.Get().m_resources >= 0, "Assert failed in MainGame.OnPlayReactiveEvent()!!!");
@@ -652,7 +664,7 @@ public class MainGame : MonoBehaviour
 		else if (m_choiceMode == ConfirmButtonMode.TextOnly)
 		{
 			m_choiceDropdown.gameObject.SetActive(false);
-			m_lstChoiceEvent[m_choiceDropdown.value].Invoke();
+			m_lstChoiceEvent[m_choiceDropdown.value].Invoke(m_lstChoiceEvent[m_choiceDropdown.value].m_eventParam);
 			m_choiceDropdown.value = 0;
 		}
 		else if(m_choiceMode == ConfirmButtonMode.RevealCard)
@@ -808,16 +820,16 @@ public class MainGame : MonoBehaviour
 
 		m_gameArea.SetActive(false);
 		m_confirmChoiceBtn.gameObject.SetActive(true);
-		m_confirmSkillTestText.gameObject.SetActive(true);
+		m_confirmChoiceText.gameObject.SetActive(true);
 		GameLogic.Get().m_cardClickMode = Card.CardClickMode.MultiSelect;
 
 		if (m_choiceMode == ConfirmButtonMode.SkillTest)
 		{
-			m_confirmSkillTestText.text = "请选择参与检定的手牌：";
+			m_confirmChoiceText.text = "请选择参与检定的手牌：";
 		}
 		else if (m_choiceMode == ConfirmButtonMode.DiscardExcessHandCards)
 		{
-			m_confirmSkillTestText.text = string.Format("手牌数量为{0}超过8，请选择要丢弃的手牌：", Player.Get().GetHandCards().Count);
+			m_confirmChoiceText.text = string.Format("手牌数量为{0}超过8，请选择要丢弃的手牌：", Player.Get().GetHandCards().Count);
 		}
 	}
 
@@ -847,7 +859,7 @@ public class MainGame : MonoBehaviour
 		Card.m_lstSelectCards.Clear();
 		m_gameArea.SetActive(true);
 		GameLogic.Get().m_cardClickMode = Card.CardClickMode.Flip;
-		m_confirmSkillTestText.gameObject.SetActive(false);
+		m_confirmChoiceText.gameObject.SetActive(false);
 	}
 
 	public void OnTargetDropdownChanged(Dropdown d)

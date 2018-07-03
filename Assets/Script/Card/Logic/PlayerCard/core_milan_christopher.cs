@@ -23,6 +23,7 @@ public class core_milan_christopher : PlayerCardLogic
 		GameLogic.Get().m_afterSkillTest.AddListener(m_afterSkillTest);
 
 		m_isActive = true;
+		Player.Get().m_currentAction.Pop();
 	}
 
 	public void AfterSkillTest(int result, Card target)

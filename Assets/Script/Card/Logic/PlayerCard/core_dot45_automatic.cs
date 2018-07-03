@@ -31,6 +31,7 @@ public class core_dot45_automatic : PlayerCardLogic
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
 
 		m_isActive = true;
+		Player.Get().m_currentAction.Pop();
 	}
 
 	public override void OnDiscard(Card card)

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224573995740812512}
   - component: {fileID: 222354013146837246}
   - component: {fileID: 114989922795448376}
+  - component: {fileID: 114501898360997172}
   m_Layer: 0
   m_Name: core_seeker_old_book_of_lore
   m_TagString: Untagged
@@ -28,6 +29,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114501898360997172
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1862712967954840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f31ce5ad2b8bd4a97095a6655f9c46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114989922795448376
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -46,10 +58,15 @@ MonoBehaviour:
   m_cardName: "\u8001\u65E7\u7684\u4E66"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 00000000
     _values: 01000000
+  m_cost: 3
+  m_slot: 3
   m_isPlayerDeck: 1
+  m_persistent: 1
+  m_eventTiming: 0
 --- !u!222 &222354013146837246
 CanvasRenderer:
   m_ObjectHideFlags: 1

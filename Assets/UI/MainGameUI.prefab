@@ -813,7 +813,7 @@ GameObject:
   - component: {fileID: 222229467601971198}
   - component: {fileID: 114841714337659138}
   m_Layer: 5
-  m_Name: SpendCardText
+  m_Name: ChoiceText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4501,7 +4501,7 @@ MonoBehaviour:
   m_agendaArea: {fileID: 1157116741684560}
   m_gameArea: {fileID: 1679718870897116}
   m_gameLog: {fileID: 114911021622239084}
-  m_confirmSkillTestText: {fileID: 114841714337659138}
+  m_confirmChoiceText: {fileID: 114841714337659138}
   m_statsInfoText: {fileID: 114989719756078072}
   m_logScrollBar: {fileID: 114140830035387118}
   m_statsScrollBar: {fileID: 114194770853592240}
@@ -7010,7 +7010,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1662, y: 21}
+  m_AnchoredPosition: {x: 1619.1, y: 56}
   m_SizeDelta: {x: 87.6, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224452874304610342
@@ -7764,7 +7764,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1525, y: 16}
+  m_AnchoredPosition: {x: 1474.8, y: 56}
   m_SizeDelta: {x: 180, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224883459075909680

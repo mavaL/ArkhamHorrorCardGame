@@ -181,11 +181,11 @@ public class core_gathering : scenario_base
 			mainUI.m_choiceMode = MainGame.ConfirmButtonMode.TextOnly;
 
 			mainUI.m_lstChoiceEvent.Clear();
-			mainUI.m_lstChoiceEvent.Add(new UnityEvent());
-			mainUI.m_lstChoiceEvent.Add(new UnityEvent());
+			mainUI.m_lstChoiceEvent.Add(new ChoiceEvent());
+			mainUI.m_lstChoiceEvent.Add(new ChoiceEvent());
 
-			mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction(OnAct_Ending1));
-			mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction(OnAct_Ending2));
+			mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction<object>(OnAct_Ending1));
+			mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction<object>(OnAct_Ending2));
 		}
 		else
 		{
@@ -287,11 +287,11 @@ public class core_gathering : scenario_base
 				mainUI.m_choiceMode = MainGame.ConfirmButtonMode.TextOnly;
 
 				mainUI.m_lstChoiceEvent.Clear();
-				mainUI.m_lstChoiceEvent.Add(new UnityEvent());
-				mainUI.m_lstChoiceEvent.Add(new UnityEvent());
+				mainUI.m_lstChoiceEvent.Add(new ChoiceEvent());
+				mainUI.m_lstChoiceEvent.Add(new ChoiceEvent());
 
-				mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction(OnAgenda1_Option1));
-				mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction(OnAgenda1_Option2));
+				mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction<object>(OnAgenda1_Option1));
+				mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction<object>(OnAgenda1_Option2));
 			}
 			else
 			{
@@ -309,14 +309,14 @@ public class core_gathering : scenario_base
 		}
 	}
 
-	private void OnAgenda1_Option1()
+	private void OnAgenda1_Option1(object param)
 	{
 		Player.Get().DecreaseSanity(2);
 		GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "选择了恶兆影响：受到2点恐怖\n");
 		GameLogic.Get().m_mainGameUI.m_InvestigationPhaseBtn.gameObject.SetActive(true);
 	}
 
-	private void OnAgenda1_Option2()
+	private void OnAgenda1_Option2(object param)
 	{
 		var cards = Player.Get().GetHandCards();
 		var cardToDiscard = cards[Random.Range(0, cards.Count-1)];
@@ -327,12 +327,12 @@ public class core_gathering : scenario_base
 		GameLogic.Get().m_mainGameUI.m_InvestigationPhaseBtn.gameObject.SetActive(true);
 	}
 
-	private void OnAct_Ending1()
+	private void OnAct_Ending1(object param)
 	{
 		_ShowEnding(1);
 	}
 
-	private void OnAct_Ending2()
+	private void OnAct_Ending2(object param)
 	{
 		_ShowEnding(2);
 	}

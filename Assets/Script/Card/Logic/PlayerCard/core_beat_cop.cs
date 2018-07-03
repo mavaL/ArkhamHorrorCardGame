@@ -29,6 +29,8 @@ public class core_beat_cop : PlayerCardLogic
 		ui.m_actionDropdown.options.Add(new Dropdown.OptionData("<疲惫的巡警>卡牌行动"));
 		m_cardAction = (PlayerAction)ui.m_actionDropdown.options.Count - 1;
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
+
+		Player.Get().m_currentAction.Pop();
 	}
 
 	private void OnCardAction(int index)

@@ -49,23 +49,23 @@ public class core_mind_over_matter : PlayerCardLogic
 			mainUI.m_choiceMode = MainGame.ConfirmButtonMode.TextOnly;
 
 			mainUI.m_lstChoiceEvent.Clear();
-			mainUI.m_lstChoiceEvent.Add(new UnityEvent());
-			mainUI.m_lstChoiceEvent.Add(new UnityEvent());
+			mainUI.m_lstChoiceEvent.Add(new ChoiceEvent());
+			mainUI.m_lstChoiceEvent.Add(new ChoiceEvent());
 
-			mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction(OnConfirmUseAbility));
-			mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction(OnConfirmNotUseAbility));
+			mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction<object>(OnConfirmUseAbility));
+			mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction<object>(OnConfirmNotUseAbility));
 			GameLogic.Get().m_currentTiming = EventTiming.BeforeSkillTest;
 		}
 	}
 
-	private void OnConfirmUseAbility()
+	private void OnConfirmUseAbility(object param)
 	{
 		GameLogic.Get().m_currentScenario.m_skillTest.m_replaceSkillTest = SkillType.Intellect;
 		GameLogic.Get().m_afterSkillTest.AddListener(m_afterSkillTest);
 		GameLogic.Get().m_currentTiming = EventTiming.None;
 	}
 
-	private void OnConfirmNotUseAbility()
+	private void OnConfirmNotUseAbility(object param)
 	{
 		GameLogic.Get().m_currentTiming = EventTiming.None;
 	}

@@ -84,9 +84,12 @@
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_medical_texts.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_milan_christopher.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_mind_over_matter.cs" />
+    <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_old_book_of_lore.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_physical_training.cs" />
+    <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_research_librarian.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_roland_dot38_special.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_vicious_blow.cs" />
+    <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_working_a_hunch.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCardLogic.cs" />
     <Compile Include="Assets\Script\Card\Logic\SkillTestEvents.cs" />
     <Compile Include="Assets\Script\Card\Logic\Treachery\core_ancient_evils.cs" />

@@ -15,7 +15,7 @@ using UnityEngine.Events;
 
 public class core_dodge : PlayerCardLogic
 {
-	public override void OnReveal(Card card)
+	public override void OnPlayReactiveEvent(Card card)
 	{
 		card.OnExhausted();
 		var pc = GetComponent<PlayerCard>();

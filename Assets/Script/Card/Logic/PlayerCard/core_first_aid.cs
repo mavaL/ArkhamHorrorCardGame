@@ -29,6 +29,7 @@ public class core_first_aid : PlayerCardLogic
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
 
 		m_isActive = true;
+		Player.Get().m_currentAction.Pop();
 	}
 
 	public override void OnDiscard(Card card)
@@ -68,14 +69,14 @@ public class core_first_aid : PlayerCardLogic
 			if (bHurt)
 			{
 				options.Add("治疗1伤害");
-				mainUI.m_lstChoiceEvent.Add(new UnityEvent());
-				mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction(OnHealOneHealth));
+				mainUI.m_lstChoiceEvent.Add(new ChoiceEvent());
+				mainUI.m_lstChoiceEvent[0].AddListener(new UnityAction<object>(OnHealOneHealth));
 			}
 			if (bHorror)
 			{
 				options.Add("治疗1恐怖");
-				mainUI.m_lstChoiceEvent.Add(new UnityEvent());
-				mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction(OnHealOneSanity));
+				mainUI.m_lstChoiceEvent.Add(new ChoiceEvent());
+				mainUI.m_lstChoiceEvent[1].AddListener(new UnityAction<object>(OnHealOneSanity));
 			}
 
 			mainUI.m_choiceDropdown.AddOptions(options);
@@ -83,7 +84,7 @@ public class core_first_aid : PlayerCardLogic
 		}
 	}
 
-	private void OnHealOneHealth()
+	private void OnHealOneHealth(object param)
 	{
 		Player.Get().HealHealth(1);
 
@@ -96,7 +97,7 @@ public class core_first_aid : PlayerCardLogic
 		Player.Get().ActionDone(m_cardAction);
 	}
 
-	private void OnHealOneSanity()
+	private void OnHealOneSanity(object param)
 	{
 		Player.Get().HealSanity(1);
 

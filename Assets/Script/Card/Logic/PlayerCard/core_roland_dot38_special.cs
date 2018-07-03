@@ -32,6 +32,7 @@ public class core_roland_dot38_special : PlayerCardLogic
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
 
 		m_isActive = true;
+		Player.Get().m_currentAction.Pop();
 	}
 
 	public override void OnDiscard(Card card)

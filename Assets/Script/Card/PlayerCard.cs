@@ -69,6 +69,8 @@ public class PlayerCard : Card
 		if (m_lstKeywords.Contains(Keyword.Asset))
 		{
 			Player.Get().AddAssetCard(this);
+
+			yield return new WaitUntil(() => Player.Get().m_currentAction.Count == 0);
 		}
 		else
 		{

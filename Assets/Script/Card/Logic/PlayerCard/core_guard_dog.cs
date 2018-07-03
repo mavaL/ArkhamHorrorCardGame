@@ -20,6 +20,8 @@ public class core_guard_dog : PlayerCardLogic
 		m_afterAssignDamage = new UnityAction<EnemyCard, int, int>(AfterAssignDamage);
 
 		GameLogic.Get().m_afterAssignDamageEvent.AddListener(m_afterAssignDamage);
+
+		Player.Get().m_currentAction.Pop();
 	}
 
 	private void AfterAssignDamage(EnemyCard attacker, int investigatorDamage, int allyDamage)
