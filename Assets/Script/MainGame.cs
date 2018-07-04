@@ -187,7 +187,7 @@ public class MainGame : MonoBehaviour
 			Debug.LogError("Error!!Not implement...");
 		}
 
-		//GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
+		GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
 	}
 
 	public void DrawPlayerCard()

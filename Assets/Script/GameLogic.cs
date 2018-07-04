@@ -208,7 +208,7 @@ public class GameLogic
 				chaosResult = -skillIconValue - playerSkillValue;
 				break;
 			case ChaosBag.ChaosTokenType.ElderSign:
-				chaosResult = Player.Get().m_investigatorCard.m_investigatorAbility.Invoke();
+				chaosResult = Player.Get().m_investigatorCard.GetComponent<InvestigatorLogic>().OnApplyElderSignEffect();
 				break;
 			case ChaosBag.ChaosTokenType.Zero:
 			case ChaosBag.ChaosTokenType.Add_1:
@@ -260,10 +260,7 @@ public class GameLogic
 
 		if (chaosToken == ChaosBag.ChaosTokenType.ElderSign)
 		{
-			if (Player.Get().m_investigatorCard.m_afterElderSignEvent.GetPersistentEventCount() > 0)
-			{
-				Player.Get().m_investigatorCard.m_afterElderSignEvent.Invoke(bSucceed);
-			}
+			Player.Get().m_investigatorCard.GetComponent<InvestigatorLogic>().OnElderSignSkillTestResult(bSucceed);
 		}
 	}
 

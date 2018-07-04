@@ -12,12 +12,4 @@ public class InvestigatorCard : Card
 
 	public int	m_health;
 	public int	m_sanity;
-
-    [System.Serializable]
-    public class ElderSignAbility : SerializableCallback<int> { }
-    public ElderSignAbility m_investigatorAbility;
-
-    [System.Serializable]
-    public class AfterElderSign : UnityEvent<bool> { }
-    public AfterElderSign   m_afterElderSignEvent;
 }

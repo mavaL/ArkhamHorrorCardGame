@@ -75,7 +75,7 @@ public class LocationCard : Card
 
 	public override void OnSkillTestResult(int result)
 	{
-		result = 99;
+		//result = 99;
 		if (result >= 0)
 		{
 			// Succeed!

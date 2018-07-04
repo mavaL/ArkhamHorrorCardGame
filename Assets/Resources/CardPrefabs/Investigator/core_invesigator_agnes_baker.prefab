@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224609077721864210}
   - component: {fileID: 114986670318230928}
+  - component: {fileID: 114407077340597190}
   m_Layer: 5
   m_Name: core_invesigator_agnes_baker
   m_TagString: Untagged
@@ -27,6 +28,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114407077340597190
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1609351538639294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b5b8bf85b79644db1b8384d6ef8b23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114986670318230928
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -38,11 +50,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ba9b5232f99374da36bf3e60704167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_lstKeywords: 
   m_frontImage: {fileID: 21300010, guid: ec84ed0bc0aec604ca37408cce272616, type: 3}
   m_backImage: {fileID: 21300010, guid: 23bec283faaa48e4886c8df63b8767b1, type: 3}
   m_image: {fileID: 0}
   m_cardName: "\u5B89\u857E\u4E1D\u8D1D\u514B"
   m_canFocus: 1
+  m_canFlip: 1
+  m_autoEventTrigger: 1
   m_willPower: 5
   m_intellect: 2
   m_combat: 2
@@ -58,6 +73,11 @@ MonoBehaviour:
     _typeName: InvestigatorCard+ElderSignAbility, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     dirty: 0
+  m_afterElderSignEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: InvestigatorCard+AfterElderSign, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!224 &224609077721864210
 RectTransform:
   m_ObjectHideFlags: 1
