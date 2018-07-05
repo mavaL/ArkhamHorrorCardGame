@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224609077721864210}
   - component: {fileID: 114986670318230928}
-  - component: {fileID: 114407077340597190}
+  - component: {fileID: 114277414291456696}
   m_Layer: 5
   m_Name: core_invesigator_agnes_baker
   m_TagString: Untagged
@@ -28,7 +28,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114407077340597190
+--- !u!114 &114277414291456696
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -36,7 +36,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1609351538639294}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14b5b8bf85b79644db1b8384d6ef8b23, type: 3}
+  m_Script: {fileID: 11500000, guid: 4baa2352c7f9f8244b373eb69b9b6e6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114986670318230928
@@ -64,20 +64,6 @@ MonoBehaviour:
   m_agility: 3
   m_health: 6
   m_sanity: 8
-  m_investigatorAbility:
-    _target: {fileID: 114826646520924828, guid: 42cf98e759d197a48ae73a3ea8f139eb,
-      type: 2}
-    _methodName: OnElderSignAbility_Agnes
-    _args: []
-    _dynamic: 0
-    _typeName: InvestigatorCard+ElderSignAbility, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    dirty: 0
-  m_afterElderSignEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: InvestigatorCard+AfterElderSign, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!224 &224609077721864210
 RectTransform:
   m_ObjectHideFlags: 1

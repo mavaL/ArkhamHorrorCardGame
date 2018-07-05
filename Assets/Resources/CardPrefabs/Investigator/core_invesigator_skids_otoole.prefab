@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224769279974275580}
   - component: {fileID: 114530422716297756}
+  - component: {fileID: 114101962777594842}
   m_Layer: 5
   m_Name: core_invesigator_skids_otoole
   m_TagString: Untagged
@@ -27,6 +28,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114101962777594842
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1473643635841186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d735292b0e935a43b4d84cbb3c0112b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114530422716297756
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -44,38 +56,14 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_cardName: "\u6DF7\u6DF7\u5965\u56FE\u5C14"
   m_canFocus: 1
+  m_canFlip: 1
+  m_autoEventTrigger: 1
   m_willPower: 2
   m_intellect: 3
   m_combat: 3
   m_agility: 4
   m_health: 8
   m_sanity: 6
-  m_investigatorAbility:
-    _target: {fileID: 114826646520924828, guid: 42cf98e759d197a48ae73a3ea8f139eb,
-      type: 2}
-    _methodName: OnElderSignAbility_OToole
-    _args: []
-    _dynamic: 0
-    _typeName: InvestigatorCard+ElderSignAbility, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    dirty: 0
-  m_afterElderSignEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114826646520924828, guid: 42cf98e759d197a48ae73a3ea8f139eb,
-          type: 2}
-        m_MethodName: AfterElderSignAbility_OToole
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: InvestigatorCard+AfterElderSign, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!224 &224769279974275580
 RectTransform:
   m_ObjectHideFlags: 1

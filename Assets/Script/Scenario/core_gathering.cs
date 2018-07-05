@@ -102,6 +102,12 @@ public class core_gathering : scenario_base
 		{
 			ui.m_statsInfoText.text += string.Format("{0}血量：<color=red>{1}</color>\n", enemy.m_cardName, enemy.m_health);
 		});
+
+		var treachery = Player.Get().GetTreacheryCards();
+		treachery.ForEach(trea =>
+		{
+			ui.m_statsInfoText.text += trea.GetLog();
+		});
 	}
 
 	public override int GetChaosTokenEffect(ChaosBag.ChaosTokenType t)

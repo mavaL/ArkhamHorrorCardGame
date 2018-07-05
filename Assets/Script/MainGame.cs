@@ -85,6 +85,8 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Seeker/core_seeker_deduction",
+		"Neutral/core_cover_up",
 		"Seeker/core_seeker_working_a_hunch",
 		"Seeker/core_seeker_research_librarian",
 		"Seeker/core_seeker_barricade",
@@ -96,7 +98,6 @@ public class MainGame : MonoBehaviour
 		"Seeker/core_seeker_medical_texts",
 		"Seeker/core_seeker_magnifying_glass",
 		"Seeker/core_seeker_hyperawreness",
-		"Seeker/core_seeker_deduction",
 		"Guardian/core_guardian_vicious_blow",
 		"Guardian/core_guardian_physical_training",
 		"Guardian/core_guardian_machete",
@@ -118,7 +119,6 @@ public class MainGame : MonoBehaviour
 		"Neutral/core_manual_dexterity",
 		"Neutral/core_manual_dexterity",
 		"Neutral/core_paranoia",
-		"Neutral/core_cover_up",
 	};
 
 	private void Awake()
@@ -187,7 +187,7 @@ public class MainGame : MonoBehaviour
 			Debug.LogError("Error!!Not implement...");
 		}
 
-		GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
+		//GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
 	}
 
 	public void DrawPlayerCard()

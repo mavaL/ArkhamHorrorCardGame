@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224771235395402366}
   - component: {fileID: 222067792376607166}
   - component: {fileID: 114853657516387364}
+  - component: {fileID: 114933428037411958}
   m_Layer: 0
   m_Name: core_cover_up
   m_TagString: Untagged
@@ -39,15 +40,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9af3d81cf6f68a4a890baa050bbc57d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lstKeywords: 
+  m_lstKeywords: 10000000
   m_frontImage: {fileID: 21300002, guid: b028b3e710412a54db4091d4405dc803, type: 3}
   m_backImage: {fileID: 21300022, guid: b028b3e710412a54db4091d4405dc803, type: 3}
   m_image: {fileID: 0}
   m_cardName: "\u63A9\u76D6"
   m_canFocus: 1
+  m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 
     _values: 
+  m_cost: 0
+  m_slot: 10
+  m_isPlayerDeck: 1
+  m_persistent: 0
+  m_eventTiming: 0
+--- !u!114 &114933428037411958
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1652575882160062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ced9991ddc88ad749a424b75e4a9987c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222067792376607166
 CanvasRenderer:
   m_ObjectHideFlags: 1

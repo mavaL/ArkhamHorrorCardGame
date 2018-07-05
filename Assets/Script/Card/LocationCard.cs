@@ -75,11 +75,11 @@ public class LocationCard : Card
 
 	public override void OnSkillTestResult(int result)
 	{
-		//result = 99;
+		result = 99;
 		if (result >= 0)
 		{
 			// Succeed!
-			Player.Get().m_clues += Player.Get().m_cluesDuringInvest;
+			Player.Get().GainClues(Player.Get().m_cluesDuringInvest);
 			m_clues -= Player.Get().m_cluesDuringInvest;
 			GameLogic.Get().OutputGameLog("调查成功！\n");
 		}

@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224256352979626264}
   - component: {fileID: 114263776994664396}
+  - component: {fileID: 114819278481950014}
   m_Layer: 5
   m_Name: core_invesigator_wendy_adams
   m_TagString: Untagged
@@ -38,26 +39,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ba9b5232f99374da36bf3e60704167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_lstKeywords: 
   m_frontImage: {fileID: 21300006, guid: ec84ed0bc0aec604ca37408cce272616, type: 3}
   m_backImage: {fileID: 21300006, guid: 23bec283faaa48e4886c8df63b8767b1, type: 3}
   m_image: {fileID: 0}
   m_cardName: "\u6E29\u8482\u4E9A\u5F53\u65AF"
   m_canFocus: 1
+  m_canFlip: 1
+  m_autoEventTrigger: 1
   m_willPower: 4
   m_intellect: 3
   m_combat: 1
   m_agility: 4
   m_health: 7
   m_sanity: 7
-  m_investigatorAbility:
-    _target: {fileID: 114826646520924828, guid: 42cf98e759d197a48ae73a3ea8f139eb,
-      type: 2}
-    _methodName: OnElderSignAbility_Wendy
-    _args: []
-    _dynamic: 0
-    _typeName: InvestigatorCard+ElderSignAbility, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    dirty: 0
+--- !u!114 &114819278481950014
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1118531099186656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddec91fd3902be24b8c5b7f99f1f96e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &224256352979626264
 RectTransform:
   m_ObjectHideFlags: 1

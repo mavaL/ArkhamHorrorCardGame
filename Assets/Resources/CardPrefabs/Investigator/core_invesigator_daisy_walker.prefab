@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224928065932552072}
   - component: {fileID: 114058285673642488}
+  - component: {fileID: 114407841873417658}
   m_Layer: 5
   m_Name: core_invesigator_daisy_walker
   m_TagString: Untagged
@@ -44,38 +45,25 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_cardName: "\u9EDB\u897F\u6C83\u514B"
   m_canFocus: 1
+  m_canFlip: 1
+  m_autoEventTrigger: 1
   m_willPower: 3
   m_intellect: 5
   m_combat: 2
   m_agility: 2
   m_health: 5
   m_sanity: 9
-  m_investigatorAbility:
-    _target: {fileID: 114826646520924828, guid: 42cf98e759d197a48ae73a3ea8f139eb,
-      type: 2}
-    _methodName: OnElderSignAbility_Daisy
-    _args: []
-    _dynamic: 0
-    _typeName: InvestigatorCard+ElderSignAbility, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    dirty: 0
-  m_afterElderSignEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114826646520924828, guid: 42cf98e759d197a48ae73a3ea8f139eb,
-          type: 2}
-        m_MethodName: AfterElderSignAbility_Daisy
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: InvestigatorCard+AfterElderSign, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+--- !u!114 &114407841873417658
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1541370902410738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 203586d0e11c336469e8e99c4cd46e70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &224928065932552072
 RectTransform:
   m_ObjectHideFlags: 1

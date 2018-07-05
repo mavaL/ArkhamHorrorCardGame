@@ -92,4 +92,9 @@ public class PlayerCard : Card
 
 		Player.Get().ActionDone(PlayerAction.PlayCard, !m_lstKeywords.Contains(Keyword.Fast));
 	}
+
+	public override string GetLog()
+	{
+		return GetComponent<PlayerCardLogic>().GetLog();
+	}
 }

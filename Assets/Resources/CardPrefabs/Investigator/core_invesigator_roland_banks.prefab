@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224897971089742720}
   - component: {fileID: 114050746152253808}
+  - component: {fileID: 114380990843182324}
   m_Layer: 5
   m_Name: core_invesigator_roland_banks
   m_TagString: Untagged
@@ -44,26 +45,25 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_cardName: "\u7F57\u5170\u73ED\u514B\u65AF"
   m_canFocus: 1
+  m_canFlip: 1
+  m_autoEventTrigger: 1
   m_willPower: 3
   m_intellect: 3
   m_combat: 4
   m_agility: 2
   m_health: 9
   m_sanity: 5
-  m_investigatorAbility:
-    _target: {fileID: 114826646520924828, guid: 42cf98e759d197a48ae73a3ea8f139eb,
-      type: 2}
-    _methodName: OnElderSignAbility_Roland
-    _args: []
-    _dynamic: 0
-    _typeName: InvestigatorCard+ElderSignAbility, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    dirty: 0
-  m_afterElderSignEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: InvestigatorCard+AfterElderSign, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+--- !u!114 &114380990843182324
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1699669398680370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b5b8bf85b79644db1b8384d6ef8b23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &224897971089742720
 RectTransform:
   m_ObjectHideFlags: 1

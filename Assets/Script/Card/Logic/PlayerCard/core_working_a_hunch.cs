@@ -15,7 +15,7 @@ public class core_working_a_hunch : PlayerCardLogic
 {
 	public override void OnReveal(Card card)
 	{
-		Player.Get().m_clues += 1;
+		Player.Get().GainClues(1);
 		Player.Get().m_currentLocation.m_clues -= 1;
 		var pc = GetComponent<PlayerCard>();
 

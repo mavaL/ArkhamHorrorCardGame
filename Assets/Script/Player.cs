@@ -78,6 +78,7 @@ public class Player
 	public int					m_totalActions = 3;
 	public int					m_attackDamage = 1;
 	public int					m_cluesDuringInvest = 1;
+	public int					m_cluesToGain = 0;
 
 	public Stack<PlayerAction>	m_currentAction = new Stack<PlayerAction>();
 	public ActionDoneEvent		m_actionDoneEvent = new ActionDoneEvent();
@@ -96,7 +97,7 @@ public class Player
 	// Engaged enemies
 	private List<EnemyCard>		m_lstEnemyCards = new List<EnemyCard>();
 	// Engaged treachery
-	private List<TreacheryCard> m_lstTreacheryCards = new List<TreacheryCard>();
+	private List<Card>			m_lstTreacheryCards = new List<Card>();
 
 	public Player()
 	{
@@ -137,13 +138,16 @@ public class Player
 			PlayerCard pc = go.GetComponent<PlayerCard>();
 			pc.m_currentLocation = null;
 
-			m_lstPlayerCards.Add(pc);
-			go.SetActive(true);
+			if(pc.GetComponent<PlayerCardLogic>().OnGainCard())
+			{
+				m_lstPlayerCards.Add(pc);
+				go.SetActive(true);
 
-			var ui = GameLogic.Get().m_mainGameUI;
-			ListViewItem item = new ListViewItem();
-			item.card = pc;
-			ui.m_handCardListView.AddItemsAt(ui.m_handCardListView.GetItemsCount(), item);
+				var ui = GameLogic.Get().m_mainGameUI;
+				ListViewItem item = new ListViewItem();
+				item.card = pc;
+				ui.m_handCardListView.AddItemsAt(ui.m_handCardListView.GetItemsCount(), item);
+			}
 		}
 	}
 
@@ -188,7 +192,7 @@ public class Player
 		return m_lstEnemyCards;
 	}
 
-	public List<TreacheryCard> GetTreacheryCards()
+	public List<Card> GetTreacheryCards()
 	{
 		return m_lstTreacheryCards;
 	}
@@ -408,7 +412,7 @@ public class Player
 		GameLogic.Get().OutputGameLog(string.Format("{0}与<{1}>发生了交战！\n", m_investigatorCard.m_cardName, enemy.m_cardName));
 	}
 
-	public void AddTreachery(TreacheryCard treachery)
+	public void AddTreachery(Card treachery)
 	{
 		m_lstTreacheryCards.Add(treachery);
 
@@ -567,5 +571,14 @@ public class Player
 		{
 			return m_currentAction.Peek();
 		}
+	}
+
+	public void GainClues(int n)
+	{
+		m_cluesToGain = n;
+		GameLogic.Get().m_beforeGainClues.Invoke();
+
+		m_clues += m_cluesToGain;
+		m_cluesToGain = 0;
 	}
 }

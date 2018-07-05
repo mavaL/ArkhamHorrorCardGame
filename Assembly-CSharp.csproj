@@ -75,6 +75,7 @@
     <Compile Include="Assets\Script\Card\Logic\LocationEvent.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_barricade.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_beat_cop.cs" />
+    <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_cover_up.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_deduction.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_dodge.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_dot45_automatic.cs" />

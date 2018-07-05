@@ -83,6 +83,7 @@ public class GameLogic
 	public BeforeEnemeyMoveEvent	m_beforeEnemyMoveEvent { get; set; } = new BeforeEnemeyMoveEvent();
 	public BeforeSkillTestEvent		m_beforeSkillTest { get; set; } = new BeforeSkillTestEvent();
 	public AfterSkillTestEvent		m_afterSkillTest { get; set; } = new AfterSkillTestEvent();
+	public UnityEvent				m_beforeGainClues { get; set; } = new UnityEvent();
 
 	public static void Swap<T>(ref T a, ref T b)
 	{

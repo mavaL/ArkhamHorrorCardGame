@@ -41,6 +41,7 @@ public class Card : MonoBehaviour
 		Ally,
 		Firearm,
 		Weapon,
+		Weakness
 	}
 
 	public List<Keyword> m_lstKeywords = new List<Keyword>();
@@ -221,7 +222,8 @@ public class Card : MonoBehaviour
 			m_exhausted = false;
 		}
 	}
-	public virtual void OnSkillTest() {}
+	public virtual string GetLog() { return ""; }
+	public virtual void OnSkillTest() { }
 	public virtual void OnSkillTestResult(int result) {}
 	public virtual void OnSpawnAtLocation(LocationCard loc) { }
 	public virtual void OnRecoverFromExhaust() { }
