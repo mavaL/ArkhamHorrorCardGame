@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224220295874040450}
   - component: {fileID: 222478507260612964}
   - component: {fileID: 114236460962903914}
+  - component: {fileID: 114612795781344836}
   m_Layer: 0
   m_Name: core_flashlight
   m_TagString: Untagged
@@ -39,17 +40,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9af3d81cf6f68a4a890baa050bbc57d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lstKeywords: 09000000
+  m_lstKeywords: 0900000001000000
   m_frontImage: {fileID: 21300002, guid: 58c50e351750ec947915a2facc15b5f8, type: 3}
   m_backImage: {fileID: 21300028, guid: 8580542278ebbab41ac830fbc6415ba2, type: 3}
   m_image: {fileID: 0}
   m_cardName: "\u624B\u7535\u7B52"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 01000000
     _values: 01000000
+  m_cost: 2
+  m_slot: 3
   m_isPlayerDeck: 1
+  m_persistent: 1
+  m_eventTiming: 0
+--- !u!114 &114612795781344836
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1723677217679118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 008beb94357f3874c9a04bf230c71592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_supply: 3
 --- !u!222 &222478507260612964
 CanvasRenderer:
   m_ObjectHideFlags: 1

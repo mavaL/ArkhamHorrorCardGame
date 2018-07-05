@@ -80,10 +80,13 @@
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_dodge.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_dot45_automatic.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_dynamite_blast.cs" />
+    <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_emergency_cache.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_evidence.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_extra_ammunition.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_first_aid.cs" />
+    <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_flashlight.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_guard_dog.cs" />
+    <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_guts.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_hyperawareness.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_machete.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_magnifying_glass.cs" />

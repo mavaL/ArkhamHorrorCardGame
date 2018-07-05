@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224367751406281070}
   - component: {fileID: 222831268078746640}
   - component: {fileID: 114718600199997056}
+  - component: {fileID: 114051937761097992}
   m_Layer: 0
   m_Name: core_guts
   m_TagString: Untagged
@@ -28,6 +29,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114051937761097992
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1656835288824572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f22c250bc87641c4c825d18b6be02df6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114718600199997056
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -46,10 +58,16 @@ MonoBehaviour:
   m_cardName: "\u52C7\u6C14"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 00000000
     _values: 02000000
+  m_cost: 0
+  m_slot: 10
   m_isPlayerDeck: 1
+  m_persistent: 0
+  m_eventTiming: 0
+  m_IsExclusiveAtSkillTestCommit: 1
 --- !u!222 &222831268078746640
 CanvasRenderer:
   m_ObjectHideFlags: 1

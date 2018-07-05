@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224096410034841776}
   - component: {fileID: 222840272976198188}
   - component: {fileID: 114097158464094128}
+  - component: {fileID: 114869806102101762}
   m_Layer: 0
   m_Name: core_emergency_cache
   m_TagString: Untagged
@@ -46,10 +47,26 @@ MonoBehaviour:
   m_cardName: "\u5E94\u6025\u85CF\u533F\u5904"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 
     _values: 
+  m_cost: 0
+  m_slot: 10
   m_isPlayerDeck: 1
+  m_persistent: 0
+  m_eventTiming: 3
+--- !u!114 &114869806102101762
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1126054147718440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 973ca0739b1988b418f87341762d2d29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222840272976198188
 CanvasRenderer:
   m_ObjectHideFlags: 1

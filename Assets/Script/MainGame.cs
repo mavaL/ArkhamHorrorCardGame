@@ -85,8 +85,11 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Neutral/core_guts",
+		"Neutral/core_guts",
+		"Neutral/core_flashlight",
+		"Neutral/core_emergency_cache",
 		"Seeker/core_seeker_deduction",
-		"Neutral/core_cover_up",
 		"Seeker/core_seeker_working_a_hunch",
 		"Seeker/core_seeker_research_librarian",
 		"Seeker/core_seeker_barricade",
@@ -111,14 +114,11 @@ public class MainGame : MonoBehaviour
 		"Neutral/core_knife",
 		"Neutral/core_knife",
 		"Neutral/core_flashlight",
-		"Neutral/core_flashlight",
 		"Neutral/core_emergency_cache",
-		"Neutral/core_emergency_cache",
-		"Neutral/core_guts",
-		"Neutral/core_guts",
 		"Neutral/core_manual_dexterity",
 		"Neutral/core_manual_dexterity",
 		"Neutral/core_paranoia",
+		"Neutral/core_cover_up",
 	};
 
 	private void Awake()

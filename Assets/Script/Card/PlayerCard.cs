@@ -46,6 +46,7 @@ public class PlayerCard : Card
 	public bool					m_isPlayerDeck = true;
 	public bool					m_persistent = false;
 	public EventTiming			m_eventTiming = EventTiming.None;
+	public bool					m_IsExclusiveAtSkillTestCommit = false;
 
 	public override void Discard()
 	{

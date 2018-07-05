@@ -179,11 +179,28 @@ public class Card : MonoBehaviour
 				}
 				else
 				{
-					RectTransform rt = (RectTransform)m_thisInListView.gameObject.GetComponent<RectTransform>().parent;
-					rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y + 30);
+					bool bCanCommit = true;
 
-					m_lstSelectCards.Add(this);
-					m_bSelected = true;
+					if (pc.m_IsExclusiveAtSkillTestCommit)
+					{
+						for (int i = 0; i < m_lstSelectCards.Count; ++i)
+						{
+							if (m_lstSelectCards[i].m_cardName == pc.m_cardName)
+							{
+								bCanCommit = false;
+								break;
+							}
+						}
+					}
+
+					if(bCanCommit)
+					{
+						RectTransform rt = (RectTransform)m_thisInListView.gameObject.GetComponent<RectTransform>().parent;
+						rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y + 30);
+
+						m_lstSelectCards.Add(this);
+						m_bSelected = true;
+					}
 				}
 			}
 		}
