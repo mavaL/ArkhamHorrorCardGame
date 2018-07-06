@@ -14,9 +14,9 @@ using UnityEngine.UI;
 
 public class core_medical_texts : PlayerCardLogic
 {
-	private PlayerAction m_cardAction;
-	private UnityAction<int> m_onCardAction;
-	private UnityAction m_onSkillTest;
+	private string				m_cardAction = "<医学文献>卡牌行动";
+	private UnityAction<int>	m_onCardAction;
+	private UnityAction			m_onSkillTest;
 
 	public override void OnReveal(Card card)
 	{
@@ -24,8 +24,7 @@ public class core_medical_texts : PlayerCardLogic
 		m_onSkillTest = new UnityAction(OnButtonConfirmSkillTest);
 
 		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_actionDropdown.options.Add(new Dropdown.OptionData("<医学文献>卡牌行动"));
-		m_cardAction = (PlayerAction)ui.m_actionDropdown.options.Count - 1;
+		ui.m_actionDropdown.options.Add(new Dropdown.OptionData(m_cardAction));
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
 
 		m_isActive = true;
@@ -40,20 +39,21 @@ public class core_medical_texts : PlayerCardLogic
 
 			var ui = GameLogic.Get().m_mainGameUI;
 			ui.m_actionDropdown.onValueChanged.RemoveListener(m_onCardAction);
-			ui.m_actionDropdown.options.RemoveAt((int)m_cardAction);
+			ui.m_actionDropdown.options.RemoveAt(ui.GetActionDropdownItemIndex(m_cardAction));
 		}
 	}
 
 	private void OnCardAction(int index)
 	{
-		if (index == (int)m_cardAction)
+		var ui = GameLogic.Get().m_mainGameUI;
+
+		if (index == ui.GetActionDropdownItemIndex(m_cardAction))
 		{
 			GameLogic.Get().OutputGameLog(string.Format("{0}使用<医学文献>的卡牌行动\n", Player.Get().m_investigatorCard.m_cardName));
 
 			bool bHurt = Player.Get().GetHp() < Player.Get().m_investigatorCard.m_health;
 			UnityEngine.Assertions.Assert.IsTrue(bHurt, "Investigator is full HP in core_medical_texts.OnCardAction()!!!");
 
-			var ui = GameLogic.Get().m_mainGameUI;
 			ui.m_confirmChoiceBtn.gameObject.SetActive(true);
 			ui.m_choiceMode = MainGame.ConfirmButtonMode.Custom;
 			ui.m_confirmChoiceBtn.onClick.AddListener(m_onSkillTest);
@@ -90,11 +90,12 @@ public class core_medical_texts : PlayerCardLogic
 
 		ui.EndSelectCardToSpend();
 
-		Player.Get().ActionDone(m_cardAction);
+		Player.Get().ActionDone((PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction));
 	}
 
 	private void Update()
 	{
-		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = Player.Get().GetHp() < Player.Get().m_investigatorCard.m_health;
+		var ui = GameLogic.Get().m_mainGameUI;
+		ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().GetHp() < Player.Get().m_investigatorCard.m_health;
 	}
 }

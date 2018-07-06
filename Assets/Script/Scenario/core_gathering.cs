@@ -11,7 +11,7 @@ public class core_gathering : scenario_base
 	public EnemyCard	m_ghoulPriest;
 	private UnityAction	m_onParleyConfirm;
 	private UnityAction<int>	m_onActionDropdownChanged;
-	private PlayerAction		m_parleyAction;
+	private string		m_parleyAction = "与丽塔谈判";
 
 	void Awake()
 	{
@@ -235,24 +235,25 @@ public class core_gathering : scenario_base
 
 		GameLogic.Get().SpawnAtLocation(m_ghoulPriest, m_lstOtherLocations[0], true);
 
-		ui.m_actionDropdown.options.Add(new Dropdown.OptionData("与丽塔谈判"));
-		m_parleyAction = (PlayerAction)ui.m_actionDropdown.options.Count - 1;
+		ui.m_actionDropdown.options.Add(new Dropdown.OptionData(m_parleyAction));
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onActionDropdownChanged);
 	}
 
 	public void OnActionDropdownChange(int index)
 	{
-		if(index == (int)m_parleyAction)
-		{
-			Player.Get().m_currentAction.Push(m_parleyAction);
+		var ui = GameLogic.Get().m_mainGameUI;
+		int actionIndex = ui.GetActionDropdownItemIndex(m_parleyAction);
 
-			var ui = GameLogic.Get().m_mainGameUI;
+		if (index == actionIndex)
+		{
+			Player.Get().m_currentAction.Push((PlayerAction)actionIndex);
+
 			ui.m_confirmChoiceBtn.gameObject.SetActive(true);
 			ui.m_choiceMode = MainGame.ConfirmButtonMode.Custom;
 			ui.m_confirmChoiceBtn.onClick.AddListener(m_onParleyConfirm);
 
 			ui.BeginSelectCardToSpend(SkillType.Intellect);
-			Player.Get().ActionDone(m_parleyAction);
+			Player.Get().ActionDone((PlayerAction)actionIndex);
 		}
 	}
 
@@ -393,11 +394,11 @@ public class core_gathering : scenario_base
 				m_lita.m_currentLocation &&
 				Player.Get().m_currentLocation.m_cardName == m_lita.m_currentLocation.m_cardName)
 			{
-				ui.m_isActionEnable[m_parleyAction] = true;
+				ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_parleyAction)] = true;
 			}
 			else
 			{
-				ui.m_isActionEnable[m_parleyAction] = false;
+				ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_parleyAction)] = false;
 			}
 		}
 	}
@@ -434,7 +435,7 @@ public class core_gathering : scenario_base
 
 		ui.m_confirmChoiceBtn.gameObject.SetActive(false);
 		ui.m_confirmChoiceBtn.onClick.RemoveListener(m_onParleyConfirm);
-		ui.m_actionDropdown.options.RemoveAt((int)m_parleyAction);
+		ui.m_actionDropdown.options.RemoveAt(ui.GetActionDropdownItemIndex(m_parleyAction));
 		Player.Get().m_currentAction.Pop();
 
 		int result = GameLogic.Get().SkillTest(SkillType.Intellect, 4, m_lita);

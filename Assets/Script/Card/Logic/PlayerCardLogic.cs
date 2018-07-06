@@ -15,7 +15,10 @@ public class PlayerCardLogic : MonoBehaviour
 	{
 		Player.Get().m_currentAction.Pop();
 	}
-	public virtual void	OnDiscard(Card card) { }
+	public virtual void	OnDiscard(Card card)
+	{
+		m_isActive = false;
+	}
 	public virtual void AddAssetResource(int num) { }
 	public virtual int GetAssetResource() { return 0; }
 	public virtual bool HasUseLimit() { return false; }

@@ -85,6 +85,8 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Guardian/core_guardian_beat_cop",
+		"Neutral/core_knife",
 		"Neutral/core_guts",
 		"Neutral/core_guts",
 		"Neutral/core_flashlight",
@@ -106,12 +108,10 @@ public class MainGame : MonoBehaviour
 		"Guardian/core_guardian_machete",
 		"Guardian/core_guardian_first_aid",
 		"Guardian/core_guardian_dynamite_blast",
-		"Guardian/core_guardian_beat_cop",
 		"Guardian/core_guardian_dot45_automatic",
 		"Guardian/core_guardian_dodge",
 		"Neutral/core_roland_dot38_special",
 		// TODO: 重复加载资源？
-		"Neutral/core_knife",
 		"Neutral/core_knife",
 		"Neutral/core_flashlight",
 		"Neutral/core_emergency_cache",
@@ -1130,5 +1130,19 @@ public class MainGame : MonoBehaviour
 		var holder = list.GetItemViewsHolderIfVisible(card.m_thisInListView.transform.parent as RectTransform);
 		list.RemoveItemFrom(holder.ItemIndex, 1);
 		card.m_thisInListView = card;
+	}
+
+	public int GetActionDropdownItemIndex(string text)
+	{
+		for(int i=0; i< m_actionDropdown.options.Count; ++i)
+		{
+			if(text == m_actionDropdown.options[i].text)
+			{
+				return i;
+			}
+		}
+
+		UnityEngine.Assertions.Assert.IsTrue(false, "Assert failed in MainGame.GetActionDropdownItemIndex()!!!");
+		return -1;
 	}
 }

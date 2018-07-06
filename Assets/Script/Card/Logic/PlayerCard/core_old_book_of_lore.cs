@@ -14,16 +14,15 @@ using UnityEngine.UI;
 
 public class core_old_book_of_lore : PlayerCardLogic
 {
-	private PlayerAction m_cardAction;
-	private UnityAction<int> m_onCardAction;
+	private string				m_cardAction = "<老旧的书>卡牌行动";
+	private UnityAction<int>	m_onCardAction;
 
 	public override void OnReveal(Card card)
 	{
 		m_onCardAction = new UnityAction<int>(OnCardAction);
 
 		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_actionDropdown.options.Add(new Dropdown.OptionData("<老旧的书>卡牌行动"));
-		m_cardAction = (PlayerAction)ui.m_actionDropdown.options.Count - 1;
+		ui.m_actionDropdown.options.Add(new Dropdown.OptionData(m_cardAction));
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
 
 		m_isActive = true;
@@ -38,24 +37,26 @@ public class core_old_book_of_lore : PlayerCardLogic
 
 			var ui = GameLogic.Get().m_mainGameUI;
 			ui.m_actionDropdown.onValueChanged.RemoveListener(m_onCardAction);
-			ui.m_actionDropdown.options.RemoveAt((int)m_cardAction);
+			ui.m_actionDropdown.options.RemoveAt(ui.GetActionDropdownItemIndex(m_cardAction));
 		}
 	}
 
 	private void OnCardAction(int index)
 	{
-		if (index == (int)m_cardAction)
+		var mainUI = GameLogic.Get().m_mainGameUI;
+		int actionIndex = mainUI.GetActionDropdownItemIndex(m_cardAction);
+
+		if (index == actionIndex)
 		{
 			GameLogic.Get().OutputGameLog(string.Format("{0}使用<老旧的书>的卡牌行动，", Player.Get().m_investigatorCard.m_cardName));
 
-			Player.Get().m_currentAction.Push(m_cardAction);
+			Player.Get().m_currentAction.Push((PlayerAction)actionIndex);
 
 			List<string> options = new List<string>();
 			options.Add(GameLogic.Get().m_lstPlayerCards[0].GetComponent<Card>().m_cardName);
 			options.Add(GameLogic.Get().m_lstPlayerCards[1].GetComponent<Card>().m_cardName);
 			options.Add(GameLogic.Get().m_lstPlayerCards[2].GetComponent<Card>().m_cardName);
 
-			var mainUI = GameLogic.Get().m_mainGameUI;
 			mainUI.m_choiceDropdown.ClearOptions();
 			mainUI.m_choiceDropdown.AddOptions(options);
 			mainUI.m_choiceDropdown.RefreshShownValue();
@@ -101,11 +102,13 @@ public class core_old_book_of_lore : PlayerCardLogic
 		Player.Get().AddHandCard(card);
 		GameLogic.Shuffle(GameLogic.Get().m_lstPlayerCards);
 
-		Player.Get().ActionDone(m_cardAction);
+		var mainUI = GameLogic.Get().m_mainGameUI;
+		Player.Get().ActionDone((PlayerAction)mainUI.GetActionDropdownItemIndex(m_cardAction));
 	}
 
 	private void Update()
 	{
-		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = !GetComponent<Card>().m_exhausted && GameLogic.Get().m_lstPlayerCards.Count >= 3;
+		var mainUI = GameLogic.Get().m_mainGameUI;
+		mainUI.m_isActionEnable[(PlayerAction)mainUI.GetActionDropdownItemIndex(m_cardAction)] = !GetComponent<Card>().m_exhausted && GameLogic.Get().m_lstPlayerCards.Count >= 3;
 	}
 }

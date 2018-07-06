@@ -16,7 +16,7 @@ public class core_first_aid : PlayerCardLogic
 {
 	public int					m_supply;
 
-	private PlayerAction		m_cardAction;
+	private string				m_cardAction = "<急救>卡牌行动";
 	private UnityAction<int>	m_onCardAction;
 
 	public override void OnReveal(Card card)
@@ -24,8 +24,7 @@ public class core_first_aid : PlayerCardLogic
 		m_onCardAction = new UnityAction<int>(OnCardAction);
 
 		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_actionDropdown.options.Add(new Dropdown.OptionData("<急救>卡牌行动"));
-		m_cardAction = (PlayerAction)ui.m_actionDropdown.options.Count - 1;
+		ui.m_actionDropdown.options.Add(new Dropdown.OptionData(m_cardAction));
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
 
 		m_isActive = true;
@@ -40,13 +39,15 @@ public class core_first_aid : PlayerCardLogic
 
 			var ui = GameLogic.Get().m_mainGameUI;
 			ui.m_actionDropdown.onValueChanged.RemoveListener(m_onCardAction);
-			ui.m_actionDropdown.options.RemoveAt((int)m_cardAction);
+			ui.m_actionDropdown.options.RemoveAt(ui.GetActionDropdownItemIndex(m_cardAction));
 		}
 	}
 
 	private void OnCardAction(int index)
 	{
-		if (index == (int)m_cardAction)
+		var mainUI = GameLogic.Get().m_mainGameUI;
+
+		if (index == mainUI.GetActionDropdownItemIndex(m_cardAction))
 		{
 			UnityEngine.Assertions.Assert.IsTrue(m_supply > 0, "Supply <= 0 in core_first_aid.OnCardAction()!!!");
 			m_supply -= 1;
@@ -56,7 +57,6 @@ public class core_first_aid : PlayerCardLogic
 
 			UnityEngine.Assertions.Assert.IsTrue(bHurt || bHorror, "Investigator is full HP/SAN in core_first_aid.OnCardAction()!!!");
 
-			var mainUI = GameLogic.Get().m_mainGameUI;
 			mainUI.m_choiceDropdown.ClearOptions();
 
 			mainUI.m_choiceDropdown.gameObject.SetActive(true);
@@ -94,7 +94,8 @@ public class core_first_aid : PlayerCardLogic
 			GetComponent<Card>().Discard();
 		}
 
-		Player.Get().ActionDone(m_cardAction);
+		var mainUI = GameLogic.Get().m_mainGameUI;
+		Player.Get().ActionDone((PlayerAction)mainUI.GetActionDropdownItemIndex(m_cardAction));
 	}
 
 	private void OnHealOneSanity(object param)
@@ -107,12 +108,14 @@ public class core_first_aid : PlayerCardLogic
 			GetComponent<Card>().Discard();
 		}
 
-		Player.Get().ActionDone(m_cardAction);
+		var mainUI = GameLogic.Get().m_mainGameUI;
+		Player.Get().ActionDone((PlayerAction)mainUI.GetActionDropdownItemIndex(m_cardAction));
 	}
 
 	private void Update()
 	{
-		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = Player.Get().GetHp() < Player.Get().m_investigatorCard.m_health || Player.Get().GetSan() < Player.Get().m_investigatorCard.m_sanity;
+		var mainUI = GameLogic.Get().m_mainGameUI;
+		mainUI.m_isActionEnable[(PlayerAction)mainUI.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().GetHp() < Player.Get().m_investigatorCard.m_health || Player.Get().GetSan() < Player.Get().m_investigatorCard.m_sanity;
 	}
 
 	public override void AddAssetResource(int num)

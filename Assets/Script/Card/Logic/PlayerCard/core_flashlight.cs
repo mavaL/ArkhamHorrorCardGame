@@ -17,7 +17,7 @@ public class core_flashlight : PlayerCardLogic
 	public int						m_supply;
 	private int						m_locationShroud;
 
-	private PlayerAction			m_cardAction;
+	private string					m_cardAction = "<手电筒>卡牌行动";
 	private UnityAction<int>		m_onCardAction;
 	private UnityAction<int, Card>	m_afterSkillTest;
 
@@ -27,8 +27,7 @@ public class core_flashlight : PlayerCardLogic
 		m_afterSkillTest = new UnityAction<int, Card>(AfterSkillTest);
 
 		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_actionDropdown.options.Add(new Dropdown.OptionData("<手电筒>卡牌行动"));
-		m_cardAction = (PlayerAction)ui.m_actionDropdown.options.Count - 1;
+		ui.m_actionDropdown.options.Add(new Dropdown.OptionData(m_cardAction));
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
 
 		m_isActive = true;
@@ -43,13 +42,15 @@ public class core_flashlight : PlayerCardLogic
 
 			var ui = GameLogic.Get().m_mainGameUI;
 			ui.m_actionDropdown.onValueChanged.RemoveListener(m_onCardAction);
-			ui.m_actionDropdown.options.RemoveAt((int)m_cardAction);
+			ui.m_actionDropdown.options.RemoveAt(ui.GetActionDropdownItemIndex(m_cardAction));
 		}
 	}
 
 	private void OnCardAction(int index)
 	{
-		if (index == (int)m_cardAction)
+		var ui = GameLogic.Get().m_mainGameUI;
+
+		if (index == ui.GetActionDropdownItemIndex(m_cardAction))
 		{
 			m_locationShroud = Player.Get().m_currentLocation.m_shroud;
 			Player.Get().m_currentLocation.m_shroud -= 2;
@@ -71,7 +72,8 @@ public class core_flashlight : PlayerCardLogic
 
 	private void Update()
 	{
-		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = Player.Get().m_currentLocation.m_clues > 0 && m_supply > 0;
+		var ui = GameLogic.Get().m_mainGameUI;
+		ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().m_currentLocation.m_clues > 0 && m_supply > 0;
 	}
 
 	public override int GetAssetResource()

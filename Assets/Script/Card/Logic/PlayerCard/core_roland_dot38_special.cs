@@ -16,7 +16,7 @@ public class core_roland_dot38_special : PlayerCardLogic
 {
 	public int					m_bullet;
 
-	private PlayerAction		m_cardAction;
+	private string				m_cardAction = "<罗兰德的.38特制手枪>卡牌行动";
 	private UnityAction<int>	m_onCardAction;
 	private UnityAction			m_afterEnemyDamaged;
 	private int					m_bonusCombat;
@@ -27,8 +27,7 @@ public class core_roland_dot38_special : PlayerCardLogic
 		m_afterEnemyDamaged = new UnityAction(AfterEnemyDamaged);
 
 		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_actionDropdown.options.Add(new Dropdown.OptionData("<罗兰德的.38特制手枪>卡牌行动"));
-		m_cardAction = (PlayerAction)ui.m_actionDropdown.options.Count - 1;
+		ui.m_actionDropdown.options.Add(new Dropdown.OptionData(m_cardAction));
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
 
 		m_isActive = true;
@@ -43,13 +42,15 @@ public class core_roland_dot38_special : PlayerCardLogic
 
 			var ui = GameLogic.Get().m_mainGameUI;
 			ui.m_actionDropdown.onValueChanged.RemoveListener(m_onCardAction);
-			ui.m_actionDropdown.options.RemoveAt((int)m_cardAction);
+			ui.m_actionDropdown.options.RemoveAt(ui.GetActionDropdownItemIndex(m_cardAction));
 		}
 	}
 
 	private void OnCardAction(int index)
 	{
-		if (index == (int)m_cardAction)
+		var ui = GameLogic.Get().m_mainGameUI;
+
+		if (index == ui.GetActionDropdownItemIndex(m_cardAction))
 		{
 			m_bonusCombat = Player.Get().m_currentLocation.m_clues > 0 ? 3 : 1;
 
@@ -74,7 +75,8 @@ public class core_roland_dot38_special : PlayerCardLogic
 
 	private void Update()
 	{
-		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = Player.Get().IsAnyEnemyToFightWith() && m_bullet > 0;
+		var ui = GameLogic.Get().m_mainGameUI;
+		ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().IsAnyEnemyToFightWith() && m_bullet > 0;
 	}
 
 	public override void AddAssetResource(int num)

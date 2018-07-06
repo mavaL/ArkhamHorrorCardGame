@@ -88,6 +88,7 @@
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_guard_dog.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_guts.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_hyperawareness.cs" />
+    <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_knife.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_machete.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_magnifying_glass.cs" />
     <Compile Include="Assets\Script\Card\Logic\PlayerCard\core_medical_texts.cs" />

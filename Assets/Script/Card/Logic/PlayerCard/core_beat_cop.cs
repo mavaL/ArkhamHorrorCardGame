@@ -14,7 +14,7 @@ using UnityEngine.UI;
 
 public class core_beat_cop : PlayerCardLogic
 {
-	private PlayerAction		m_cardAction;
+	private string				m_cardAction = "<疲惫的巡警>卡牌行动";
 	private UnityAction<int>	m_onCardAction;
 	private UnityAction<int>	m_onTargetDropdownChanged;
 
@@ -26,20 +26,30 @@ public class core_beat_cop : PlayerCardLogic
 		m_onTargetDropdownChanged = new UnityAction<int>(OnTargetDropdownChanged);
 
 		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_actionDropdown.options.Add(new Dropdown.OptionData("<疲惫的巡警>卡牌行动"));
-		m_cardAction = (PlayerAction)ui.m_actionDropdown.options.Count - 1;
+		ui.m_actionDropdown.options.Add(new Dropdown.OptionData(m_cardAction));
 		ui.m_actionDropdown.onValueChanged.AddListener(m_onCardAction);
 
+		m_isActive = true;
 		Player.Get().m_currentAction.Pop();
+	}
+
+	public override void OnDiscard(Card card)
+	{
+		if(m_isActive)
+		{
+			Player.Get().m_investigatorCard.m_combat -= 1;
+			m_isActive = false;
+		}
 	}
 
 	private void OnCardAction(int index)
 	{
-		if (index == (int)m_cardAction)
+		var ui = GameLogic.Get().m_mainGameUI;
+
+		if (index == ui.GetActionDropdownItemIndex(m_cardAction))
 		{
 			Player.Get().m_currentAction.Push(PlayerAction.BeatcopCardAction);
 
-			var ui = GameLogic.Get().m_mainGameUI;
 			ui.m_actionDropdown.gameObject.SetActive(false);
 			ui.m_targetDropdown.gameObject.SetActive(true);
 			ui.UpdateTargetDropdown();
@@ -64,7 +74,7 @@ public class core_beat_cop : PlayerCardLogic
 		var ui = GameLogic.Get().m_mainGameUI;
 		ui.m_actionDropdown.onValueChanged.RemoveListener(m_onCardAction);
 		ui.m_targetDropdown.onValueChanged.RemoveListener(m_onTargetDropdownChanged);
-		ui.m_actionDropdown.options.RemoveAt((int)m_cardAction);
+		ui.m_actionDropdown.options.RemoveAt(ui.GetActionDropdownItemIndex(m_cardAction));
 
 		ui.m_targetDropdown.gameObject.SetActive(false);
 
@@ -74,13 +84,13 @@ public class core_beat_cop : PlayerCardLogic
 		yield return new WaitUntil(() => GameLogic.Get().m_currentTiming == EventTiming.None);
 
 		GetComponent<Card>().Discard();
-		Player.Get().m_investigatorCard.m_combat -= 1;
 
 		Player.Get().ActionDone(PlayerAction.BeatcopCardAction, false);
 	}
 
 	private void Update()
 	{
-		GameLogic.Get().m_mainGameUI.m_isActionEnable[m_cardAction] = Player.Get().IsAnyEnemyToFightWith();
+		var ui = GameLogic.Get().m_mainGameUI;
+		ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().IsAnyEnemyToFightWith();
 	}
 }
