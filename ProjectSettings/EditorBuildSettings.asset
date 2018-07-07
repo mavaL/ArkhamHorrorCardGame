@@ -14,10 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/core_gathering.unity
     guid: 4cf023f5ee93c204b9f92a92136e4d2d
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/core_mask_of_midnight.unity
     guid: 6301714375d918648aae6d78d7afdf7e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Resources/PathfindingTest/pathfinding_test.unity
     guid: e8831bf0f7ef17a42ba0836644638f62
   m_configObjects: {}

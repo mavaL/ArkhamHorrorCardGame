@@ -22,20 +22,28 @@ public class core_dissonant_voices : TreacheryLogic
 		m_roundEnd = new UnityAction(OnRoundEnd);
 
 		GameLogic.Get().m_mainGameUI.m_roundEndEvent.AddListener(m_roundEnd);
+
+		m_isActive = true;
 	}
 
 	private void Update()
 	{
-		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_isActionEnable[PlayerAction.PlayCard] = false;
+		if(m_isActive)
+		{
+			var ui = GameLogic.Get().m_mainGameUI;
+			ui.m_isActionEnable[PlayerAction.PlayCard] = false;
+		}
 	}
 
-	public void OnRoundEnd()
+	private void OnRoundEnd()
 	{
 		var ui = GameLogic.Get().m_mainGameUI;
 		ui.m_roundEndEvent.RemoveListener(m_roundEnd);
+
 		GetComponent<TreacheryCard>().Discard();
+
 		ui.m_isActionEnable[PlayerAction.PlayCard] = true;
+		m_isActive = false;
 
 		GameLogic.Get().OutputGameLog(string.Format("{0}摆脱了<不协和音>\n", Player.Get().m_investigatorCard.m_cardName));
 	}

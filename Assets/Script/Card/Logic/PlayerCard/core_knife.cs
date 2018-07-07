@@ -18,15 +18,15 @@ public class core_knife : PlayerCardLogic
 	private string				m_cardAction2 = "<小刀>卡牌行动2";
 	private UnityAction<int>	m_onCardAction1;
 	private UnityAction<int>	m_onCardAction2;
-	private UnityAction			m_afterEnemyDamaged1;
-	private UnityAction			m_afterEnemyDamaged2;
+	private UnityAction<EnemyCard>	m_afterEnemyDamaged1;
+	private UnityAction<EnemyCard> m_afterEnemyDamaged2;
 
 	public override void OnReveal(Card card)
 	{
 		m_onCardAction1 = new UnityAction<int>(OnCardAction1);
 		m_onCardAction2 = new UnityAction<int>(OnCardAction2);
-		m_afterEnemyDamaged1 = new UnityAction(AfterEnemyDamaged1);
-		m_afterEnemyDamaged2 = new UnityAction(AfterEnemyDamaged2);
+		m_afterEnemyDamaged1 = new UnityAction<EnemyCard>(AfterEnemyDamaged1);
+		m_afterEnemyDamaged2 = new UnityAction<EnemyCard>(AfterEnemyDamaged2);
 
 		var ui = GameLogic.Get().m_mainGameUI;
 
@@ -81,13 +81,13 @@ public class core_knife : PlayerCardLogic
 		}
 	}
 
-	private void AfterEnemyDamaged1()
+	private void AfterEnemyDamaged1(EnemyCard target)
 	{
 		GameLogic.Get().m_afterEnemyDamagedEvent.RemoveListener(m_afterEnemyDamaged1);
 		Player.Get().m_investigatorCard.m_combat -= 1;
 	}
 
-	private void AfterEnemyDamaged2()
+	private void AfterEnemyDamaged2(EnemyCard target)
 	{
 		GameLogic.Get().m_afterEnemyDamagedEvent.RemoveListener(m_afterEnemyDamaged2);
 		Player.Get().m_investigatorCard.m_combat -= 2;

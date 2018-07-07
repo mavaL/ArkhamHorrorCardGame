@@ -108,7 +108,10 @@ public class core_old_book_of_lore : PlayerCardLogic
 
 	private void Update()
 	{
-		var mainUI = GameLogic.Get().m_mainGameUI;
-		mainUI.m_isActionEnable[(PlayerAction)mainUI.GetActionDropdownItemIndex(m_cardAction)] = !GetComponent<Card>().m_exhausted && GameLogic.Get().m_lstPlayerCards.Count >= 3;
+		if(m_isActive)
+		{
+			var mainUI = GameLogic.Get().m_mainGameUI;
+			mainUI.m_isActionEnable[(PlayerAction)mainUI.GetActionDropdownItemIndex(m_cardAction)] = !GetComponent<Card>().m_exhausted && GameLogic.Get().m_lstPlayerCards.Count >= 3;
+		}	
 	}
 }

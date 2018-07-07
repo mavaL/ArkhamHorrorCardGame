@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224361539558717458}
   - component: {fileID: 222424078455678324}
   - component: {fileID: 114179159289821368}
+  - component: {fileID: 114231260997940836}
   m_Layer: 0
   m_Name: core_manual_dexterity
   m_TagString: Untagged
@@ -46,10 +47,27 @@ MonoBehaviour:
   m_cardName: "\u5FC3\u7075\u624B\u5DE7"
   m_canFocus: 1
   m_canFlip: 1
+  m_autoEventTrigger: 1
   m_skillIcons:
     _keys: 03000000
     _values: 02000000
+  m_cost: 0
+  m_slot: 10
   m_isPlayerDeck: 1
+  m_persistent: 0
+  m_eventTiming: 0
+  m_IsExclusiveAtSkillTestCommit: 1
+--- !u!114 &114231260997940836
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1087893571123768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f616ba33694c76408c85bff64b48fdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222424078455678324
 CanvasRenderer:
   m_ObjectHideFlags: 1

@@ -95,7 +95,10 @@ public class core_medical_texts : PlayerCardLogic
 
 	private void Update()
 	{
-		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().GetHp() < Player.Get().m_investigatorCard.m_health;
+		if(m_isActive)
+		{
+			var ui = GameLogic.Get().m_mainGameUI;
+			ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().GetHp() < Player.Get().m_investigatorCard.m_health;
+		}
 	}
 }

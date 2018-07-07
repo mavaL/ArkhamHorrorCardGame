@@ -16,7 +16,7 @@ public class core_machete : PlayerCardLogic
 {
 	private string					m_cardAction = "<弯刀>卡牌行动";
 	private UnityAction<int>		m_onCardAction;
-	private UnityAction				m_afterEnemyDamaged;
+	private UnityAction<EnemyCard> m_afterEnemyDamaged;
 	private UnityAction<EnemyCard>	m_beforeEnemyDamaged;
 	private bool					m_bBonus = false;
 
@@ -24,7 +24,7 @@ public class core_machete : PlayerCardLogic
 	{
 		m_onCardAction = new UnityAction<int>(OnCardAction);
 		m_beforeEnemyDamaged = new UnityAction<EnemyCard>(BeforeEnemyDamaged);
-		m_afterEnemyDamaged = new UnityAction(AfterEnemyDamaged);
+		m_afterEnemyDamaged = new UnityAction<EnemyCard>(AfterEnemyDamaged);
 
 		var ui = GameLogic.Get().m_mainGameUI;
 		ui.m_actionDropdown.options.Add(new Dropdown.OptionData(m_cardAction));
@@ -73,7 +73,7 @@ public class core_machete : PlayerCardLogic
 		}
 	}
 
-	private void AfterEnemyDamaged()
+	private void AfterEnemyDamaged(EnemyCard target)
 	{
 		GameLogic.Get().m_afterEnemyDamagedEvent.RemoveListener(m_afterEnemyDamaged);
 
@@ -87,7 +87,10 @@ public class core_machete : PlayerCardLogic
 
 	private void Update()
 	{
-		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().IsAnyEnemyToFightWith();
+		if(m_isActive)
+		{
+			var ui = GameLogic.Get().m_mainGameUI;
+			ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().IsAnyEnemyToFightWith();
+		}	
 	}
 }

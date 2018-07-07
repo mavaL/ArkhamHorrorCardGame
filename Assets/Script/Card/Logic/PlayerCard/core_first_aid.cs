@@ -114,8 +114,11 @@ public class core_first_aid : PlayerCardLogic
 
 	private void Update()
 	{
-		var mainUI = GameLogic.Get().m_mainGameUI;
-		mainUI.m_isActionEnable[(PlayerAction)mainUI.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().GetHp() < Player.Get().m_investigatorCard.m_health || Player.Get().GetSan() < Player.Get().m_investigatorCard.m_sanity;
+		if(m_isActive)
+		{
+			var mainUI = GameLogic.Get().m_mainGameUI;
+			mainUI.m_isActionEnable[(PlayerAction)mainUI.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().GetHp() < Player.Get().m_investigatorCard.m_health || Player.Get().GetSan() < Player.Get().m_investigatorCard.m_sanity;
+		}
 	}
 
 	public override void AddAssetResource(int num)

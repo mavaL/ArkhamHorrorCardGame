@@ -72,8 +72,11 @@ public class core_flashlight : PlayerCardLogic
 
 	private void Update()
 	{
-		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().m_currentLocation.m_clues > 0 && m_supply > 0;
+		if(m_isActive)
+		{
+			var ui = GameLogic.Get().m_mainGameUI;
+			ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().m_currentLocation.m_clues > 0 && m_supply > 0;
+		}
 	}
 
 	public override int GetAssetResource()

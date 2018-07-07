@@ -36,7 +36,7 @@ public enum TurnPhase
 // Param 3: damage assign to ally
 public class AfterAssignDamageEvent : UnityEvent<EnemyCard, int, int> { }
 
-public class BeforeDamageEnemeyEvent : UnityEvent<EnemyCard> { }
+public class DamageEnemeyEvent : UnityEvent<EnemyCard> { }
 public class BeforeEnemeyMoveEvent : UnityEvent<EnemyCard, LocationCard> { }
 // Param 1: skill test result
 // Param 2: target of this skill test
@@ -78,8 +78,8 @@ public class GameLogic
 	static public List<EnemyCard>	m_lstUnengagedEnemyCards = new List<EnemyCard>();
 	public UnityEvent				m_enemyAttackEvent { get; set; } = new UnityEvent();
 	public AfterAssignDamageEvent	m_afterAssignDamageEvent { get; set; } = new AfterAssignDamageEvent();
-	public UnityEvent				m_afterEnemyDamagedEvent { get; set; } = new UnityEvent();
-	public BeforeDamageEnemeyEvent	m_beforeEnemyDamagedEvent { get; set; } = new BeforeDamageEnemeyEvent();
+	public DamageEnemeyEvent		m_afterEnemyDamagedEvent { get; set; } = new DamageEnemeyEvent();
+	public DamageEnemeyEvent		m_beforeEnemyDamagedEvent { get; set; } = new DamageEnemeyEvent();
 	public BeforeEnemeyMoveEvent	m_beforeEnemyMoveEvent { get; set; } = new BeforeEnemeyMoveEvent();
 	public BeforeSkillTestEvent		m_beforeSkillTest { get; set; } = new BeforeSkillTestEvent();
 	public AfterSkillTestEvent		m_afterSkillTest { get; set; } = new AfterSkillTestEvent();

@@ -28,6 +28,8 @@ public class core_frozen_in_fear : TreacheryLogic
 
 		Player.Get().m_actionDoneEvent.AddListener(m_actionDone);
 		GameLogic.Get().m_mainGameUI.m_roundEndEvent.AddListener(m_roundEnd);
+
+		m_isActive = true;
 	}
 
 	public void OnActionDone(PlayerAction action)
@@ -47,7 +49,7 @@ public class core_frozen_in_fear : TreacheryLogic
 	{
 		var ui = GameLogic.Get().m_mainGameUI;
 
-		if (GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase)
+		if (m_isActive && GameLogic.Get().m_currentPhase == TurnPhase.InvestigationPhase)
 		{
 			if (Player.Get().ActionLeft() < 2)
 			{
@@ -100,7 +102,9 @@ public class core_frozen_in_fear : TreacheryLogic
 			GameLogic.Get().m_afterSkillTest.RemoveListener(m_afterSkillTest);
 			Player.Get().m_actionDoneEvent.RemoveListener(m_actionDone);
 			GameLogic.Get().m_mainGameUI.m_roundEndEvent.RemoveListener(m_roundEnd);
+
 			GetComponent<TreacheryCard>().Discard();
+			m_isActive = false;
 
 		}
 		GameLogic.Get().OutputGameLog(string.Format("{0}试图摆脱<魂飞魄散>{1}\n", Player.Get().m_investigatorCard.m_cardName, result<0?"失败":"成功"));

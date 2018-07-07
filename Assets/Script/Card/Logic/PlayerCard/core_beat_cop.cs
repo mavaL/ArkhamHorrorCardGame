@@ -90,7 +90,10 @@ public class core_beat_cop : PlayerCardLogic
 
 	private void Update()
 	{
-		var ui = GameLogic.Get().m_mainGameUI;
-		ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().IsAnyEnemyToFightWith();
+		if(m_isActive)
+		{
+			var ui = GameLogic.Get().m_mainGameUI;
+			ui.m_isActionEnable[(PlayerAction)ui.GetActionDropdownItemIndex(m_cardAction)] = Player.Get().IsAnyEnemyToFightWith();
+		}
 	}
 }

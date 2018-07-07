@@ -85,19 +85,20 @@ public class MainGame : MonoBehaviour
 
 	string[] m_roland_def_cards =
 	{
+		"Guardian/core_guardian_dog",
+		"Guardian/core_guardian_evidence",
 		"Guardian/core_guardian_beat_cop",
 		"Neutral/core_knife",
 		"Neutral/core_guts",
 		"Neutral/core_guts",
 		"Neutral/core_flashlight",
+		"Neutral/core_paranoia",
 		"Neutral/core_emergency_cache",
 		"Seeker/core_seeker_deduction",
 		"Seeker/core_seeker_working_a_hunch",
 		"Seeker/core_seeker_research_librarian",
 		"Seeker/core_seeker_barricade",
 		"Seeker/core_seeker_old_book_of_lore",
-		"Guardian/core_guardian_dog",
-		"Guardian/core_guardian_evidence",
 		"Seeker/core_seeker_mind_over_matter",
 		"Seeker/core_seeker_milan_christopher",
 		"Seeker/core_seeker_medical_texts",
@@ -117,7 +118,6 @@ public class MainGame : MonoBehaviour
 		"Neutral/core_emergency_cache",
 		"Neutral/core_manual_dexterity",
 		"Neutral/core_manual_dexterity",
-		"Neutral/core_paranoia",
 		"Neutral/core_cover_up",
 	};
 
@@ -153,6 +153,8 @@ public class MainGame : MonoBehaviour
 		m_handCardListView.Init();
 		m_threatListView.Init();
 		m_assetListView.Init();
+
+		Player.Get().m_investigatorCard.GetComponent<InvestigatorLogic>().EnterMainGame();
 
 		GameLogic.DockCard(Player.Get().m_investigatorCard.gameObject, GameObject.Find("InvestigatorCard"));
 
@@ -677,9 +679,10 @@ public class MainGame : MonoBehaviour
 				PlayerCard pc = card as PlayerCard;
 				if(pc.m_isPlayerDeck)
 				{
+					GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了<{1}>\n", Player.Get().m_investigatorCard.m_cardName, card.m_cardName));
+
 					Player.Get().AddHandCard(m_tempHighlightCard);
 
-					GameLogic.Get().OutputGameLog(string.Format("{0}花费1行动获取了<{1}>\n", Player.Get().m_investigatorCard.m_cardName, card.m_cardName));
 					Player.Get().ActionDone(PlayerAction.DrawOneCard);
 				}
 			}
