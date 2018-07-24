@@ -44,7 +44,7 @@ public class core_rotting_remains : TreacheryLogic
 			int horror = -result;
 			GameLogic.Get().OutputGameLog(string.Format("{0}由于<腐烂遗骸>受到{1}点恐怖！\n", Player.Get().m_investigatorCard.m_cardName, horror));
 
-			Player.Get().DecreaseSanity(horror);
+			Player.Get().AssigningHorror(horror);
 
 			GameLogic.Get().m_afterSkillTest.RemoveListener(m_afterSkillTest);
 			GetComponent<TreacheryCard>().Discard();

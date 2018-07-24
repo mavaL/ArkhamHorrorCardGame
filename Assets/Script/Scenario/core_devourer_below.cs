@@ -41,4 +41,9 @@ public class core_devourer_below : scenario_base
 	{
 		throw new System.NotImplementedException();
 	}
+
+	public override void GameOver()
+	{
+		throw new System.NotImplementedException();
+	}
 }

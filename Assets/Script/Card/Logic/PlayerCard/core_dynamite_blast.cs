@@ -80,7 +80,7 @@ public class core_dynamite_blast : PlayerCardLogic
 
 		if (index == 1)
 		{
-			Player.Get().DecreaseHealth(null, 3);
+			Player.Get().AssigningDamage(null, 3);
 			GameLogic.Get().OutputGameLog(string.Format("{0}受到了3点伤害\n", Player.Get().m_investigatorCard.m_cardName));
 
 			var engaged = Player.Get().GetEnemyCards();

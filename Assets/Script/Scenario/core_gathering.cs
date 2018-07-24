@@ -124,7 +124,7 @@ public class core_gathering : scenario_base
 				case ChaosBag.ChaosTokenType.Tablet:
 					if (Card.HowManyEnemyCardContainTheKeyword(Player.Get().m_currentLocation.m_lstCardsAtHere, Card.Keyword.Ghoul) > 0)
 					{
-						Player.Get().DecreaseHealth(null, 1);
+						Player.Get().AssigningDamage(null, 1);
 						GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "结算混沌标记：受到1点伤害\n");
 					}
 					return -2;
@@ -149,7 +149,7 @@ public class core_gathering : scenario_base
 			switch (t)
 			{
 				case ChaosBag.ChaosTokenType.Cultist:
-					Player.Get().DecreaseSanity(1);
+					Player.Get().AssigningHorror(1);
 					GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "结算混沌标记：受到1点恐怖\n");
 					break;
 				default:
@@ -318,7 +318,7 @@ public class core_gathering : scenario_base
 
 	private void OnAgenda1_Option1(object param)
 	{
-		Player.Get().DecreaseSanity(2);
+		Player.Get().AssigningHorror(2);
 		GameLogic.Get().OutputGameLog(Player.Get().m_investigatorCard.m_cardName + "选择了恶兆影响：受到2点恐怖\n");
 		GameLogic.Get().m_mainGameUI.m_InvestigationPhaseBtn.gameObject.SetActive(true);
 	}
@@ -455,5 +455,13 @@ public class core_gathering : scenario_base
 
 		m_lstOtherLocations[3].OnPointerExit(null);
 		ui.EndSelectCardToSpend();
+	}
+
+	public override void GameOver()
+	{
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().blocksRaycasts = false;
+		GameObject.Find("CanvasGroup").GetComponent<CanvasGroup>().interactable = false;
+
+		_ShowEnding(4);
 	}
 }

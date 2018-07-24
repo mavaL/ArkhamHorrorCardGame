@@ -311,7 +311,7 @@ public class Player
 		GameLogic.Get().OutputGameLog(string.Format("{0}恢复了{1}点神智\n", Player.Get().m_investigatorCard.m_cardName, amount));
 	}
 
-	public void DecreaseHealth(EnemyCard attacker, int amount = 1)
+	public void AssigningDamage(EnemyCard attacker, int amount = 1)
 	{
 		if(m_lstAssetSlots[(int)AssetSlot.Ally] != null)
 		{
@@ -327,7 +327,7 @@ public class Player
 		}
 		else
 		{
-			m_health -= amount;
+			LoseHealth(amount);
 
 			if(attacker)
 			{
@@ -336,7 +336,7 @@ public class Player
 		}
 	}
 
-	public void DecreaseSanity(int amount = 1)
+	public void AssigningHorror(int amount = 1)
 	{
 		if (m_lstAssetSlots[(int)AssetSlot.Ally] != null)
 		{
@@ -351,11 +351,36 @@ public class Player
 		}
 		else
 		{
-			m_sanity -= amount;
+			LoseSanity(amount);
 		}
 	}
 
-    public int HowManySanityIsLost()
+	public void LoseHealth(int amount)
+	{
+		m_health -= amount;
+
+		if(m_health <= 0)
+		{
+			YouAreDead();
+		}
+	}
+
+	public void LoseSanity(int amount)
+	{
+		m_sanity -= amount;
+
+		if (m_sanity <= 0)
+		{
+			YouAreDead();
+		}
+	}
+
+	private void YouAreDead()
+	{
+		GameLogic.Get().m_currentScenario.GameOver();
+	}
+
+	public int HowManySanityIsLost()
     {
         return m_investigatorCard.m_sanity - m_sanity;
     }

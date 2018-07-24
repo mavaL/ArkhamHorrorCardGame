@@ -41,4 +41,9 @@ public class core_mask_of_midnight : scenario_base
 	{
 		throw new System.NotImplementedException();
 	}
+
+	public override void GameOver()
+	{
+		throw new System.NotImplementedException();
+	}
 }

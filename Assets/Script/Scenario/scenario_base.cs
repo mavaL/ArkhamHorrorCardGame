@@ -29,6 +29,7 @@ public abstract class scenario_base : MonoBehaviour
 	public abstract void AfterSkillTestFailed(ChaosBag.ChaosTokenType t);
 	public abstract void AdvanceAct();
 	public abstract void AdvanceAgenda();
+	public abstract void GameOver();
 
 	public void InstantiateCards()
 	{

@@ -44,7 +44,7 @@ public class core_grasping_hands : TreacheryLogic
 			int damage = -result;
 			GameLogic.Get().OutputGameLog(string.Format("{0}由于<攥取之手>受到{1}点伤害！\n", Player.Get().m_investigatorCard.m_cardName, damage));
 
-			Player.Get().DecreaseHealth(null, damage);
+			Player.Get().AssigningDamage(null, damage);
 
 			GameLogic.Get().m_afterSkillTest.RemoveListener(m_afterSkillTest);
 			GetComponent<TreacheryCard>().Discard();

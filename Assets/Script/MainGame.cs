@@ -351,14 +351,14 @@ public class MainGame : MonoBehaviour
 
 			if(enemy.m_damage > 0)
 			{
-				Player.Get().DecreaseHealth(enemy, enemy.m_damage);
+				Player.Get().AssigningDamage(enemy, enemy.m_damage);
 			}
 
 			yield return new WaitUntil(() => Player.Get().m_currentAction.Count == 0);
 
 			if (enemy.m_horror > 0)
 			{
-				Player.Get().DecreaseSanity(enemy.m_horror);
+				Player.Get().AssigningHorror(enemy.m_horror);
 			}
 
 			enemy.OnExhausted();
@@ -1101,7 +1101,7 @@ public class MainGame : MonoBehaviour
 		if (Player.Get().GetCurrentAction() == PlayerAction.AssignDamage)
 		{
 			ally.m_health -= allyDamage;
-			Player.Get().m_health -= investigatorDamage;
+			Player.Get().LoseHealth(investigatorDamage);
 
 			if (Player.Get().m_attacker)
 			{
@@ -1113,7 +1113,7 @@ public class MainGame : MonoBehaviour
 		else
 		{
 			ally.m_sanity -= allyDamage;
-			Player.Get().m_sanity -= investigatorDamage;
+			Player.Get().LoseSanity(investigatorDamage);
 		}
 
 		if (ally.m_health <= 0 || ally.m_sanity <= 0)

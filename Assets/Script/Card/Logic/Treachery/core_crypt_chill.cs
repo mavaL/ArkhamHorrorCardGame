@@ -39,7 +39,7 @@ public class core_crypt_chill : TreacheryLogic
 		{
 			if (!Player.Get().ChooseAndDiscardAssetCard())
 			{
-				Player.Get().DecreaseHealth(null, 2);
+				Player.Get().AssigningDamage(null, 2);
 				GameLogic.Get().OutputGameLog(string.Format("{0}结算<地穴恶寒>，因为没有在场资产牌，受到了2点伤害！\n", Player.Get().m_investigatorCard.m_cardName));
 			}
 		}

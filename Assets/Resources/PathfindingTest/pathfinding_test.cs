@@ -112,4 +112,9 @@ public class pathfinding_test : scenario_base
 	{
 		
 	}
+
+	public override void GameOver()
+	{
+		throw new System.NotImplementedException();
+	}
 }

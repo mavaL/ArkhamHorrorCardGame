@@ -85,7 +85,7 @@ public class core_medical_texts : PlayerCardLogic
 		else
 		{
 			GameLogic.Get().OutputGameLog(string.Format("<医学文献>使用失败\n", Player.Get().m_investigatorCard.m_cardName));
-			Player.Get().DecreaseHealth(null, 1);
+			Player.Get().AssigningDamage(null, 1);
 		}
 
 		ui.EndSelectCardToSpend();
