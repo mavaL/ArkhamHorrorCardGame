@@ -15,9 +15,9 @@ public class MainMenu : MonoBehaviour {
 		
 	}
 
-    public void OnButtonEnterGame()
+    public void OnButtonEnterLobby()
     {
-        SceneManager.LoadScene("SelectMenu");
+        SceneManager.LoadScene("LobbyScene");
     }
 
     public void OnButtonOptions()

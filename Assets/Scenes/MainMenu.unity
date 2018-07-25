@@ -298,7 +298,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 80404741}
-        m_MethodName: OnButtonEnterGame
+        m_MethodName: OnButtonEnterLobby
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -594,7 +594,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter
+  m_Text: "\u8FDB\u5165\u5927\u5385"
 --- !u!222 &1059748920
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -985,7 +985,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Options
+  m_Text: "\u6E38\u620F\u8BBE\u7F6E"
 --- !u!222 &2002641049
 CanvasRenderer:
   m_ObjectHideFlags: 0

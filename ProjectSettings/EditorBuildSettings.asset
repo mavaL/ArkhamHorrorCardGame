@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Resources/PathfindingTest/pathfinding_test.unity
     guid: e8831bf0f7ef17a42ba0836644638f62
+  - enabled: 1
+    path: Assets/Scenes/LobbyScene.unity
+    guid: 4522ba17e03aec94fb4f0475067e1374
   m_configObjects: {}
